@@ -1,4 +1,4 @@
-# Streamlit — Build a Web UI with Python
+# Streamlit - Build a Web UI with Python
 
 So far, we've been running Python programs from the terminal.
 
@@ -72,7 +72,7 @@ You should see:
 My First App
 ```
 
-Congratulations — we just turned a Python file into a webpage.
+Congratulations - we just turned a Python file into a webpage.
 
 ---
 
