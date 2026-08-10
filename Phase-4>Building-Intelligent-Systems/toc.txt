@@ -1,0 +1,49 @@
+PHASE 4
+BUILDING INTELLIGENT SYSTEMS
+│
+├── 0. Anatomy of an Intelligent Application
+│
+├── 1. Project 1 — Document Reader
+│      │
+│      ├── Real-world files
+│      ├── OCR
+│      ├── OpenCV preprocessing
+│      ├── Regex cleaning
+│      └── Streamlit
+│
+├── 2. Project 2 — Resume Parser
+│      │
+│      ├── Document → text
+│      ├── Information extraction
+│      ├── Regex
+│      ├── NLP
+│      └── Structured data
+│
+├── 3. Project 3 — Resume Matcher
+│      │
+│      ├── TF-IDF
+│      ├── Cosine similarity
+│      ├── BM25
+│      ├── Embeddings
+│      └── Ranking
+│
+├── 4. Project 4 — Document Classifier
+│      │
+│      ├── CNN
+│      ├── Transfer learning
+│      ├── Model inference
+│      └── Streamlit
+│
+├── 5. Project 5 — Resume Intelligence
+│      │
+│      ├── OCR
+│      ├── CV
+│      ├── NLP
+│      ├── EDA
+│      ├── ML
+│      ├── DL
+│      ├── Similarity
+│      └── Streamlit
+│
+└── 6. FINAL CAPSTONE
+       Build your own intelligent system
