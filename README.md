@@ -239,6 +239,16 @@ Run the app:
 streamlit run app.py --server.address 0.0.0.0 --server.port 8501
 ```
 
+If the above command gives error on file uploads, give extra permissions using the following command:
+
+```
+streamlit run app.py \
+    --server.address 0.0.0.0 \
+    --server.port 8501 \
+    --server.enableXsrfProtection false \
+    --server.enableCORS false
+```
+
 ---
 
 ### 🌍 Access the App
