@@ -1227,7 +1227,7 @@ This separation keeps responsibilities clear.
 
 ---
 
-# 42. Mini Project — User Notes
+# 42. Mini Project - User Notes
 
 Before connecting authentication to resumes, build:
 
@@ -1373,7 +1373,7 @@ working together.
 
 # 46. Common Mistakes
 
-### Mistake 1 — Treating authentication as authorization
+### Mistake 1 - Treating authentication as authorization
 
 Being logged in does not mean:
 
@@ -1385,7 +1385,7 @@ You need authorization rules.
 
 ---
 
-### Mistake 2 — Storing passwords yourself
+### Mistake 2 - Storing passwords yourself
 
 Do not build your own password system for this project.
 
@@ -1393,13 +1393,13 @@ Use the Auth provider.
 
 ---
 
-### Mistake 3 — Not enabling RLS
+### Mistake 3 - Not enabling RLS
 
 If an exposed table contains user-specific data, RLS needs to be part of the design. Supabase specifically recommends enabling RLS on exposed tables. citeturn0search1
 
 ---
 
-### Mistake 4 — Using names as ownership
+### Mistake 4 - Using names as ownership
 
 Do not use:
 
@@ -1413,7 +1413,7 @@ Use the authenticated user's ID.
 
 ---
 
-### Mistake 5 — Exposing service keys
+### Mistake 5 - Exposing service keys
 
 Service/secret keys can bypass RLS and must not be exposed to users or browser-side code. citeturn0search1
 

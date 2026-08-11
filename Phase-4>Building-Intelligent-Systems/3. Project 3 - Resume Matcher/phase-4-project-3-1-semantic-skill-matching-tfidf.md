@@ -1,4 +1,4 @@
-# Project 2.2 — Semantic Skill Matching with TF-IDF and Cosine Similarity
+# Project 2.2 - Semantic Skill Matching with TF-IDF and Cosine Similarity
 
 ## From Exact Keywords to Similarity
 
@@ -158,7 +158,7 @@ One approach is:
 
 TF-IDF stands for:
 
-> **Term Frequency — Inverse Document Frequency**
+> **Term Frequency - Inverse Document Frequency**
 
 It creates a numerical representation of text.
 
@@ -1537,7 +1537,7 @@ This distinction is extremely important.
 
 ---
 
-# 34. Experiment — Compare Two Representations
+# 34. Experiment - Compare Two Representations
 
 Create a small experiment.
 
@@ -1579,7 +1579,7 @@ Different behavior
 
 ---
 
-# 35. Challenge — Build a Skill Ranking UI
+# 35. Challenge - Build a Skill Ranking UI
 
 Upgrade the Streamlit application.
 
@@ -1630,7 +1630,7 @@ Now the user can directly observe the effect of the threshold.
 
 ---
 
-# 36. Challenge — Build a Comparison Table
+# 36. Challenge - Build a Comparison Table
 
 Display:
 
@@ -1748,7 +1748,7 @@ So we need a better representation.
 
 We are now ready to introduce:
 
-# Project 2.3 — Embeddings for Semantic Matching
+# Project 2.3 - Embeddings for Semantic Matching
 
 We will take the exact same architecture:
 
@@ -1802,7 +1802,7 @@ Semantic Matching
 
 And once we can represent resumes and job descriptions semantically, we are ready for:
 
-# Project 3 — Resume ↔ Job Matching
+# Project 3 - Resume ↔ Job Matching
 
 where the system will move from:
 

@@ -973,7 +973,7 @@ from Python against a real PostgreSQL database.
 
 ---
 
-# 36. Mini Project — Persistent Notes
+# 36. Mini Project - Persistent Notes
 
 Build:
 

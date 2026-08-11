@@ -1,4 +1,4 @@
-# Project 3 — Resume ↔ Job Matching
+# Project 3 - Resume ↔ Job Matching
 
 ## From Information Extraction to Decision Support
 
@@ -1631,7 +1631,7 @@ We are now applying it to an intelligent application.
 
 ---
 
-# 42. Important Limitation — Resume Matching Is Not Hiring
+# 42. Important Limitation - Resume Matching Is Not Hiring
 
 Our system should not make claims such as:
 
@@ -1669,7 +1669,7 @@ Not:
 
 ---
 
-# 43. Another Important Limitation — Bias
+# 43. Another Important Limitation - Bias
 
 A resume matching system can inherit bias from:
 
@@ -1703,7 +1703,7 @@ The score is an engineering artifact produced by our system.
 
 ---
 
-# 44. Challenge — Add Explanations
+# 44. Challenge - Add Explanations
 
 For every semantic match, store:
 
@@ -1731,7 +1731,7 @@ Now the application can explain its output.
 
 ---
 
-# 45. Challenge — Let the User Adjust Weights
+# 45. Challenge - Let the User Adjust Weights
 
 Add Streamlit sliders:
 
@@ -1782,7 +1782,7 @@ This is a good exercise in turning an algorithmic assumption into an application
 
 ---
 
-# 46. Challenge — Compare Different Models
+# 46. Challenge - Compare Different Models
 
 Our embedding model is currently:
 
@@ -1819,7 +1819,7 @@ This teaches an important lesson:
 
 ---
 
-# 47. Challenge — Cache Job Embeddings
+# 47. Challenge - Cache Job Embeddings
 
 If the same job description is analyzed against many resumes, we don't need to encode the job every time.
 
@@ -1845,7 +1845,7 @@ This is a simple example of thinking about system performance.
 
 ---
 
-# 48. Challenge — Batch Resume Matching
+# 48. Challenge - Batch Resume Matching
 
 Once one resume works, try:
 

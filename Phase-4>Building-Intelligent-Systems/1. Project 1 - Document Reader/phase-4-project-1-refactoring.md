@@ -1,4 +1,4 @@
-# Project 1.1 — Refactoring the Document Reader into an Application
+# Project 1.1 - Refactoring the Document Reader into an Application
 
 ## From Prototype to Real Project
 
@@ -745,7 +745,7 @@ Git checkpoint
 
 ---
 
-# 21. Challenge — Add a Second Preprocessing Method
+# 21. Challenge - Add a Second Preprocessing Method
 
 Our current pipeline is:
 
@@ -799,7 +799,7 @@ The goal is to understand how preprocessing changes the data sent to OCR.
 
 ---
 
-# 22. Challenge — Preserve Document Structure
+# 22. Challenge - Preserve Document Structure
 
 Our current cleaner collapses whitespace:
 
@@ -843,7 +843,7 @@ Ask:
 
 ---
 
-# 23. Challenge — Build a Small Evaluation Set
+# 23. Challenge - Build a Small Evaluation Set
 
 Create:
 
@@ -1065,7 +1065,7 @@ For example:
 
 That becomes:
 
-# Project 2 — Build a Real Resume Parser
+# Project 2 - Build a Real Resume Parser
 
 We will initially solve the problem using **Python, regex, and rules**.
 

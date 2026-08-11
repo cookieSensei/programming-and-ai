@@ -1,6 +1,6 @@
-# Project 1 — Build a Document Reader
+# Project 1 - Build a Document Reader
 
-## Phase 4 — Building Intelligent Systems
+## Phase 4 - Building Intelligent Systems
 
 In the previous module, we learned how to think about an intelligent application as a pipeline.
 
@@ -1313,7 +1313,7 @@ This is exactly the pipeline we designed before writing the code.
 
 ---
 
-# 33. Exercise — Break the Application
+# 33. Exercise - Break the Application
 
 A good way to understand the pipeline is to deliberately change it.
 
@@ -1363,7 +1363,7 @@ Ask:
 
 ---
 
-# 34. Exercise — Add a Preview
+# 34. Exercise - Add a Preview
 
 Add a section that displays the processed image.
 
@@ -1396,7 +1396,7 @@ This makes the pipeline visible.
 
 ---
 
-# 35. Exercise — Preserve Line Structure
+# 35. Exercise - Preserve Line Structure
 
 Our cleaning function currently collapses whitespace.
 
@@ -1432,7 +1432,7 @@ For a resume parser, preserving sections and line breaks might be extremely impo
 
 ---
 
-# 36. Exercise — Add File Validation
+# 36. Exercise - Add File Validation
 
 What happens if the user uploads an unsupported file?
 
@@ -1461,7 +1461,7 @@ This is our first practical example of handling failure paths.
 
 ---
 
-# 37. Exercise — Measure OCR Quality
+# 37. Exercise - Measure OCR Quality
 
 Create a small set of test documents.
 
@@ -1488,7 +1488,7 @@ We are beginning to think about **evaluation**.
 
 ---
 
-# 38. Exercise — Experiment With the Pipeline
+# 38. Exercise - Experiment With the Pipeline
 
 Try changing:
 
@@ -1761,7 +1761,7 @@ NLP / Regex
 
 That will become:
 
-# Project 2 — Build a Real Resume Parser
+# Project 2 - Build a Real Resume Parser
 
 We will start with rules and regex.
 

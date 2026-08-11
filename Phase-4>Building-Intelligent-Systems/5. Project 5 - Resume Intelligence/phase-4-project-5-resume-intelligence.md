@@ -1,4 +1,4 @@
-# Project 5 — Resume Intelligence
+# Project 5 - Resume Intelligence
 
 ## Bringing Everything Together
 
@@ -1682,7 +1682,7 @@ That is what Phase 4 has been preparing us for.
 
 Next comes the final guided step:
 
-# Project 6 — Final Capstone
+# Project 6 - Final Capstone
 
 For the capstone, the problem will no longer be provided.
 

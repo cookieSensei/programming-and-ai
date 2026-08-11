@@ -1,6 +1,6 @@
 # Anatomy of an Intelligent Application
 
-## Phase 4 — Building Intelligent Systems
+## Phase 4 - Building Intelligent Systems
 
 So far, we have learned how to build many individual pieces:
 
@@ -563,25 +563,25 @@ At each stage, the representation is different.
 
 Let's look at a simplified example.
 
-### Stage 1 — File
+### Stage 1 - File
 
 ```text
 resume.pdf
 ```
 
-### Stage 2 — Image
+### Stage 2 - Image
 
 ```text
 pixels
 ```
 
-### Stage 3 — Text
+### Stage 3 - Text
 
 ```text
 "John Smith Python Developer..."
 ```
 
-### Stage 4 — Tokens
+### Stage 4 - Tokens
 
 ```python
 [
@@ -592,7 +592,7 @@ pixels
 ]
 ```
 
-### Stage 5 — Features
+### Stage 5 - Features
 
 The text might be transformed into numerical features.
 
@@ -608,13 +608,13 @@ or:
 Embedding vector
 ```
 
-### Stage 6 — Prediction
+### Stage 6 - Prediction
 
 ```text
 Data Scientist
 ```
 
-### Stage 7 — Application Result
+### Stage 7 - Application Result
 
 ```text
 Candidate appears to be a strong
@@ -1241,7 +1241,7 @@ The architecture remains.
 
 ---
 
-# 24. Exercise — Design Before You Code
+# 24. Exercise - Design Before You Code
 
 Before moving to our first Phase 4 project, design a simple intelligent application on paper.
 
@@ -1464,7 +1464,7 @@ The best system is not the one that uses the most AI.
 
 Now that we understand the anatomy of an intelligent application, we can build our first real Phase 4 system.
 
-## Project 1 — Document Reader
+## Project 1 - Document Reader
 
 We will start with a deceptively simple problem:
 

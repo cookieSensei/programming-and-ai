@@ -1,4 +1,4 @@
-PHASE 5 — BUILDING FOR THE REAL WORLD
+PHASE 5 - BUILDING FOR THE REAL WORLD
 
 │
 ├── 0. From Application to Product
@@ -40,7 +40,7 @@ PHASE 5 — BUILDING FOR THE REAL WORLD
 │      ├── Database metadata
 │      └── Connecting files to users
 │
-├── 5. Project — AI Career Companion
+├── 5. Project - AI Career Companion
 │      ├── User accounts
 │      ├── Resume upload
 │      ├── Resume parsing

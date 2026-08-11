@@ -1,4 +1,4 @@
-# Project 4 — Document Classifier
+# Project 4 - Document Classifier
 
 ## From Understanding Images to Building an Intelligent Application
 
@@ -1400,4 +1400,4 @@ That is the important transition.
 
 Next:
 
-# Project 5 — Resume Intelligence
+# Project 5 - Resume Intelligence

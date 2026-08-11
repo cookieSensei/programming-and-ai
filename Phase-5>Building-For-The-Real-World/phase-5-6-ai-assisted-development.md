@@ -1587,7 +1587,7 @@ Requirements:
 
 # 49. The AI-Assisted Workflow
 
-### Step 1 — Design yourself
+### Step 1 - Design yourself
 
 Write:
 
@@ -1599,35 +1599,35 @@ Database changes
 Functions needed
 ```
 
-### Step 2 — Ask AI for critique
+### Step 2 - Ask AI for critique
 
 ```text
 Here is my design.
 What assumptions am I missing?
 ```
 
-### Step 3 — Implement
+### Step 3 - Implement
 
 Write the first version.
 
-### Step 4 — Ask AI to review
+### Step 4 - Ask AI to review
 
 ```text
 Review this implementation.
 ```
 
-### Step 5 — Test
+### Step 5 - Test
 
 Create test cases.
 
-### Step 6 — Git checkpoint
+### Step 6 - Git checkpoint
 
 ```bash
 git add .
 git commit -m "Add skill gap analysis"
 ```
 
-### Step 7 — Iterate
+### Step 7 - Iterate
 
 Now improve it.
 

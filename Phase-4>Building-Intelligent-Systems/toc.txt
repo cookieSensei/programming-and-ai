@@ -3,7 +3,7 @@ BUILDING INTELLIGENT SYSTEMS
 │
 ├── 0. Anatomy of an Intelligent Application
 │
-├── 1. Project 1 — Document Reader
+├── 1. Project 1 - Document Reader
 │      │
 │      ├── Real-world files
 │      ├── OCR
@@ -11,7 +11,7 @@ BUILDING INTELLIGENT SYSTEMS
 │      ├── Regex cleaning
 │      └── Streamlit
 │
-├── 2. Project 2 — Resume Parser
+├── 2. Project 2 - Resume Parser
 │      │
 │      ├── Document → text
 │      ├── Information extraction
@@ -19,7 +19,7 @@ BUILDING INTELLIGENT SYSTEMS
 │      ├── NLP
 │      └── Structured data
 │
-├── 3. Project 3 — Resume Matcher
+├── 3. Project 3 - Resume Matcher
 │      │
 │      ├── TF-IDF
 │      ├── Cosine similarity
@@ -27,14 +27,14 @@ BUILDING INTELLIGENT SYSTEMS
 │      ├── Embeddings
 │      └── Ranking
 │
-├── 4. Project 4 — Document Classifier
+├── 4. Project 4 - Document Classifier
 │      │
 │      ├── CNN
 │      ├── Transfer learning
 │      ├── Model inference
 │      └── Streamlit
 │
-├── 5. Project 5 — Resume Intelligence
+├── 5. Project 5 - Resume Intelligence
 │      │
 │      ├── OCR
 │      ├── CV

@@ -910,7 +910,7 @@ This is now starting to resemble a real application.
 
 ---
 
-# 31. Mini Project — Private Resume Vault
+# 31. Mini Project - Private Resume Vault
 
 Before building the complete Career Companion, create:
 
@@ -1068,11 +1068,11 @@ This demonstrates authentication and storage authorization working together.
 
 # 36. Common Mistakes
 
-### Mistake 1 — Making the resume bucket public
+### Mistake 1 - Making the resume bucket public
 
 Do not make private user documents public just to make the demo easier.
 
-### Mistake 2 — Storing only the filename
+### Mistake 2 - Storing only the filename
 
 Store the actual:
 
@@ -1082,7 +1082,7 @@ storage_path
 
 so the application knows exactly where the object lives.
 
-### Mistake 3 — Forgetting ownership
+### Mistake 3 - Forgetting ownership
 
 Every user-owned file needs an ownership model.
 
@@ -1094,11 +1094,11 @@ user ID
 access policies
 ```
 
-### Mistake 4 — Trusting Streamlit's file filter
+### Mistake 4 - Trusting Streamlit's file filter
 
 The UI filter is useful, but it is not the complete security or validation strategy.
 
-### Mistake 5 — Ignoring failed operations
+### Mistake 5 - Ignoring failed operations
 
 Storage and database operations are separate operations.
 

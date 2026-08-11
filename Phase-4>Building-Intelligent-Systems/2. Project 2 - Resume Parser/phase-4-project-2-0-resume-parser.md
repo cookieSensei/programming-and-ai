@@ -1,4 +1,4 @@
-# Project 2 — Build a Resume Parser
+# Project 2 - Build a Resume Parser
 
 ## From Text to Structured Information
 
@@ -89,7 +89,7 @@ Education:
 BSc Computer Science
 
 Experience:
-Software Developer — 2022-2025
+Software Developer - 2022-2025
 ```
 
 we want something closer to:
@@ -109,7 +109,7 @@ we want something closer to:
         "BSc Computer Science"
     ],
     "experience": [
-        "Software Developer — 2022-2025"
+        "Software Developer - 2022-2025"
     ]
 }
 ```
@@ -1174,7 +1174,7 @@ They are potential solutions to a problem we just encountered.
 
 ---
 
-# 27. Exercise — Break Your Parser
+# 27. Exercise - Break Your Parser
 
 Create several artificial resumes.
 
@@ -1257,7 +1257,7 @@ The important part is to **measure the failures**.
 
 ---
 
-# 29. Challenge — Improve the Rules
+# 29. Challenge - Improve the Rules
 
 Before introducing NLP, try improving the rule-based system.
 
@@ -1453,7 +1453,7 @@ How well do they match?
 
 That takes us to:
 
-# Project 3 — Resume ↔ Job Matching
+# Project 3 - Resume ↔ Job Matching
 
 We will start with techniques students have already encountered:
 

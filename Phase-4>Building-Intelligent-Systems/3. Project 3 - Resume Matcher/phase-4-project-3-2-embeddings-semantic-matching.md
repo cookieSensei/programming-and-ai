@@ -1,4 +1,4 @@
-# Project 2.3 — Embeddings for Semantic Matching
+# Project 2.3 - Embeddings for Semantic Matching
 
 ## From Words to Meaning
 
@@ -1328,7 +1328,7 @@ We now have the beginnings of a real intelligent application architecture.
 
 ---
 
-# 34. Project Exercise — Build the Semantic Matcher
+# 34. Project Exercise - Build the Semantic Matcher
 
 Your task is to create:
 
@@ -1533,7 +1533,7 @@ and ask the much more useful question:
 
 That becomes:
 
-# Project 3 — Resume ↔ Job Matching
+# Project 3 - Resume ↔ Job Matching
 
 We will combine:
 

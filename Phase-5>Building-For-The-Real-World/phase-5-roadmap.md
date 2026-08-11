@@ -1,4 +1,4 @@
-# Phase 5 — Building for the Real World
+# Phase 5 - Building for the Real World
 
 Phase 4 taught us how to combine programming and AI to build intelligent applications.
 
@@ -316,7 +316,7 @@ The database can store information **about** a file while storage keeps the actu
 
 ---
 
-# 7. Project — AI Career Companion
+# 7. Project - AI Career Companion
 
 We now combine Phase 4's Resume Intelligence application with everything learned in Phase 5.
 
@@ -896,7 +896,7 @@ The capability is what matters.
 # 23. Final Phase 5 Roadmap
 
 ```text
-PHASE 5 — BUILDING FOR THE REAL WORLD
+PHASE 5 - BUILDING FOR THE REAL WORLD
 │
 ├── 0. From Application to Product
 │   ├── State
@@ -933,7 +933,7 @@ PHASE 5 — BUILDING FOR THE REAL WORLD
 │   ├── Database metadata
 │   └── User-owned files
 │
-├── 5. Project — AI Career Companion
+├── 5. Project - AI Career Companion
 │   ├── Users
 │   ├── Resumes
 │   ├── Jobs
@@ -975,7 +975,7 @@ Phase 5 should not end with:
 
 It should end with:
 
-> **"I don't know how to build this yet — but I know how to figure it out."**
+> **"I don't know how to build this yet - but I know how to figure it out."**
 
 That is the capability this phase is designed to develop.
 

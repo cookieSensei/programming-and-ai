@@ -1,4 +1,4 @@
-# Project 2.1 — Make the Resume Parser Reliable
+# Project 2.1 - Make the Resume Parser Reliable
 
 ## From a Working Parser to a Tested Parser
 
@@ -1193,7 +1193,7 @@ This is a very important software engineering habit.
 
 ---
 
-# 25. Challenge — Add Five More Resumes
+# 25. Challenge - Add Five More Resumes
 
 Create at least five additional cases.
 
@@ -1448,7 +1448,7 @@ The parser is now ready for its next challenge.
 
 We will create:
 
-# Project 2.2 — Semantic Skill Matching
+# Project 2.2 - Semantic Skill Matching
 
 Instead of asking:
 
