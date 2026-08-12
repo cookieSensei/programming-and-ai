@@ -1,0 +1,14 @@
+{
+  "model_type": "cnn",
+  "image_size": [
+    224,
+    224
+  ],
+  "class_names": [
+    "email",
+    "resume",
+    "scientific_publication"
+  ],
+  "training_seconds": 79.04610991477966,
+  "epochs_requested": 10
+}
