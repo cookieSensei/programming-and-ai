@@ -1,0 +1,15 @@
+John Smith
+
+Python developer and machine learning engineer.
+
+Skills:
+Python
+SQL
+Machine Learning
+OpenCV
+TensorFlow
+Docker
+
+Experience:
+Built image classification systems using convolutional neural networks.
+Developed predictive models and data pipelines.

@@ -1,0 +1,12 @@
+Jane Smith
+
+Software developer.
+
+Skills:
+Java
+JavaScript
+HTML
+CSS
+
+Experience:
+Built web applications and ecommerce websites.
