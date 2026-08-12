@@ -1,0 +1,9 @@
+streamlit
+pypdf
+pymupdf
+pillow
+numpy
+opencv-python-headless
+pytesseract
+scikit-learn
+sentence-transformers
