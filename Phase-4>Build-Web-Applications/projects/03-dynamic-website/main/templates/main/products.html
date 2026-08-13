@@ -1,0 +1,1 @@
+{% extends "main/base.html" %}{% block content %}<h1>Products</h1><div class="grid">{% for product in products %}<div class="card"><h2>{{ product.name }}</h2><p>₹{{ product.price }}</p>{% if product.available %}<p>Available</p>{% else %}<p>Currently unavailable</p>{% endif %}<a href="{% url 'product_detail' product.id %}">View product</a></div>{% endfor %}</div>{% endblock %}

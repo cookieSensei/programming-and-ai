@@ -1,0 +1,1 @@
+{% extends "main/base.html" %}{% block content %}<h1>{{ product.name }}</h1><p>{{ product.description }}</p><p>Price: ₹{{ product.price }}</p><p>Quantity: {{ product.quantity }}</p><div class="actions"><a href="{% url 'product_update' product.pk %}">Edit</a><a href="{% url 'product_delete' product.pk %}">Delete</a><a href="{% url 'product_list' %}">Back</a></div>{% endblock %}

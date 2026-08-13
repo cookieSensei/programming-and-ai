@@ -1,0 +1,1 @@
+{% extends "main/base.html" %}{% block content %}<h1>Book a Service</h1><div class="grid">{% for service in services %}<div class="card"><h2>{{ service.name }}</h2><p>{{ service.description }}</p><p>₹{{ service.price }}</p><a href="{% url 'book' %}">Book this service</a></div>{% empty %}<p>No services are available yet.</p>{% endfor %}</div>{% endblock %}

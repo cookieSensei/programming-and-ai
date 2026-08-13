@@ -65,3 +65,229 @@ dist/
 *.egg-info/
 
 *.keras
+
+
+
+
+# ============================================================
+# Python
+# ============================================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Python virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# virtualenv environments with custom names
+# Add your actual environment folder name here if needed.
+myenv/
+my-environment/
+
+# ============================================================
+# Django
+# ============================================================
+
+*.sqlite3
+db.sqlite3
+db.sqlite3-journal
+
+# Django collected static files
+staticfiles/
+
+# Uploaded/media files generated during local development
+media/
+
+# ============================================================
+# Environment / Secrets
+# ============================================================
+
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Local configuration
+*.local
+
+# ============================================================
+# Jupyter / Google Colab
+# ============================================================
+
+.ipynb_checkpoints/
+
+# ============================================================
+# Streamlit
+# ============================================================
+
+.streamlit/secrets.toml
+
+# ============================================================
+# Machine Learning
+# ============================================================
+
+# Model weights / checkpoints
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
+*.h5
+*.keras
+
+# Common ML output directories
+checkpoints/
+models/
+runs/
+wandb/
+
+# ============================================================
+# Data
+# ============================================================
+
+# Local datasets and generated data
+# data/
+# datasets/
+
+# Large/generated files
+# *.csv
+*.parquet
+*.feather
+*.pkl
+*.pickle
+
+# Keep small example datasets if intentionally committed
+!examples/*.csv
+!example_data/*.csv
+
+# ============================================================
+# Node / JavaScript / Next.js
+# ============================================================
+
+node_modules/
+.npm/
+.pnpm-store/
+.yarn/
+.yarn-cache/
+
+# Next.js
+.next/
+out/
+
+# Production builds
+dist/
+build/
+
+# Environment files used by Node/Next.js
+.next/
+.vercel/
+
+# ============================================================
+# JavaScript / TypeScript caches
+# ============================================================
+
+*.tsbuildinfo
+.eslintcache
+
+# ============================================================
+# IDEs / Editors
+# ============================================================
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+.idea/
+*.iml
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Sublime
+*.sublime-workspace
+*.sublime-project
+
+# ============================================================
+# Operating System
+# ============================================================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+
+# ============================================================
+# Logs
+# ============================================================
+
+*.log
+logs/
+
+# ============================================================
+# Coverage / Testing
+# ============================================================
+
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+
+# ============================================================
+# Build / Packaging
+# ============================================================
+
+*.egg
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+wheels/
+MANIFEST
+*.manifest
+*.spec
+
+# ============================================================
+# Documentation builds
+# ============================================================
+
+docs/_build/
+
+# ============================================================
+# Temporary files
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# ============================================================
+# OS / generated archives
+# ============================================================
+
+*.zip
+*.tar
+*.tar.gz
+*.tgz

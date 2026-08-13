@@ -1,0 +1,60 @@
+PHASE 1
+Think Like a Programmer
+
+Python
+↓
+"I understand programming."
+
+
+PHASE 2
+Build with Code
+
+Terminal
++
+Libraries
++
+Streamlit
+↓
+"I can build things."
+
+
+PHASE 3
+Understand AI
+
+AI / ML
++
+Experimentation
+↓
+"I understand what AI can do."
+
+
+PHASE 4
+Build Web Applications
+
+Own computer
++
+virtualenv
++
+Django
++
+HTML/CSS
++
+small JavaScript exposure
+↓
+"I can build websites."
+
+
+PHASE 5
+Make Applications Real
+
+SQL
++
+Database
++
+Authentication
++
+Production
++
+Deployment
+↓
+"I can put my application in front of people."

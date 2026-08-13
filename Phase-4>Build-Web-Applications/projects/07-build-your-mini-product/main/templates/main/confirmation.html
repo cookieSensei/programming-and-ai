@@ -1,0 +1,1 @@
+{% extends "main/base.html" %}{% block content %}<h1>Booking received</h1><p>Thanks, {{ booking.customer_name }}.</p><p>Your request for <strong>{{ booking.service.name }}</strong> on {{ booking.preferred_date }} has been recorded.</p><a href="{% url 'home' %}">Back to services</a>{% endblock %}

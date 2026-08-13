@@ -1,0 +1,1 @@
+{% extends "main/base.html" %}{% block content %}<h1>{{ product.name }}</h1><p>{{ product.description }}</p><h2>₹{{ product.price }}</h2>{% if product.available %}<p>Available</p>{% else %}<p>Currently unavailable</p>{% endif %}<a href="{% url 'products' %}">Back to products</a>{% endblock %}

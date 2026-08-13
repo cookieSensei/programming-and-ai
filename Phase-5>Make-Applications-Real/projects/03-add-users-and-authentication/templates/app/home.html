@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Tasks</h1>
+<ul>
+{% for task in tasks %}
+<li>{{ task.title }}</li>
+{% empty %}
+<li>You have no tasks yet.</li>
+{% endfor %}
+</ul>
+<p>This page only queries tasks owned by the authenticated user.</p>
+{% endblock %}
