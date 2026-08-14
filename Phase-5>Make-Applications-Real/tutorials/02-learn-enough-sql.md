@@ -1,6 +1,6 @@
-# Tutorial 02 — Learn Enough SQL to Work With Your Data
+# Tutorial 02 - Learn Enough SQL to Work With Your Data
 
-## Phase 5 — Make Applications Real
+## Phase 5 - Make Applications Real
 
 ### The big idea
 
@@ -281,7 +281,7 @@ What does this mean?
 
 It can mean:
 
-> Set the price of every matching row — potentially every product — to 48000.
+> Set the price of every matching row - potentially every product - to 48000.
 
 That is very different from:
 

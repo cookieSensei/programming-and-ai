@@ -1,4 +1,4 @@
-# Tutorial 02 — HTML Basics
+# Tutorial 02 - HTML Basics
 
 ## Why this matters
 

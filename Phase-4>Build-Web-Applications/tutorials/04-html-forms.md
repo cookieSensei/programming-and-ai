@@ -1,4 +1,4 @@
-# Tutorial 04 — HTML Forms
+# Tutorial 04 - HTML Forms
 
 ## Why this matters
 

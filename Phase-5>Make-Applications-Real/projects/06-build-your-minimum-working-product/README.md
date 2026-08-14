@@ -1,4 +1,4 @@
-# Project 6 — Build Your Minimum Working Product
+# Project 6 - Build Your Minimum Working Product
 
 This is the final reference implementation for Phase 5.
 

@@ -1,4 +1,4 @@
-# Tutorial 01 — How the Web Works
+# Tutorial 01 - How the Web Works
 
 ## Why this matters
 

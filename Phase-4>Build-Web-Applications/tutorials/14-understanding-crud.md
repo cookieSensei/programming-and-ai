@@ -1,4 +1,4 @@
-# Tutorial 14 — Understanding CRUD
+# Tutorial 14 - Understanding CRUD
 
 ## Why this tutorial exists
 

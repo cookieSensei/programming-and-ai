@@ -1,6 +1,6 @@
-# Tutorial 06 — Build Your Minimum Working Product
+# Tutorial 06 - Build Your Minimum Working Product
 
-## Phase 5 — Make Applications Real
+## Phase 5 - Make Applications Real
 
 ## Final Phase 5 Project
 
@@ -679,27 +679,27 @@ Explain the role of each component.
 
 Use ChatGPT strategically.
 
-### Step 1 — Explain the goal
+### Step 1 - Explain the goal
 
 > I am building an MWP for [user] who needs to [problem]. The core flow is [flow].
 
-### Step 2 — Ask for architecture
+### Step 2 - Ask for architecture
 
 > Identify the minimum files/components required.
 
-### Step 3 — Implement one feature
+### Step 3 - Implement one feature
 
 > Add the smallest implementation for [feature].
 
-### Step 4 — Test
+### Step 4 - Test
 
 > Here is what happened.
 
-### Step 5 — Debug
+### Step 5 - Debug
 
 > Explain the root cause before proposing the fix.
 
-### Step 6 — Review
+### Step 6 - Review
 
 > Check whether this change introduces security, data ownership, or deployment issues.
 

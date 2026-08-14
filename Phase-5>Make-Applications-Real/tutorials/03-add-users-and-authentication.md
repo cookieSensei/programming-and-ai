@@ -1,6 +1,6 @@
-# Tutorial 03 — Add Users and Authentication
+# Tutorial 03 - Add Users and Authentication
 
-## Phase 5 — Make Applications Real
+## Phase 5 - Make Applications Real
 
 ### The big idea
 

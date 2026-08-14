@@ -1,4 +1,4 @@
-# Tutorial 06 — Django URLs and Views
+# Tutorial 06 - Django URLs and Views
 
 ## Why this matters
 

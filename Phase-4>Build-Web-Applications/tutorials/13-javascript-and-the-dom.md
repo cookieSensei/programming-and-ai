@@ -1,4 +1,4 @@
-# Tutorial 13 — JavaScript and the DOM
+# Tutorial 13 - JavaScript and the DOM
 
 ## Why this tutorial exists
 

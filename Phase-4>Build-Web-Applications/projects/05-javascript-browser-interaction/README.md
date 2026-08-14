@@ -1,4 +1,4 @@
-# Project 5 — JavaScript Browser Interaction
+# Project 5 - JavaScript Browser Interaction
 
 This project is intentionally independent of Django. Open `index.html` in a browser.
 

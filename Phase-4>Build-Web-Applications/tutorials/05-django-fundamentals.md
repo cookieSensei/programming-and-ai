@@ -1,4 +1,4 @@
-# Tutorial 05 — Django Fundamentals
+# Tutorial 05 - Django Fundamentals
 
 ## Why this matters
 

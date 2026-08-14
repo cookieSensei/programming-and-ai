@@ -1,4 +1,4 @@
-# Tutorial 09 — Django Forms and User Input
+# Tutorial 09 - Django Forms and User Input
 
 ## Why this matters
 

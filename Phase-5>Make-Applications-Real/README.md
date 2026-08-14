@@ -1,4 +1,4 @@
-# Phase 5 — Make Applications Real
+# Phase 5 - Make Applications Real
 
 Phase 5 takes the student's Phase 4 web application and introduces the pieces needed to make it a Minimum Working Product.
 

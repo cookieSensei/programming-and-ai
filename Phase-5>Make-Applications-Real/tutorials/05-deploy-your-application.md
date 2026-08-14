@@ -1,6 +1,6 @@
-# Tutorial 05 — Deploy Your Application
+# Tutorial 05 - Deploy Your Application
 
-## Phase 5 — Make Applications Real
+## Phase 5 - Make Applications Real
 
 ### The big idea
 

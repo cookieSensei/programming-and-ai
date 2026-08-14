@@ -1,4 +1,4 @@
-# Project 5 — Deploy Your Application
+# Project 5 - Deploy Your Application
 
 This is a small deployment-ready Django application.
 

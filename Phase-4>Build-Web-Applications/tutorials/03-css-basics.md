@@ -1,4 +1,4 @@
-# Tutorial 03 — CSS Basics
+# Tutorial 03 - CSS Basics
 
 ## Why this matters
 

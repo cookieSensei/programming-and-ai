@@ -1,4 +1,4 @@
-# Project 4 — Prepare Your Application for Production
+# Project 4 - Prepare Your Application for Production
 
 This project demonstrates a production-oriented Django configuration.
 

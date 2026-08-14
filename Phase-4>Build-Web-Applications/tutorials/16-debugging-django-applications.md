@@ -1,4 +1,4 @@
-# Tutorial 16 — Debugging Django Applications
+# Tutorial 16 - Debugging Django Applications
 
 ## Why this tutorial exists
 

@@ -1,4 +1,4 @@
-# Tutorial 11 — Django Admin
+# Tutorial 11 - Django Admin
 
 ## Why this matters
 

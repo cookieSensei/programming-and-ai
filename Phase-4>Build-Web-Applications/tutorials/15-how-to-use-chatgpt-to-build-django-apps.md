@@ -1,4 +1,4 @@
-# Tutorial 15 — How to Use ChatGPT to Build Django Apps
+# Tutorial 15 - How to Use ChatGPT to Build Django Apps
 
 ## Why this tutorial exists
 

@@ -18,4 +18,4 @@ class Booking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.customer.username} — {self.service.name} — {self.booking_date}"
+        return f"{self.customer.username} - {self.service.name} - {self.booking_date}"

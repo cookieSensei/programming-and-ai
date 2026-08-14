@@ -1,4 +1,4 @@
-# Tutorial 08 — Django Static Files
+# Tutorial 08 - Django Static Files
 
 ## Why this matters
 

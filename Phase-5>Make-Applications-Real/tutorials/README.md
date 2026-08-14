@@ -1,4 +1,4 @@
-# Phase 5 — Very Detailed Tutorials
+# Phase 5 - Very Detailed Tutorials
 
 ## Make Applications Real
 

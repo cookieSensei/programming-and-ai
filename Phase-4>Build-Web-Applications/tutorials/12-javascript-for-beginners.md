@@ -1,4 +1,4 @@
-# Tutorial 12 — JavaScript for Beginners
+# Tutorial 12 - JavaScript for Beginners
 
 ## Why this tutorial exists
 

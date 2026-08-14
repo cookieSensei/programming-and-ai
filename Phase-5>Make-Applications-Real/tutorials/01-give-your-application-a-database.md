@@ -1,6 +1,6 @@
-# Tutorial 01 — Give Your Application a Database
+# Tutorial 01 - Give Your Application a Database
 
-## Phase 5 — Make Applications Real
+## Phase 5 - Make Applications Real
 
 ### The big idea
 

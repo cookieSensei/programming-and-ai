@@ -1,4 +1,4 @@
-# Tutorial 07 — Django Templates
+# Tutorial 07 - Django Templates
 
 ## Why this matters
 

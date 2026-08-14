@@ -1,4 +1,4 @@
-# Tutorial 10 — Django Models and Migrations
+# Tutorial 10 - Django Models and Migrations
 
 ## Why this matters
 

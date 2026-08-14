@@ -1,6 +1,6 @@
-# Tutorial 04 — Prepare Your Application for Production
+# Tutorial 04 - Prepare Your Application for Production
 
-## Phase 5 — Make Applications Real
+## Phase 5 - Make Applications Real
 
 ### The big idea
 

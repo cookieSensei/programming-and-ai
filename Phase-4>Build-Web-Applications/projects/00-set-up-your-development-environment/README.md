@@ -1,4 +1,4 @@
-# Project 0 — Set Up Your Development Environment
+# Project 0 - Set Up Your Development Environment
 
 This project has no application code. Follow the curriculum guide to create a local Python environment with `virtualenv`, install Django, and verify the setup.
 

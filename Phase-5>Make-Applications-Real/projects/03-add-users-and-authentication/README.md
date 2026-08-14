@@ -1,4 +1,4 @@
-# Project 3 — Add Users and Authentication
+# Project 3 - Add Users and Authentication
 
 This is a small multi-user Django application.
 
@@ -22,10 +22,10 @@ Then use:
 
 ## What to explore
 
-- `accounts/forms.py` — registration form
-- `accounts/views.py` — registration and protected application flow
-- `accounts/urls.py` — routes
-- `app/models.py` — user-owned records
-- `app/views.py` — filtering records for the logged-in user
+- `accounts/forms.py` - registration form
+- `accounts/views.py` - registration and protected application flow
+- `accounts/urls.py` - routes
+- `app/models.py` - user-owned records
+- `app/views.py` - filtering records for the logged-in user
 
 The important security lesson is that the server filters data by the authenticated user. Do not rely on hiding links in the browser.

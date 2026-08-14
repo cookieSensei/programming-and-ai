@@ -1,4 +1,4 @@
-# Phase 4 — Build Web Applications
+# Phase 4 - Build Web Applications
 
 These are runnable reference implementations for the Phase 4 projects. They are intended to be taught incrementally, not copied blindly.
 
@@ -9,7 +9,7 @@ These are runnable reference implementations for the Phase 4 projects. They are 
 2. Build a Business Website
 3. Build a Dynamic Website
 4. Build an Interactive Application
-5. JavaScript — Make the Browser Interactive
+5. JavaScript - Make the Browser Interactive
 6. Build a CRUD Application
 7. Build Your Mini Product
 
