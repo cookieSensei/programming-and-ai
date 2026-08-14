@@ -1,0 +1,57 @@
+[
+  {
+    "model": "inventory.product",
+    "pk": 1,
+    "fields": {
+      "name": "Laptop",
+      "description": "A business laptop for everyday work.",
+      "price": "50000.00",
+      "quantity": 10,
+      "created_at": "2026-08-01T10:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 2,
+    "fields": {
+      "name": "Keyboard",
+      "description": "A comfortable keyboard for office work.",
+      "price": "2000.00",
+      "quantity": 25,
+      "created_at": "2026-08-02T10:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 3,
+    "fields": {
+      "name": "Mouse",
+      "description": "A wireless mouse for everyday use.",
+      "price": "1000.00",
+      "quantity": 40,
+      "created_at": "2026-08-03T10:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 4,
+    "fields": {
+      "name": "Monitor",
+      "description": "A 24-inch monitor for productivity.",
+      "price": "15000.00",
+      "quantity": 15,
+      "created_at": "2026-08-04T10:00:00Z"
+    }
+  },
+  {
+    "model": "inventory.product",
+    "pk": 5,
+    "fields": {
+      "name": "Webcam",
+      "description": "A webcam for online meetings.",
+      "price": "5000.00",
+      "quantity": 20,
+      "created_at": "2026-08-05T10:00:00Z"
+    }
+  }
+]
