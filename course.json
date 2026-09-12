@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "slug": "programming-and-ai",
+  "title": "Programming & AI",
+  "description": "A free, practical path from programming foundations to software engineering, machine learning, deep learning, web applications and real-world AI systems.",
+  "audience": "Beginners and self-taught learners who want to build strong programming fundamentals and progress toward practical AI and software development.",
+  "licenseLabel": "Free to learn on CookieSensei",
+  "lessonExtensions": [".md", ".ipynb"],
+  "resourceExtensions": [".py", ".js", ".jsx", ".ts", ".tsx", ".html", ".css", ".json", ".csv", ".txt", ".pdf"],
+  "excludePaths": ["README.md", "note.txt", ".gitignore", "datasets"],
+  "phases": [
+    {
+      "path": "Phase-0>Foundation",
+      "slug": "foundation",
+      "title": "Foundation",
+      "description": "Understand what code is, become comfortable with the terminal, and learn the development tools used throughout the program.",
+      "order": 0
+    },
+    {
+      "path": "Phase-1>Thinking-Like-A-Programmer",
+      "slug": "thinking-like-a-programmer",
+      "title": "Thinking Like a Programmer",
+      "description": "Build strong Python fundamentals and learn to reason about data and programs from first principles.",
+      "order": 1
+    },
+    {
+      "path": "Phase-2>Building-Softwares",
+      "slug": "building-software",
+      "title": "Building Software",
+      "description": "Turn programming knowledge into useful software by working with text, web data, embeddings and application building blocks.",
+      "order": 2
+    },
+    {
+      "path": "Phase-3>Teaching-Computers-To-Learn",
+      "slug": "teaching-computers-to-learn",
+      "title": "Teaching Computers to Learn",
+      "description": "Learn machine learning, deep learning and the practical foundations behind modern AI systems.",
+      "order": 3
+    },
+    {
+      "path": "Phase-4>Build-Web-Applications",
+      "slug": "build-web-applications",
+      "title": "Build Web Applications",
+      "description": "Build modern web applications and connect software ideas to interfaces people can actually use.",
+      "order": 4
+    },
+    {
+      "path": "Phase-5>Make-Applications-Real",
+      "slug": "make-applications-real",
+      "title": "Make Applications Real",
+      "description": "Move from projects to production-minded applications, deployment and real-world software engineering workflows.",
+      "order": 5
+    }
+  ]
+}
