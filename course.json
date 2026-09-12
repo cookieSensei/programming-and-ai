@@ -7,7 +7,8 @@
   "licenseLabel": "Free to learn on CookieSensei",
   "lessonExtensions": [".md", ".ipynb"],
   "resourceExtensions": [".py", ".js", ".jsx", ".ts", ".tsx", ".html", ".css", ".json", ".csv", ".txt", ".pdf"],
-  "excludePaths": ["README.md", "note.txt", ".gitignore", "datasets"],
+  "excludePaths": ["README.md", "note.txt", ".gitignore"],
+  "publicResourceRoots": ["datasets"],
   "phases": [
     {
       "path": "Phase-0>Foundation",
