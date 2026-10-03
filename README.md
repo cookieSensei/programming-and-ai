@@ -1,486 +1,204 @@
-# AI Lab Docker Environment
+# Programming & AI — CookieSensei
 
-This repository provides a **GPU-enabled Docker environment** containing multiple isolated Python environments for different AI workflows.
+The main learning program for [cookiesensei.com](https://cookiesensei.com), taking beginners from programming foundations to Python, data analysis, machine learning, web applications and a working software product.
 
-The container is based on **CUDA 12.1 + Ubuntu 22.04** and includes environments for:
+This repository is the **syllabus and teaching material**: lessons, Jupyter notebooks, Python examples, datasets and independent practice projects. The Docker images that provide CookieSensei Cloud Labs live in a separate repository.
 
-* TensorFlow research
-* PyTorch deep learning
-* Data science workflows
-* Resume OCR + ATS scoring with Transformers
+**Start learning:** [CookieSensei learning library](https://cookiesensei.com/learn) · [Curriculum roadmap](https://cookiesensei.com/curriculum) · [Published source](https://github.com/cookieSensei/programming-and-ai/tree/published)
 
----
+## Start here
 
-# Environments Overview
+1. Read the first foundation lesson, [What is code?](Phase-0%3EFoundation/1-what-is-code.ipynb).
+2. Continue through the phases in order. Read the explanation, run the example, change something small, and explain what changed.
+3. Use the published website for reading, GitHub for source, and a Python/notebook environment or an assigned Cloud Lab for execution.
+4. In Phases 4 and 5, follow each project's own setup instructions. The projects are independent applications.
 
-The container contains **four virtual environments** located in:
+The public learning material can be read without a paid enrollment. Managed Cloud Lab and live classroom access are separate services associated with the relevant CookieSensei offering; reading this repository does not create a lab account or classroom invitation.
 
-```
-/opt/envs/
-```
+## Learning path
 
-| Environment   | Path              | Purpose                               |
-| ------------- | ----------------- | ------------------------------------- |
-| TensorFlow    | `/opt/envs/tf`    | TensorFlow experiments and research   |
-| PyTorch       | `/opt/envs/torch` | Deep learning, computer vision, YOLO  |
-| Data Science  | `/opt/envs/ds`    | Classical ML and analytics            |
-| ATS Resume AI | `/opt/envs/ats`   | OCR, NLP, resume parsing, ATS scoring |
+The authoritative phase paths/order are in [`course.json`](course.json). Preserve their exact names when maintaining content.
 
----
+| Phase | Material | What you practice |
+| --- | --- | --- |
+| 0 — [Foundation](Phase-0%3EFoundation/) | What code is, terminal commands, Git and GitHub | Running code and understanding the tools |
+| 1 — [Thinking Like a Programmer](Phase-1%3EThinking-Like-A-Programmer/) | Python basics, data structures, functions, loops, classes, NumPy, Pandas and plotting | Reasoning with programs and exploring data |
+| 2 — [Building Software](Phase-2%3EBuilding-Softwares/) | Regular expressions, embeddings, Beautiful Soup, chatbot examples and Streamlit | Combining useful software building blocks |
+| 3 — [Teaching Computers to Learn](Phase-3%3ETeaching-Computers-To-Learn/) | Regression, classification, clustering, deep learning, computer vision and NLP | Training, evaluating and using models |
+| 4 — [Build Web Applications](Phase-4%3EBuild-Web-Applications/README.md) | Django, HTML/CSS, forms, JavaScript, CRUD and a mini product | Building interfaces and interactive applications |
+| 5 — [Make Applications Real](Phase-5%3EMake-Applications-Real/README.md) | Databases, SQL, users/authentication, production settings, deployment and a minimum working product | Turning a learning project into something another person can use |
 
----
+Additional resources:
 
-# Activating Python Environments
+- [`datasets/`](datasets/): shared CSV/TSV datasets used in exercises.
+- [Phase 4–5 student guide](phase-4-5-student-guide.pdf): companion reference.
+- [`PUBLISHING.md`](PUBLISHING.md): how approved content reaches the website.
 
-Each environment can be activated manually using `source`.
+## Get a local copy
 
----
-
-## TensorFlow Environment
-
-Activate:
+### Linux, macOS or a Linux Cloud Lab
 
 ```bash
-source /opt/envs/tf/bin/activate
+git clone https://github.com/cookieSensei/programming-and-ai.git
+cd programming-and-ai
 ```
 
-Verify:
+This checks out `main`, the authoring branch. To follow the learner-facing revision:
 
 ```bash
-python -c "import tensorflow as tf; print(tf.__version__)"
+git fetch origin published
+git switch --track origin/published
 ```
 
-Deactivate:
+If you already have a local `published` branch, use `git switch published`. Contributors should work from `main` on their own branch.
 
-```bash
-deactivate
-```
+### Windows
 
----
+Phase directory names contain **`>`**, which is not valid in native Windows filenames. A normal Git checkout or ZIP extraction onto a Windows filesystem can fail.
 
-## PyTorch Environment
+Use the website, an assigned Linux Cloud Lab, or WSL. For WSL, clone inside its Linux home (for example `~/projects`), **not under `/mnt/c`**. Quote paths containing `>` in shell commands because the shell otherwise treats it as redirection.
 
-Activate:
+Do not rename phase folders locally as an onboarding workaround: their paths are part of the publishing manifest and lesson/resource links.
 
-```bash
-source /opt/envs/torch/bin/activate
-```
+## Run notebooks and Python examples
 
-Verify GPU:
+### Option A: CookieSensei AI Cloud Lab
 
-```bash
-python -c "import torch; print(torch.cuda.is_available())"
-```
+If you have an assigned AI lab, open it from [code.cookiesensei.com](https://code.cookiesensei.com), launch VS Code and clone this repository under the workspace's persistent home directory, usually `/home/coder/project`.
 
-Deactivate:
+The AI lab image provides these environments; other template types may not:
 
-```bash
-deactivate
-```
+| Environment | Activate in a terminal | Notebook kernel |
+| --- | --- | --- |
+| Data science | `source /opt/envs/ds/bin/activate` | Python (Data Science) |
+| PyTorch | `source /opt/envs/torch/bin/activate` | Python (PyTorch) |
+| TensorFlow | `source /opt/envs/tf/bin/activate` | Python (TensorFlow) |
+| OCR / résumé experiments | `source /opt/envs/ats/bin/activate` | Python (ATS Resume AI) |
 
----
-
-## Data Science Environment
-
-Activate:
+Use the environment appropriate to the lesson. Terminal activation does not automatically select a notebook's kernel: choose the matching kernel in VS Code/Jupyter too.
 
 ```bash
 source /opt/envs/ds/bin/activate
+python -c "import pandas, sklearn; print('Environment ready')"
 ```
 
-Test:
+You can call an interpreter directly, for example `/opt/envs/torch/bin/python your_script.py`. GPU visibility and framework compatibility depend on the assigned workspace; introductory programming/data lessons do not require a GPU.
+
+Keep work under the persistent home directory and push your own projects to Git. A container's `/workspace` directory is not automatically a persistent Coder volume.
+
+### Option B: Your own Python environment
+
+Use a Python version supported by the lesson's dependencies. The Django practice projects use Django 5.2; Python 3.10 or newer is required for that framework. Individual AI lessons may need different framework/Python combinations.
+
+The repository has **no universal root `requirements.txt` or `setup.sh`**. This is a starting environment for basic notebooks, not a promise that every AI example uses the same dependencies:
 
 ```bash
-python -c "import pandas, sklearn, xgboost"
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install jupyterlab ipykernel numpy pandas matplotlib seaborn scikit-learn
+python -m ipykernel install --user --name cookiesensei-study --display-name "Python (CookieSensei study)"
+jupyter lab
 ```
 
-Deactivate:
+Open the lesson notebook and choose **Python (CookieSensei study)**. Install extra libraries only as required by the lesson, in a suitable environment. Some examples need downloaded datasets, model files or service credentials beyond what is committed; inspect their imports and paths first.
 
-```bash
-deactivate
-```
+Dataset paths can be relative to the notebook's working directory. If a file cannot be found, locate it in `datasets/` or the lesson's resources and adjust the example path deliberately.
 
----
+### Streamlit examples
 
-## ATS Resume AI Environment
-
-This environment is designed for:
-
-* Resume OCR
-* EasyOCR
-* Transformers
-* Sentence embeddings
-* ATS scoring
-
-Activate:
-
-```bash
-source /opt/envs/ats/bin/activate
-```
-
-Test OCR:
-
-```bash
-python -c "import easyocr; print('EasyOCR ready')"
-```
-
-Deactivate:
-
-```bash
-deactivate
-```
-
----
-
-# Running Python Without Activating
-
-You can also directly call Python from an environment:
-
-```bash
-/opt/envs/torch/bin/python script.py
-```
-
-Example:
-
-```bash
-/opt/envs/ats/bin/python resume_parser.py
-```
-
----
-
-# Available Jupyter Kernels
-
-If using JupyterLab inside the container, the following kernels are available:
-
-* **Python (TensorFlow)**
-* **Python (PyTorch)**
-* **Python (Data Science)**
-* **Python (ATS Resume AI)**
-
-Start JupyterLab:
-
-```bash
-/opt/envs/ds/bin/jupyter lab --ip=0.0.0.0 --port=8888 --allow-root
-```
-
----
-
-# Workspace Directory
-
-The container uses:
-
-```
-/workspace
-```
-
-as the main working directory.
-
-Any files in your host project directory will appear here inside the container.
-
----
-
-# GPU Support
-
-The container supports CUDA-enabled GPUs.
-
-Verify inside the container:
-
-```bash
-nvidia-smi
-```
-
-or:
-
-```bash
-python -c "import torch; print(torch.cuda.is_available())"
-```
-
----
-
-# Included Technologies
-
-The container includes support for:
-
-* TensorFlow
-* PyTorch
-* HuggingFace Transformers
-* Sentence Transformers
-* EasyOCR
-* Tesseract OCR
-* OpenCV
-* YOLOv8
-* Streamlit / Gradio / FastAPI
-* Pandas / Scikit-learn / XGBoost
-* JupyterLab
-
----
-
-
-
-
-
-## 🌐 Running Streamlit Apps
-
-The container supports running **Streamlit applications** for building interactive ML demos.
-
----
-
-### ▶️ Run a Streamlit App
-
-Activate the desired environment (example: Data Science):
-
-```bash
-source /opt/envs/ds/bin/activate
-```
-
-Run the app:
+In an environment containing Streamlit, run a selected lesson's app:
 
 ```bash
 streamlit run app.py --server.address 0.0.0.0 --server.port 8501
 ```
 
-If the above command gives error on file uploads, give extra permissions using the following command:
+Open localhost port 8501 for local work, or the authenticated Coder forwarded port in a lab. Keep CORS/XSRF protections enabled; diagnose URL/proxy configuration if an upload fails instead of disabling them as a routine workaround.
 
-```
-streamlit run app.py \
-    --server.address 0.0.0.0 \
-    --server.port 8501 \
-    --server.enableXsrfProtection false \
-    --server.enableCORS false
-```
+## Run the web application projects
 
----
-
-### 🌍 Access the App
-
-- **Local:**
-  ```
-  http://localhost:8501
-  ```
-
-- **Remote (Coder / VM / Cloud):**
-  - Forward port **8501**
-  - Open the forwarded URL
-
----
-
-### ⚠️ Notes
-
-- `0.0.0.0` is required for Docker/remote environments  
-- Default port is **8501**  
-- Change port if needed:
+Phase 4 contains independent Django projects plus a plain JavaScript project. Example, from the repository root in a Linux/macOS shell:
 
 ```bash
-streamlit run app.py --server.address 0.0.0.0 --server.port 8080
-```
-
-
-
-------------------------------------------------------------------------
-
-# 🧠 Creating Your Langchain Virtual Environment 
-
-Students can create their own LangChain/GenAI environment.
-
-## 🚀 Setup
-
-    bash setup.sh
-    source .venv/bin/activate
-
-## 🧪 Verify
-
-    python -c "import langchain; print('LangChain ready')"
-
-## 📓 Jupyter
-
-Select:
-
-    Python (langchain-env)
-
-## 🧹 Reset Environment
-
-    rm -rf .venv
-    bash setup.sh
-
-------------------------------------------------------------------------
-
-# 📁 Workflow
-
-    git clone <repo>
-    cd project
-    bash setup.sh
-    source .venv/bin/activate
-    python app.py
-
-------------------------------------------------------------------------
-
-# Workspace Directory
-
-    /workspace
-
-------------------------------------------------------------------------
-
-# GPU Support
-
-    nvidia-smi
-
----
-
-
-
----
-
-# 🧠 Creating Your Own Virtual Environment (Recommended for Students)
-
-Students should create their own environment for projects (especially GenAI / LangChain).
-
----
-
-## 🚀 Step-by-Step Setup
-
-### 1. Go to your project folder
-
-```bash
-cd my-project
-```
-
----
-
-### 2. Create virtual environment
-
-```bash
+cd "Phase-4>Build-Web-Applications/projects/01-my-first-django-website"
 python3 -m venv .venv
-```
-
----
-
-### 3. Activate it
-
-```bash
 source .venv/bin/activate
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
 ```
 
----
+Open `http://127.0.0.1:8000`. In a remote lab, use `python manage.py runserver 0.0.0.0:8000` and Coder's authenticated port forwarding; configure the project's allowed host for that preview hostname as needed. Django's development server is for exercises, not public production hosting.
 
-### 4. Install dependencies
+Phase 4's JavaScript project needs no Python environment. Phase 5 introduces database/authentication/deployment concepts; read the [Phase 5 guide](Phase-5%3EMake-Applications-Real/README.md) and the selected project's README and environment example. Its production-style projects need settings beyond simply running the development server.
 
-#### Option A (Recommended)
+## How the complete CookieSensei system works
 
-```bash
-pip install -r requirements.txt
+| Repository | Responsibility |
+| --- | --- |
+| **programming-and-ai** | What students learn: content, examples, manifest and publishing rules |
+| [cookiecloudlabs](https://github.com/cookieSensei/cookiecloudlabs) | Website/LMS integration, enrollment, payments, student/admin access and classroom interface |
+| [coder-templates](https://github.com/cookieSensei/coder-templates) | Reusable Docker environments and Terraform definitions for Cloud Labs |
+| [threadripper_fedora_services_virtual_classroom](https://github.com/cookieSensei/threadripper_fedora_services_virtual_classroom) | Fedora setup and self-hosted classroom API, LiveKit and recordings |
+
+Some companion repositories are private and require collaborator access.
+
+```mermaid
+flowchart TD
+    Author[Instructor edits main] --> Review[Content review]
+    Review --> Published[Approved published branch]
+    Published -->|server-side content loading| Website[CookieSensei website on Hostinger]
+    Student[Learner] --> Website
+    Student -->|assigned access| Coder[Coder OSS on Fedora]
+    Templates[coder-templates] --> Coder
+    Coder --> Lab[Browser VS Code and Docker workspace]
+    Published -->|clone lessons and exercises| Lab
+    Website -->|authorized class access| Classroom[Fedora classroom API]
+    Classroom --> LiveKit[LiveKit audio video and screen sharing]
+    Student <-->|live media| LiveKit
+    LiveKit --> Egress[Recording worker]
+    Egress --> Files[Recording storage on Fedora]
 ```
 
-#### Option B (Manual install)
+### Hostinger: website delivery
 
-```bash
-pip install langchain openai chromadb streamlit python-dotenv
-```
+The website repository's deployment notes describe an **Ubuntu Hostinger VPS** running Next.js through **PM2**, with **Nginx/HTTPS** in front. Operators pull an approved website revision, install dependencies, apply required database migrations, build Next.js and restart the PM2 process. Website code deployment is separate from publishing this curriculum.
 
----
+The live learning platform's contract is to load approved syllabus content **server-side**, resolve `published` to a commit SHA, and serve lessons/resources under CookieSensei URLs. Students do not need a GitHub token. The website default branch may differ from its deployed branch; the website README calls out that distinction.
 
-### 5. Verify setup
+### Fedora: labs and live classes
 
-```bash
-python -c "import langchain; print('LangChain ready')"
-```
+The Threadripper runs Fedora, Docker, Coder OSS and its separate database. Coder is exposed through a Cloudflare Tunnel and creates lab containers from `coder-templates`, with persistent home volumes and optional GPU access. Learners read a lesson, open their workspace, clone the exercises and run them with the appropriate environment.
 
----
+The same machine hosts the separate Fastify classroom API, classroom PostgreSQL, LiveKit, Redis and Egress recording worker. The website calls the classroom API over private connectivity; browsers join LiveKit media sessions with scoped tokens. Recordings remain runtime files, not syllabus/Git content.
 
-### 6. Deactivate
+Maintainers can find the detailed [Fedora/Coder/LiveKit setup](https://github.com/cookieSensei/threadripper_fedora_services_virtual_classroom#readme) and [Hostinger deployment](https://github.com/cookieSensei/cookiecloudlabs#hostinger-vps-deployment) in the companion guides. Their configuration does not need to be installed just to study a notebook.
 
-```bash
-deactivate
-```
+## Contribute and publish lessons
 
----
+1. Branch from `main` and edit the appropriate phase. Preserve the exact phase path and stable lesson/resource links.
+2. Follow the existing numbered filename conventions; ordering is derived naturally from filenames/directories.
+3. Run changed notebook cells or the affected project in a fresh, appropriate environment. Verify relative resource paths and remove private data, credentials and accidental sensitive outputs.
+4. Keep reusable datasets under `datasets/` or the relevant lesson resources, and update `course.json` only when the content structure changes.
+5. Review changes, then publish through the authenticated CookieSensei admin workflow described in [`PUBLISHING.md`](PUBLISHING.md).
 
-# ⚡ One-Command Setup (Easiest)
+`main` is the **authoring** branch; `published` is the **learner-facing** branch. Publishing fast-forwards `published` to an approved `main` commit. A commit to `main` does not automatically publish a website lesson. This repository is public, so “draft” means not yet selected for the learning website, not private.
 
-If provided, run:
+The manifest recognizes `.md` and `.ipynb` lessons, lists permitted resource extensions, declares `datasets` as a public resource root, and excludes the root README/`note.txt`/`.gitignore` from course content. There is no root application build or universal test command; validate the material you change.
 
-```bash
-bash setup.sh
-source .venv/bin/activate
-```
+## Common problems
 
----
+| Problem | What to check |
+| --- | --- |
+| Windows clone says invalid path | Use a Linux filesystem/WSL home or Cloud Lab; phase names contain `>` |
+| Shell command behaves strangely with a phase path | Quote the complete path |
+| Import works in terminal but not notebook | Notebook kernel uses a different interpreter |
+| Missing dataset/model | Working directory, lesson resource instructions and file paths |
+| No GPU / CUDA error | Assigned template, selected environment and compatible framework; use CPU where the lesson allows |
+| Web project cannot find Django | Activate that project's environment and install its own requirements |
+| Port opens locally but not in a lab | Bind to the appropriate interface, forward the port and allow the preview hostname |
+| Edits are absent from the learning website | Confirm the approved `published` revision and publishing workflow |
 
-# 🔁 Reset Environment (If Something Breaks)
+## License and attribution
 
-```bash
-rm -rf .venv
-bash setup.sh
-```
-
----
-
-# 📓 Jupyter Notebook Support
-
-After setup:
-
-```bash
-python -m ipykernel install --user --name=langchain-env
-```
-
-Then select kernel:
-
-```
-Python (langchain-env)
-```
-
----
-
-# 💻 VS Code / Coder Users
-
-1. Open Command Palette (`Ctrl + Shift + P`)
-2. Select:
-
-   ```
-   Python: Select Interpreter
-   ```
-3. Choose:
-
-   ```
-   .venv/bin/python
-   ```
-
----
-
-
-
----
-
-# 🎯 Best Practices
-
-### ✅ Do
-
-* Create `.venv` per project
-* Use `requirements.txt`
-* Activate environment before running code
-
-### ❌ Don’t
-
-* Don’t install packages globally
-* Don’t reuse environments across projects
-
----
-
-# 🚀 Example Workflow
-
-```bash
-git clone <your-repo>
-cd project
-
-bash setup.sh
-source .venv/bin/activate
-
-python app.py
-```
-
----
-
-# 📜 License
-
-MIT License
-
-
+The repository's existing README declared **MIT License**; a standalone `LICENSE` file is not currently included. This documentation update preserves that declaration rather than introducing new license terms. Credit CookieSensei and link back to this repository when sharing material; consult the [published reuse guidance](https://cookiesensei.com/learn) for the program's attribution information.
