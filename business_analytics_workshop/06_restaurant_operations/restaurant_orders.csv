@@ -1,0 +1,601 @@
+order_id,date,branch,meal_period,channel,guests,bill_amount,food_cost,wait_minutes,rating
+DINE-0001,2025-01-01,Central,Dinner,Takeaway,1,470.12,102.74,54,3
+DINE-0002,2025-01-02,University,Breakfast,Dine in,3,1242.74,381.17,47,3
+DINE-0003,2025-01-03,Central,Lunch,Delivery,3,1430.24,370.61,34,4
+DINE-0004,2025-01-04,University,Dinner,Dine in,6,1858.33,809.89,55,3
+DINE-0005,2025-01-05,Riverside,Breakfast,Dine in,1,395.84,100.65,6,5
+DINE-0006,2025-01-06,University,Lunch,Takeaway,2,850.77,171.72,51,2
+DINE-0007,2025-01-07,Riverside,Dinner,Takeaway,3,554.65,249.95,50,3
+DINE-0008,2025-01-08,University,Breakfast,Dine in,2,742.35,176.56,12,5
+DINE-0009,2025-01-09,Riverside,Dinner,Dine in,5,2831.63,577.06,18,4
+DINE-0010,2025-01-10,Riverside,Dinner,Takeaway,6,3158.24,724.39,9,5
+DINE-0011,2025-01-11,Central,Breakfast,Dine in,3,1170.6,353.84,15,5
+DINE-0012,2025-01-12,Central,Breakfast,Dine in,3,815.13,447.12,26,3
+DINE-0013,2025-01-13,Central,Lunch,Dine in,1,465.93,97.71,49,3
+DINE-0014,2025-01-14,Riverside,Breakfast,Takeaway,6,3209.14,867.61,38,3
+DINE-0015,2025-01-15,Central,Breakfast,Dine in,2,738.65,175.03,6,5
+DINE-0016,2025-01-16,Riverside,Breakfast,Delivery,6,2208.86,488.4,36,4
+DINE-0017,2025-01-17,Central,Dinner,Takeaway,1,446.9,107.71,21,4
+DINE-0018,2025-01-18,University,Breakfast,Delivery,4,806.67,333.79,55,3
+DINE-0019,2025-01-19,Riverside,Breakfast,Delivery,5,2096.45,374.03,35,3
+DINE-0020,2025-01-20,University,Breakfast,Delivery,2,941.47,200.28,45,3
+DINE-0021,2025-01-21,University,Lunch,Delivery,5,1864.35,707.32,39,4
+DINE-0022,2025-01-22,University,Dinner,Takeaway,6,3680.03,822.8,13,5
+DINE-0023,2025-01-23,Riverside,Dinner,Delivery,2,790.33,197.38,27,4
+DINE-0024,2025-01-24,Riverside,Breakfast,Delivery,3,641.36,354.65,37,2
+DINE-0025,2025-01-25,Riverside,Lunch,Delivery,1,602.64,89.54,36,3
+DINE-0026,2025-01-26,Riverside,Dinner,Dine in,4,1064.66,355.24,19,5
+DINE-0027,2025-01-27,Riverside,Dinner,Delivery,1,268.21,124.73,39,4
+DINE-0028,2025-01-28,University,Breakfast,Dine in,2,1208.08,235.65,32,4
+DINE-0029,2025-01-29,Riverside,Dinner,Takeaway,5,1979.3,385.56,27,4
+DINE-0030,2025-01-30,Riverside,Lunch,Dine in,4,2339.96,291.86,24,4
+DINE-0031,2025-01-31,Riverside,Dinner,Dine in,3,1094.17,427.26,17,4
+DINE-0032,2025-02-01,Central,Dinner,Takeaway,4,1389.44,394.29,16,5
+DINE-0033,2025-02-02,Riverside,Lunch,Dine in,1,368.7,89.97,13,5
+DINE-0034,2025-02-03,Central,Lunch,Takeaway,6,1592.87,727.61,20,4
+DINE-0035,2025-02-04,Central,Breakfast,Delivery,3,1076.32,290.59,31,3
+DINE-0036,2025-02-05,Central,Dinner,Takeaway,5,1806.47,472.54,35,3
+DINE-0037,2025-02-06,Riverside,Lunch,Takeaway,3,553.83,249.78,55,3
+DINE-0038,2025-02-07,Riverside,Breakfast,Delivery,6,1016.67,566.88,11,4
+DINE-0039,2025-02-08,Central,Breakfast,Dine in,3,811.66,426.62,23,4
+DINE-0040,2025-02-09,University,Dinner,Delivery,2,477.24,144.62,23,4
+DINE-0041,2025-02-10,Riverside,Breakfast,Takeaway,3,1119.53,325.37,15,4
+DINE-0042,2025-02-11,University,Dinner,Takeaway,2,877.92,239.09,28,4
+DINE-0043,2025-02-12,Central,Dinner,Takeaway,2,560.25,251.38,27,4
+DINE-0044,2025-02-13,University,Lunch,Takeaway,2,669.6,219.44,55,2
+DINE-0045,2025-02-14,University,Lunch,Dine in,3,527.69,382.57,24,4
+DINE-0046,2025-02-15,Riverside,Breakfast,Takeaway,5,1895.49,542.9,46,3
+DINE-0047,2025-02-16,Central,Dinner,Delivery,5,2580.1,385.12,36,3
+DINE-0048,2025-02-17,Central,Breakfast,Dine in,6,1819.97,518.06,23,5
+DINE-0049,2025-02-18,Central,Dinner,Delivery,3,1421.28,246.16,28,4
+DINE-0050,2025-02-19,Central,Dinner,Dine in,4,1854.33,367.8,5,5
+DINE-0051,2025-02-20,Riverside,Dinner,Delivery,1,501.2,129.14,44,3
+DINE-0052,2025-02-21,Central,Dinner,Dine in,1,509.47,87.09,30,3
+DINE-0053,2025-02-22,Central,Dinner,Dine in,5,2942.51,556.63,37,4
+DINE-0054,2025-02-23,Riverside,Dinner,Delivery,3,898.82,377.51,46,2
+DINE-0055,2025-02-24,Central,Breakfast,Delivery,3,1577.14,311.46,45,3
+DINE-0056,2025-02-25,Central,Breakfast,Delivery,1,608.99,76.83,6,5
+DINE-0057,2025-02-26,University,Breakfast,Dine in,6,3342.3,686.18,50,3
+DINE-0058,2025-02-27,University,Breakfast,Dine in,2,1040.41,255.23,12,4
+DINE-0059,2025-02-28,Central,Lunch,Takeaway,1,527.38,126.31,6,4
+DINE-0060,2025-03-01,University,Lunch,Delivery,3,499.44,412.61,22,4
+DINE-0061,2025-03-02,University,Lunch,Delivery,2,1157.99,265.54,20,5
+DINE-0062,2025-03-03,University,Breakfast,Dine in,6,1435.25,612.65,54,2
+DINE-0063,2025-03-04,University,Breakfast,Dine in,2,1066.97,144.52,10,5
+DINE-0064,2025-03-05,Riverside,Breakfast,Dine in,1,387.89,146.08,8,5
+DINE-0065,2025-03-06,University,Lunch,Takeaway,1,414.14,116.41,7,5
+DINE-0066,2025-03-07,Riverside,Dinner,Dine in,6,2512.43,754.72,24,4
+DINE-0067,2025-03-08,Central,Lunch,Delivery,3,1338.55,227.23,36,3
+DINE-0068,2025-03-09,Riverside,Breakfast,Dine in,3,1421.84,433.88,42,3
+DINE-0069,2025-03-10,Central,Lunch,Delivery,3,1310.77,242.07,29,4
+DINE-0070,2025-03-11,Central,Dinner,Delivery,6,2287.03,653.7,39,2
+DINE-0071,2025-03-12,Riverside,Dinner,Takeaway,4,1309.44,444.68,46,3
+DINE-0072,2025-03-13,Central,Dinner,Dine in,3,1154.6,335.85,38,3
+DINE-0073,2025-03-14,University,Lunch,Takeaway,3,1688.86,242.55,49,4
+DINE-0074,2025-03-15,Central,Lunch,Takeaway,4,1377.04,399.64,29,4
+DINE-0075,2025-03-16,University,Lunch,Delivery,3,1178.9,401.52,18,4
+DINE-0076,2025-03-17,Riverside,Lunch,Takeaway,2,1291.24,158.55,27,5
+DINE-0077,2025-03-18,University,Lunch,Dine in,4,2137.66,410.32,13,5
+DINE-0078,2025-03-19,Riverside,Dinner,Takeaway,6,3097.99,664.4,17,5
+DINE-0079,2025-03-20,Riverside,Dinner,Takeaway,2,846.08,161.92,25,4
+DINE-0080,2025-03-21,University,Dinner,Takeaway,1,312.31,122.47,25,5
+DINE-0081,2025-03-22,Riverside,Breakfast,Delivery,6,3798.3,482.09,28,3
+DINE-0082,2025-03-23,Riverside,Dinner,Delivery,2,755.32,156.74,11,5
+DINE-0083,2025-03-24,University,Lunch,Delivery,2,642.14,145.96,31,3
+DINE-0084,2025-03-25,Riverside,Dinner,Dine in,5,1923.01,696.49,16,4
+DINE-0085,2025-03-26,Central,Lunch,Delivery,6,3749.74,505.36,42,3
+DINE-0086,2025-03-27,University,Breakfast,Delivery,2,620.54,186.51,22,4
+DINE-0087,2025-03-28,Riverside,Lunch,Dine in,6,1797.34,454.57,15,4
+DINE-0088,2025-03-29,Central,Dinner,Dine in,2,1272.87,248.87,27,4
+DINE-0089,2025-03-30,University,Breakfast,Takeaway,3,1948.43,267.91,50,2
+DINE-0090,2025-03-31,Riverside,Breakfast,Takeaway,3,1225.16,316.02,53,4
+DINE-0091,2025-04-01,Central,Breakfast,Dine in,4,2242.48,352.57,17,5
+DINE-0092,2025-04-02,Central,Breakfast,Delivery,5,876.73,520.09,19,4
+DINE-0093,2025-04-03,Riverside,Lunch,Takeaway,4,2420.29,355.12,20,4
+DINE-0094,2025-04-04,Riverside,Lunch,Delivery,2,1048.76,247.14,20,3
+DINE-0095,2025-04-05,Central,Breakfast,Dine in,4,1109.69,383.01,42,3
+DINE-0096,2025-04-06,Central,Dinner,Delivery,5,3123.74,379.94,41,4
+DINE-0097,2025-04-07,Central,Lunch,Takeaway,5,1988.2,603.98,24,3
+DINE-0098,2025-04-08,Riverside,Lunch,Delivery,1,627.96,129.9,11,4
+DINE-0099,2025-04-09,Central,Breakfast,Dine in,1,465.63,90.58,33,4
+DINE-0100,2025-04-10,Riverside,Breakfast,Takeaway,4,684.18,408.68,42,3
+DINE-0101,2025-04-11,University,Dinner,Delivery,2,715.76,234.4,44,4
+DINE-0102,2025-04-12,Riverside,Dinner,Dine in,6,1338.46,664.29,20,5
+DINE-0103,2025-04-13,Central,Breakfast,Takeaway,5,1075.32,352.38,5,4
+DINE-0104,2025-04-14,Central,Breakfast,Dine in,3,1308.81,280.12,54,3
+DINE-0105,2025-04-15,Central,Breakfast,Takeaway,2,543.52,201.71,22,4
+DINE-0106,2025-04-16,Riverside,Lunch,Takeaway,3,1285.63,272.84,15,5
+DINE-0107,2025-04-17,Central,Dinner,Dine in,2,730.36,298.97,29,3
+DINE-0108,2025-04-18,University,Dinner,Dine in,5,2691.0,557.44,31,4
+DINE-0109,2025-04-19,University,Breakfast,Dine in,5,1791.26,559.84,13,4
+DINE-0110,2025-04-20,Central,Lunch,Dine in,2,1019.35,245.81,40,3
+DINE-0111,2025-04-21,Riverside,Lunch,Delivery,1,626.31,139.43,16,5
+DINE-0112,2025-04-22,Riverside,Lunch,Delivery,4,2088.73,368.24,28,3
+DINE-0113,2025-04-23,Riverside,Dinner,Dine in,4,1918.35,554.88,22,5
+DINE-0114,2025-04-24,University,Lunch,Delivery,3,905.53,361.24,29,3
+DINE-0115,2025-04-25,Riverside,Breakfast,Dine in,4,1973.81,303.77,23,4
+DINE-0116,2025-04-26,University,Lunch,Dine in,3,1109.88,254.14,25,3
+DINE-0117,2025-04-27,University,Breakfast,Delivery,5,1625.3,673.09,8,5
+DINE-0118,2025-04-28,Riverside,Lunch,Dine in,4,823.25,552.14,11,4
+DINE-0119,2025-04-29,Central,Breakfast,Delivery,1,629.61,88.77,41,3
+DINE-0120,2025-04-30,University,Dinner,Delivery,6,1253.6,579.11,43,3
+DINE-0121,2025-01-01,Central,Breakfast,Dine in,4,1380.37,408.92,30,4
+DINE-0122,2025-01-02,University,Lunch,Dine in,5,1146.86,708.5,16,4
+DINE-0123,2025-01-03,Riverside,Breakfast,Takeaway,2,462.66,267.56,30,3
+DINE-0124,2025-01-04,University,Breakfast,Dine in,3,1812.51,250.31,49,4
+DINE-0125,2025-01-05,Central,Lunch,Dine in,2,379.85,228.45,5,5
+DINE-0126,2025-01-06,University,Lunch,Takeaway,4,2078.31,395.61,5,4
+DINE-0127,2025-01-07,Riverside,Lunch,Dine in,1,483.63,140.54,38,3
+DINE-0128,2025-01-08,Central,Dinner,Dine in,2,737.67,152.37,37,3
+DINE-0129,2025-01-09,Riverside,Breakfast,Dine in,5,3185.84,442.04,50,3
+DINE-0130,2025-01-10,University,Breakfast,Takeaway,6,1346.97,646.02,9,4
+DINE-0131,2025-01-11,Central,Breakfast,Delivery,5,2922.51,546.85,24,4
+DINE-0132,2025-01-12,University,Lunch,Takeaway,1,633.8,140.82,11,5
+DINE-0133,2025-01-13,University,Dinner,Delivery,4,1050.19,369.9,50,3
+DINE-0134,2025-01-14,Riverside,Dinner,Takeaway,5,2544.08,465.57,34,4
+DINE-0135,2025-01-15,University,Dinner,Dine in,5,2104.38,381.47,41,3
+DINE-0136,2025-01-16,Riverside,Dinner,Dine in,5,1869.83,515.79,6,4
+DINE-0137,2025-01-17,Riverside,Lunch,Delivery,6,2012.89,698.17,9,5
+DINE-0138,2025-01-18,University,Breakfast,Takeaway,2,1229.51,143.42,22,3
+DINE-0139,2025-01-19,Central,Lunch,Delivery,2,1165.18,165.05,14,5
+DINE-0140,2025-01-20,University,Lunch,Delivery,1,628.1,133.55,26,3
+DINE-0141,2025-01-21,Central,Breakfast,Dine in,4,970.5,507.36,30,3
+DINE-0142,2025-01-22,Riverside,Dinner,Delivery,3,1916.09,326.42,30,3
+DINE-0143,2025-01-23,Central,Lunch,Dine in,5,3187.56,651.66,51,3
+DINE-0144,2025-01-24,University,Breakfast,Dine in,4,2551.24,545.36,55,2
+DINE-0145,2025-01-25,Riverside,Breakfast,Delivery,1,221.38,147.71,36,4
+DINE-0146,2025-01-26,University,Breakfast,Takeaway,4,1949.18,406.95,32,3
+DINE-0147,2025-01-27,Central,Breakfast,Dine in,3,1529.93,216.92,20,5
+DINE-0148,2025-01-28,Central,Dinner,Delivery,2,770.08,209.83,19,4
+DINE-0149,2025-01-29,University,Breakfast,Dine in,3,849.89,360.72,37,4
+DINE-0150,2025-01-30,University,Lunch,Takeaway,6,2657.63,536.29,43,4
+DINE-0151,2025-01-31,Riverside,Breakfast,Dine in,1,179.71,106.12,51,3
+DINE-0152,2025-02-01,University,Lunch,Dine in,5,979.79,483.65,52,3
+DINE-0153,2025-02-02,Central,Dinner,Delivery,4,693.0,489.47,25,4
+DINE-0154,2025-02-03,Riverside,Dinner,Delivery,3,1171.84,429.55,7,5
+DINE-0155,2025-02-04,University,Lunch,Takeaway,3,858.96,376.65,24,3
+DINE-0156,2025-02-05,Riverside,Dinner,Delivery,5,3246.98,678.32,7,5
+DINE-0157,2025-02-06,Central,Dinner,Delivery,1,280.29,131.16,52,3
+DINE-0158,2025-02-07,Riverside,Dinner,Takeaway,1,280.39,149.35,32,2
+DINE-0159,2025-02-08,Riverside,Lunch,Delivery,5,1657.75,380.21,17,4
+DINE-0160,2025-02-09,University,Breakfast,Delivery,6,3599.98,803.6,7,5
+DINE-0161,2025-02-10,University,Lunch,Takeaway,5,950.92,746.57,42,3
+DINE-0162,2025-02-11,Riverside,Dinner,Takeaway,1,165.88,121.14,15,5
+DINE-0163,2025-02-12,University,Lunch,Dine in,2,846.38,204.75,12,5
+DINE-0164,2025-02-13,Central,Dinner,Delivery,6,1632.06,794.1,24,4
+DINE-0165,2025-02-14,Central,Dinner,Takeaway,6,2950.82,506.14,21,3
+DINE-0166,2025-02-15,Central,Dinner,Takeaway,2,467.44,293.27,53,3
+DINE-0167,2025-02-16,Central,Breakfast,Dine in,3,685.53,210.66,12,5
+DINE-0168,2025-02-17,Central,Lunch,Takeaway,3,1746.2,227.64,28,4
+DINE-0169,2025-02-18,University,Dinner,Delivery,2,578.29,247.96,49,3
+DINE-0170,2025-02-19,University,Breakfast,Dine in,1,481.21,136.39,14,4
+DINE-0171,2025-02-20,Central,Dinner,Dine in,6,1175.73,820.05,50,3
+DINE-0172,2025-02-21,University,Breakfast,Takeaway,4,2352.91,429.18,29,4
+DINE-0173,2025-02-22,Riverside,Lunch,Takeaway,2,480.55,265.46,28,5
+DINE-0174,2025-02-23,University,Breakfast,Delivery,1,185.81,119.43,46,3
+DINE-0175,2025-02-24,Central,Breakfast,Delivery,1,623.33,105.0,38,3
+DINE-0176,2025-02-25,Riverside,Lunch,Delivery,2,1055.59,202.66,27,3
+DINE-0177,2025-02-26,Central,Dinner,Dine in,3,748.83,449.52,44,4
+DINE-0178,2025-02-27,University,Dinner,Takeaway,2,590.56,178.08,43,2
+DINE-0179,2025-02-28,Riverside,Breakfast,Delivery,4,1814.74,403.88,49,2
+DINE-0180,2025-03-01,Central,Lunch,Delivery,5,2435.36,381.23,33,4
+DINE-0181,2025-03-02,University,Dinner,Dine in,6,2946.15,871.75,34,3
+DINE-0182,2025-03-03,Riverside,Breakfast,Dine in,3,827.16,312.39,47,2
+DINE-0183,2025-03-04,Central,Dinner,Dine in,1,486.88,112.21,42,4
+DINE-0184,2025-03-05,University,Dinner,Takeaway,4,2425.25,531.56,19,4
+DINE-0185,2025-03-06,Riverside,Breakfast,Takeaway,6,1543.6,877.42,37,3
+DINE-0186,2025-03-07,University,Breakfast,Delivery,4,1608.79,476.56,22,5
+DINE-0187,2025-03-08,Riverside,Dinner,Dine in,6,2900.93,467.7,51,3
+DINE-0188,2025-03-09,Riverside,Lunch,Delivery,5,1943.71,640.03,52,3
+DINE-0189,2025-03-10,Riverside,Breakfast,Dine in,4,1977.06,405.43,11,4
+DINE-0190,2025-03-11,Central,Breakfast,Takeaway,1,298.43,129.95,22,4
+DINE-0191,2025-03-12,University,Lunch,Takeaway,5,837.44,545.8,12,5
+DINE-0192,2025-03-13,Central,Dinner,Takeaway,4,2261.88,298.07,52,2
+DINE-0193,2025-03-14,Central,Dinner,Delivery,3,573.55,285.9,33,2
+DINE-0194,2025-03-15,Central,Dinner,Dine in,1,303.99,119.36,29,3
+DINE-0195,2025-03-16,Riverside,Breakfast,Delivery,6,1362.2,524.91,23,3
+DINE-0196,2025-03-17,University,Breakfast,Delivery,2,700.26,238.09,27,4
+DINE-0197,2025-03-18,University,Breakfast,Delivery,6,3680.51,691.76,27,3
+DINE-0198,2025-03-19,University,Lunch,Dine in,1,205.48,119.58,40,2
+DINE-0199,2025-03-20,Central,Dinner,Delivery,2,610.1,201.97,33,4
+DINE-0200,2025-03-21,Central,Dinner,Takeaway,6,2568.67,488.05,6,3
+DINE-0201,2025-03-22,University,Dinner,Takeaway,6,3870.32,690.69,20,5
+DINE-0202,2025-03-23,Central,Lunch,Dine in,3,1888.98,385.27,26,4
+DINE-0203,2025-03-24,Central,Breakfast,Delivery,5,2130.44,648.59,52,3
+DINE-0204,2025-03-25,Central,Dinner,Takeaway,3,1086.56,211.44,20,4
+DINE-0205,2025-03-26,Central,Lunch,Delivery,5,1932.14,660.22,15,5
+DINE-0206,2025-03-27,Central,Lunch,Delivery,2,878.8,259.34,12,5
+DINE-0207,2025-03-28,University,Lunch,Delivery,1,167.38,97.93,54,2
+DINE-0208,2025-03-29,Central,Dinner,Dine in,3,1113.17,377.68,54,3
+DINE-0209,2025-03-30,Central,Breakfast,Dine in,3,605.55,218.06,44,1
+DINE-0210,2025-03-31,University,Breakfast,Delivery,1,642.16,115.53,54,3
+DINE-0211,2025-04-01,University,Lunch,Takeaway,1,410.36,114.9,37,3
+DINE-0212,2025-04-02,Riverside,Breakfast,Delivery,6,3575.91,680.81,30,4
+DINE-0213,2025-04-03,University,Lunch,Delivery,6,3540.99,776.97,37,4
+DINE-0214,2025-04-04,University,Lunch,Delivery,1,318.26,92.15,49,3
+DINE-0215,2025-04-05,Riverside,Lunch,Delivery,2,514.08,212.71,20,3
+DINE-0216,2025-04-06,University,Breakfast,Takeaway,1,364.0,105.23,51,4
+DINE-0217,2025-04-07,Riverside,Lunch,Dine in,5,3171.04,582.13,42,4
+DINE-0218,2025-04-08,University,Breakfast,Takeaway,2,1237.31,191.46,25,5
+DINE-0219,2025-04-09,University,Lunch,Takeaway,2,616.76,207.45,24,4
+DINE-0220,2025-04-10,Riverside,Lunch,Delivery,1,410.62,133.69,11,5
+DINE-0221,2025-04-11,University,Breakfast,Delivery,3,1404.24,422.33,34,4
+DINE-0222,2025-04-12,University,Breakfast,Takeaway,2,1279.15,250.97,33,2
+DINE-0223,2025-04-13,Riverside,Lunch,Takeaway,5,1505.0,424.43,42,2
+DINE-0224,2025-04-14,Riverside,Lunch,Dine in,5,1894.06,606.49,16,4
+DINE-0225,2025-04-15,Central,Dinner,Dine in,4,1412.42,290.27,32,3
+DINE-0226,2025-04-16,Riverside,Dinner,Delivery,5,2519.59,658.1,31,4
+DINE-0227,2025-04-17,Central,Breakfast,Delivery,1,634.36,100.8,12,4
+DINE-0228,2025-04-18,University,Lunch,Takeaway,3,834.48,405.6,45,3
+DINE-0229,2025-04-19,University,Breakfast,Delivery,5,1597.68,481.17,19,4
+DINE-0230,2025-04-20,Riverside,Breakfast,Takeaway,1,580.35,101.93,14,4
+DINE-0231,2025-04-21,Central,Dinner,Takeaway,6,2863.18,532.46,21,4
+DINE-0232,2025-04-22,University,Dinner,Dine in,2,860.94,227.09,15,4
+DINE-0233,2025-04-23,Riverside,Breakfast,Takeaway,5,1422.07,448.65,19,5
+DINE-0234,2025-04-24,Riverside,Breakfast,Dine in,1,556.21,107.32,53,3
+DINE-0235,2025-04-25,University,Dinner,Takeaway,4,1109.26,323.65,52,3
+DINE-0236,2025-04-26,Riverside,Lunch,Dine in,3,1390.1,280.0,33,5
+DINE-0237,2025-04-27,University,Dinner,Dine in,2,771.73,270.91,51,2
+DINE-0238,2025-04-28,Central,Dinner,Dine in,2,568.38,255.86,13,5
+DINE-0239,2025-04-29,Central,Breakfast,Takeaway,4,1086.79,456.49,19,4
+DINE-0240,2025-04-30,Central,Lunch,Delivery,2,998.35,224.85,10,4
+DINE-0241,2025-01-01,University,Dinner,Dine in,3,1352.95,268.01,39,4
+DINE-0242,2025-01-02,University,Dinner,Dine in,2,973.56,181.67,53,2
+DINE-0243,2025-01-03,University,Breakfast,Delivery,4,2216.4,342.64,36,2
+DINE-0244,2025-01-04,University,Breakfast,Dine in,5,865.35,535.14,10,5
+DINE-0245,2025-01-05,University,Dinner,Dine in,2,526.42,207.81,5,5
+DINE-0246,2025-01-06,Central,Dinner,Takeaway,6,1472.4,503.67,50,2
+DINE-0247,2025-01-07,University,Breakfast,Takeaway,4,1789.35,539.05,14,5
+DINE-0248,2025-01-08,Central,Breakfast,Dine in,1,335.37,108.41,20,5
+DINE-0249,2025-01-09,Riverside,Breakfast,Delivery,1,348.97,125.29,27,4
+DINE-0250,2025-01-10,Central,Lunch,Dine in,3,738.43,215.95,19,4
+DINE-0251,2025-01-11,Central,Breakfast,Dine in,4,2172.16,304.36,19,5
+DINE-0252,2025-01-12,University,Breakfast,Takeaway,3,1056.35,309.09,38,3
+DINE-0253,2025-01-13,University,Dinner,Delivery,5,1719.45,541.42,55,2
+DINE-0254,2025-01-14,Riverside,Dinner,Delivery,1,170.59,94.62,9,5
+DINE-0255,2025-01-15,University,Dinner,Delivery,5,1784.24,367.7,30,4
+DINE-0256,2025-01-16,University,Breakfast,Delivery,5,2403.52,607.05,22,3
+DINE-0257,2025-01-17,Central,Dinner,Delivery,6,2213.34,793.79,8,5
+DINE-0258,2025-01-18,University,Breakfast,Takeaway,1,455.24,114.92,21,4
+DINE-0259,2025-01-19,Central,Lunch,Delivery,6,2019.0,539.93,38,3
+DINE-0260,2025-01-20,Central,Dinner,Delivery,6,1879.63,860.03,47,3
+DINE-0261,2025-01-21,University,Breakfast,Dine in,2,1266.33,192.64,29,4
+DINE-0262,2025-01-22,Riverside,Breakfast,Dine in,3,1065.56,285.16,54,2
+DINE-0263,2025-01-23,Central,Dinner,Takeaway,4,1274.02,534.99,13,4
+DINE-0264,2025-01-24,University,Dinner,Takeaway,3,829.48,416.73,16,4
+DINE-0265,2025-01-25,University,Dinner,Dine in,5,1414.86,569.72,43,4
+DINE-0266,2025-01-26,University,Breakfast,Dine in,1,455.62,76.04,50,2
+DINE-0267,2025-01-27,Riverside,Breakfast,Delivery,4,857.79,420.16,8,5
+DINE-0268,2025-01-28,Riverside,Lunch,Delivery,6,2444.77,534.43,27,5
+DINE-0269,2025-01-29,Riverside,Lunch,Takeaway,2,625.07,177.28,36,3
+DINE-0270,2025-01-30,Riverside,Dinner,Delivery,1,516.54,118.67,53,3
+DINE-0271,2025-01-31,Riverside,Dinner,Takeaway,5,2488.62,718.68,13,4
+DINE-0272,2025-02-01,Riverside,Dinner,Delivery,5,1325.49,679.48,54,2
+DINE-0273,2025-02-02,Central,Breakfast,Dine in,6,2323.32,468.17,51,3
+DINE-0274,2025-02-03,Riverside,Breakfast,Dine in,3,1385.34,354.49,16,5
+DINE-0275,2025-02-04,Riverside,Dinner,Delivery,5,1014.54,432.17,28,3
+DINE-0276,2025-02-05,Central,Lunch,Delivery,1,615.35,92.77,47,4
+DINE-0277,2025-02-06,University,Breakfast,Dine in,1,596.78,70.13,55,2
+DINE-0278,2025-02-07,University,Dinner,Takeaway,1,645.79,149.32,30,4
+DINE-0279,2025-02-08,Central,Lunch,Dine in,2,774.99,278.95,39,3
+DINE-0280,2025-02-09,University,Breakfast,Takeaway,4,1938.53,345.48,7,5
+DINE-0281,2025-02-10,Riverside,Lunch,Dine in,1,591.72,94.02,29,4
+DINE-0282,2025-02-11,Riverside,Breakfast,Takeaway,5,2020.79,350.89,22,3
+DINE-0283,2025-02-12,University,Breakfast,Delivery,5,872.24,630.99,52,2
+DINE-0284,2025-02-13,University,Breakfast,Takeaway,6,1668.08,724.03,28,4
+DINE-0285,2025-02-14,University,Breakfast,Takeaway,6,2064.02,573.41,12,5
+DINE-0286,2025-02-15,Riverside,Lunch,Dine in,3,1184.82,403.42,38,3
+DINE-0287,2025-02-16,University,Lunch,Dine in,4,1145.77,558.31,44,2
+DINE-0288,2025-02-17,Riverside,Breakfast,Delivery,3,948.94,383.98,10,4
+DINE-0289,2025-02-18,University,Dinner,Delivery,5,2189.79,598.47,38,4
+DINE-0290,2025-02-19,University,Lunch,Delivery,6,1668.56,706.99,51,3
+DINE-0291,2025-02-20,Central,Lunch,Takeaway,6,3718.89,526.87,34,3
+DINE-0292,2025-02-21,University,Lunch,Takeaway,4,1718.41,332.47,45,3
+DINE-0293,2025-02-22,Riverside,Dinner,Dine in,3,1459.86,316.16,35,3
+DINE-0294,2025-02-23,Riverside,Breakfast,Dine in,3,774.9,226.21,42,3
+DINE-0295,2025-02-24,University,Lunch,Delivery,5,1782.13,657.71,5,5
+DINE-0296,2025-02-25,Riverside,Dinner,Dine in,5,829.5,473.84,21,4
+DINE-0297,2025-02-26,Riverside,Dinner,Delivery,6,1698.64,813.01,48,2
+DINE-0298,2025-02-27,University,Lunch,Delivery,4,725.88,426.76,8,5
+DINE-0299,2025-02-28,Riverside,Lunch,Takeaway,5,2809.88,408.03,25,5
+DINE-0300,2025-03-01,University,Lunch,Takeaway,1,589.12,140.74,31,4
+DINE-0301,2025-03-02,Riverside,Breakfast,Delivery,3,1056.43,285.16,45,3
+DINE-0302,2025-03-03,Riverside,Breakfast,Dine in,3,1060.05,290.76,41,3
+DINE-0303,2025-03-04,Central,Dinner,Dine in,2,563.33,260.79,53,3
+DINE-0304,2025-03-05,Riverside,Lunch,Delivery,2,882.47,270.87,47,3
+DINE-0305,2025-03-06,Riverside,Lunch,Delivery,6,3625.9,638.79,45,3
+DINE-0306,2025-03-07,University,Breakfast,Takeaway,4,1212.46,341.59,29,4
+DINE-0307,2025-03-08,Central,Breakfast,Delivery,2,427.18,259.46,51,2
+DINE-0308,2025-03-09,Riverside,Lunch,Dine in,2,1236.69,282.34,25,4
+DINE-0309,2025-03-10,Central,Dinner,Takeaway,5,2519.75,394.62,45,3
+DINE-0310,2025-03-11,Central,Dinner,Delivery,1,280.84,135.82,45,2
+DINE-0311,2025-03-12,University,Breakfast,Takeaway,4,2347.11,540.02,27,4
+DINE-0312,2025-03-13,Central,Breakfast,Dine in,5,1385.79,663.5,14,4
+DINE-0313,2025-03-14,Central,Lunch,Takeaway,5,2049.79,641.3,19,4
+DINE-0314,2025-03-15,Central,Dinner,Takeaway,4,1292.11,486.06,9,5
+DINE-0315,2025-03-16,Central,Lunch,Delivery,4,1002.32,594.47,54,2
+DINE-0316,2025-03-17,Central,Dinner,Delivery,5,3228.65,502.11,14,5
+DINE-0317,2025-03-18,Riverside,Lunch,Takeaway,6,1587.48,619.47,22,4
+DINE-0318,2025-03-19,University,Breakfast,Dine in,3,857.34,436.23,31,3
+DINE-0319,2025-03-20,University,Lunch,Takeaway,5,1102.24,482.54,44,3
+DINE-0320,2025-03-21,University,Dinner,Delivery,4,1402.37,505.19,39,3
+DINE-0321,2025-03-22,University,Lunch,Takeaway,1,274.12,115.34,36,3
+DINE-0322,2025-03-23,Riverside,Breakfast,Takeaway,4,2520.62,525.15,11,5
+DINE-0323,2025-03-24,University,Lunch,Takeaway,3,1334.49,321.57,12,5
+DINE-0324,2025-03-25,Riverside,Dinner,Dine in,2,451.07,190.25,16,5
+DINE-0325,2025-03-26,Riverside,Lunch,Dine in,4,944.51,316.11,31,4
+DINE-0326,2025-03-27,Riverside,Breakfast,Takeaway,2,1138.14,297.26,41,2
+DINE-0327,2025-03-28,Central,Dinner,Dine in,2,727.75,281.78,13,4
+DINE-0328,2025-03-29,University,Breakfast,Delivery,6,2858.42,434.61,54,3
+DINE-0329,2025-03-30,University,Dinner,Delivery,2,711.42,214.03,40,4
+DINE-0330,2025-03-31,Riverside,Dinner,Takeaway,4,1059.58,533.34,30,4
+DINE-0331,2025-04-01,University,Breakfast,Dine in,3,1506.43,329.85,28,5
+DINE-0332,2025-04-02,Riverside,Lunch,Delivery,2,979.08,244.21,17,4
+DINE-0333,2025-04-03,Central,Dinner,Takeaway,6,1885.85,673.8,42,5
+DINE-0334,2025-04-04,Riverside,Dinner,Dine in,4,837.12,299.53,14,4
+DINE-0335,2025-04-05,University,Breakfast,Takeaway,2,407.5,246.58,24,4
+DINE-0336,2025-04-06,Central,Lunch,Delivery,2,914.0,141.42,8,5
+DINE-0337,2025-04-07,Riverside,Dinner,Dine in,6,3018.29,682.72,18,3
+DINE-0338,2025-04-08,Central,Lunch,Dine in,4,1412.5,550.04,24,5
+DINE-0339,2025-04-09,Central,Dinner,Dine in,2,859.09,140.1,33,4
+DINE-0340,2025-04-10,Riverside,Lunch,Delivery,2,478.44,201.76,16,4
+DINE-0341,2025-04-11,Riverside,Dinner,Dine in,4,2083.14,537.98,38,5
+DINE-0342,2025-04-12,University,Dinner,Delivery,3,833.04,244.43,29,4
+DINE-0343,2025-04-13,Central,Dinner,Takeaway,6,3572.72,509.6,42,2
+DINE-0344,2025-04-14,Central,Lunch,Dine in,3,958.34,218.23,21,4
+DINE-0345,2025-04-15,Central,Dinner,Dine in,1,610.88,117.04,9,5
+DINE-0346,2025-04-16,Riverside,Dinner,Takeaway,5,1812.32,379.69,54,2
+DINE-0347,2025-04-17,Central,Breakfast,Dine in,3,1934.12,434.07,35,4
+DINE-0348,2025-04-18,Riverside,Breakfast,Delivery,2,547.45,162.83,35,4
+DINE-0349,2025-04-19,Riverside,Breakfast,Delivery,1,249.0,143.84,39,3
+DINE-0350,2025-04-20,Central,Dinner,Takeaway,3,520.67,344.89,12,4
+DINE-0351,2025-04-21,University,Lunch,Delivery,6,2562.45,769.99,19,4
+DINE-0352,2025-04-22,Central,Dinner,Dine in,3,1218.31,317.43,55,3
+DINE-0353,2025-04-23,Central,Lunch,Delivery,5,2163.07,631.57,29,4
+DINE-0354,2025-04-24,University,Breakfast,Takeaway,4,2080.42,409.81,44,4
+DINE-0355,2025-04-25,University,Dinner,Takeaway,6,1663.45,685.45,8,5
+DINE-0356,2025-04-26,Central,Lunch,Takeaway,4,1679.36,508.53,54,3
+DINE-0357,2025-04-27,Central,Dinner,Dine in,4,1293.4,345.08,15,5
+DINE-0358,2025-04-28,University,Lunch,Delivery,3,1200.56,377.34,13,5
+DINE-0359,2025-04-29,University,Dinner,Delivery,6,3422.64,485.9,51,3
+DINE-0360,2025-04-30,Central,Breakfast,Takeaway,5,2854.57,550.06,31,4
+DINE-0361,2025-01-01,University,Lunch,Dine in,2,1110.23,165.05,25,3
+DINE-0362,2025-01-02,Riverside,Breakfast,Takeaway,1,202.15,133.45,29,3
+DINE-0363,2025-01-03,Central,Lunch,Dine in,1,204.9,145.68,10,5
+DINE-0364,2025-01-04,Riverside,Breakfast,Dine in,3,1351.06,234.98,52,3
+DINE-0365,2025-01-05,University,Breakfast,Delivery,3,1324.31,402.41,50,3
+DINE-0366,2025-01-06,University,Dinner,Dine in,2,1211.14,191.72,8,4
+DINE-0367,2025-01-07,Riverside,Lunch,Takeaway,3,1718.99,431.6,55,2
+DINE-0368,2025-01-08,Riverside,Lunch,Delivery,1,604.23,148.03,51,2
+DINE-0369,2025-01-09,Riverside,Lunch,Dine in,2,554.19,273.69,5,5
+DINE-0370,2025-01-10,University,Dinner,Takeaway,2,664.47,175.33,21,5
+DINE-0371,2025-01-11,Riverside,Breakfast,Delivery,6,2878.37,441.25,41,3
+DINE-0372,2025-01-12,University,Breakfast,Delivery,6,1615.58,860.96,23,5
+DINE-0373,2025-01-13,Riverside,Breakfast,Delivery,4,1117.4,542.55,49,2
+DINE-0374,2025-01-14,Riverside,Lunch,Dine in,2,1050.36,253.42,32,4
+DINE-0375,2025-01-15,Riverside,Lunch,Dine in,1,322.79,103.29,45,2
+DINE-0376,2025-01-16,Central,Lunch,Takeaway,1,446.23,106.2,50,3
+DINE-0377,2025-01-17,Riverside,Lunch,Takeaway,5,2386.27,743.24,22,4
+DINE-0378,2025-01-18,Riverside,Breakfast,Delivery,3,1121.57,318.54,46,2
+DINE-0379,2025-01-19,Riverside,Breakfast,Takeaway,4,1006.15,416.92,25,5
+DINE-0380,2025-01-20,University,Dinner,Dine in,4,1506.93,285.61,47,3
+DINE-0381,2025-01-21,Riverside,Dinner,Dine in,1,161.68,147.26,44,3
+DINE-0382,2025-01-22,Central,Breakfast,Dine in,3,754.82,265.63,22,3
+DINE-0383,2025-01-23,Riverside,Breakfast,Takeaway,1,460.59,96.6,48,4
+DINE-0384,2025-01-24,Central,Breakfast,Takeaway,2,766.27,243.16,27,4
+DINE-0385,2025-01-25,Riverside,Dinner,Delivery,1,482.8,149.51,19,4
+DINE-0386,2025-01-26,Central,Breakfast,Delivery,6,2492.83,662.86,13,5
+DINE-0387,2025-01-27,Central,Breakfast,Delivery,1,474.12,148.49,46,2
+DINE-0388,2025-01-28,University,Lunch,Takeaway,5,1180.83,746.6,42,4
+DINE-0389,2025-01-29,Central,Breakfast,Dine in,1,262.99,116.11,32,3
+DINE-0390,2025-01-30,Central,Lunch,Takeaway,6,1662.55,681.91,13,4
+DINE-0391,2025-01-31,University,Breakfast,Dine in,4,2473.31,445.66,47,2
+DINE-0392,2025-02-01,Riverside,Lunch,Dine in,3,1845.89,310.94,31,2
+DINE-0393,2025-02-02,University,Lunch,Takeaway,1,543.01,91.49,21,4
+DINE-0394,2025-02-03,Central,Breakfast,Takeaway,1,489.42,148.46,40,3
+DINE-0395,2025-02-04,University,Lunch,Delivery,5,1157.6,409.82,13,5
+DINE-0396,2025-02-05,Riverside,Dinner,Dine in,3,1666.85,312.93,33,3
+DINE-0397,2025-02-06,University,Dinner,Dine in,6,2330.31,558.29,14,5
+DINE-0398,2025-02-07,University,Breakfast,Dine in,6,1661.19,642.89,50,3
+DINE-0399,2025-02-08,University,Lunch,Dine in,4,667.55,280.09,28,4
+DINE-0400,2025-02-09,Riverside,Lunch,Takeaway,4,953.63,497.92,44,3
+DINE-0401,2025-02-10,Central,Breakfast,Delivery,6,2891.04,892.3,47,2
+DINE-0402,2025-02-11,University,Breakfast,Dine in,5,1498.95,472.14,8,5
+DINE-0403,2025-02-12,Riverside,Dinner,Delivery,1,455.14,93.05,20,5
+DINE-0404,2025-02-13,Riverside,Dinner,Dine in,6,3220.39,852.38,54,2
+DINE-0405,2025-02-14,Riverside,Lunch,Takeaway,4,2474.35,575.28,37,3
+DINE-0406,2025-02-15,Riverside,Lunch,Delivery,3,1216.18,315.45,26,4
+DINE-0407,2025-02-16,Riverside,Breakfast,Dine in,4,760.47,433.65,19,4
+DINE-0408,2025-02-17,Central,Breakfast,Delivery,5,845.02,705.0,20,5
+DINE-0409,2025-02-18,University,Lunch,Takeaway,1,472.99,132.57,48,3
+DINE-0410,2025-02-19,University,Breakfast,Delivery,2,558.35,261.96,55,4
+DINE-0411,2025-02-20,University,Breakfast,Takeaway,2,1198.89,180.3,50,2
+DINE-0412,2025-02-21,University,Dinner,Dine in,4,2088.19,385.18,30,5
+DINE-0413,2025-02-22,Riverside,Lunch,Takeaway,3,1183.29,343.9,17,4
+DINE-0414,2025-02-23,Riverside,Dinner,Takeaway,2,596.48,293.27,40,3
+DINE-0415,2025-02-24,University,Breakfast,Takeaway,5,2018.16,676.3,15,4
+DINE-0416,2025-02-25,Central,Lunch,Delivery,5,2037.24,516.56,43,3
+DINE-0417,2025-02-26,Riverside,Dinner,Dine in,6,1478.8,615.69,14,5
+DINE-0418,2025-02-27,Riverside,Breakfast,Delivery,5,3149.22,374.7,10,5
+DINE-0419,2025-02-28,University,Breakfast,Takeaway,6,2722.79,657.1,30,4
+DINE-0420,2025-03-01,Riverside,Lunch,Delivery,5,966.14,485.88,41,4
+DINE-0421,2025-03-02,University,Lunch,Takeaway,6,2076.75,541.49,32,3
+DINE-0422,2025-03-03,Riverside,Breakfast,Delivery,5,2171.74,635.81,17,4
+DINE-0423,2025-03-04,University,Dinner,Dine in,6,2243.19,647.2,12,4
+DINE-0424,2025-03-05,Riverside,Lunch,Delivery,3,975.77,231.82,26,4
+DINE-0425,2025-03-06,University,Dinner,Dine in,4,1382.3,570.83,40,4
+DINE-0426,2025-03-07,Central,Dinner,Dine in,6,2592.24,870.34,51,2
+DINE-0427,2025-03-08,Riverside,Dinner,Delivery,5,2057.52,691.5,52,2
+DINE-0428,2025-03-09,Central,Lunch,Dine in,5,3178.26,489.59,39,3
+DINE-0429,2025-03-10,Riverside,Lunch,Delivery,5,3085.36,496.76,47,3
+DINE-0430,2025-03-11,Central,Dinner,Delivery,2,1201.29,231.22,22,4
+DINE-0431,2025-03-12,University,Breakfast,Delivery,3,981.36,334.4,54,3
+DINE-0432,2025-03-13,Riverside,Breakfast,Delivery,2,570.24,274.6,11,4
+DINE-0433,2025-03-14,Central,Dinner,Dine in,3,1624.42,432.47,26,5
+DINE-0434,2025-03-15,Riverside,Lunch,Dine in,2,990.25,187.63,16,4
+DINE-0435,2025-03-16,Riverside,Breakfast,Dine in,1,357.49,86.08,33,2
+DINE-0436,2025-03-17,University,Lunch,Takeaway,6,3687.17,737.72,48,2
+DINE-0437,2025-03-18,Riverside,Breakfast,Dine in,5,2104.47,615.42,38,4
+DINE-0438,2025-03-19,Central,Lunch,Delivery,1,603.68,97.45,33,4
+DINE-0439,2025-03-20,Central,Breakfast,Dine in,4,1913.93,508.2,20,5
+DINE-0440,2025-03-21,Central,Dinner,Takeaway,3,580.22,349.34,27,3
+DINE-0441,2025-03-22,University,Breakfast,Takeaway,6,1867.39,814.77,12,5
+DINE-0442,2025-03-23,Central,Dinner,Takeaway,3,1944.16,287.79,34,4
+DINE-0443,2025-03-24,Central,Breakfast,Dine in,5,1140.2,531.69,29,4
+DINE-0444,2025-03-25,Riverside,Dinner,Takeaway,2,624.16,221.09,37,4
+DINE-0445,2025-03-26,Central,Breakfast,Delivery,5,2641.17,724.75,55,3
+DINE-0446,2025-03-27,University,Breakfast,Dine in,2,367.21,290.03,13,5
+DINE-0447,2025-03-28,University,Dinner,Delivery,2,388.05,266.46,34,4
+DINE-0448,2025-03-29,Central,Breakfast,Takeaway,1,310.34,77.07,30,3
+DINE-0449,2025-03-30,Riverside,Dinner,Takeaway,6,1106.46,630.81,5,4
+DINE-0450,2025-03-31,University,Dinner,Dine in,1,381.56,136.58,46,3
+DINE-0451,2025-04-01,University,Lunch,Dine in,4,1580.63,537.2,48,2
+DINE-0452,2025-04-02,University,Lunch,Dine in,2,352.57,177.08,21,4
+DINE-0453,2025-04-03,University,Lunch,Delivery,2,690.72,298.8,37,3
+DINE-0454,2025-04-04,University,Breakfast,Delivery,6,2588.31,730.04,14,4
+DINE-0455,2025-04-05,University,Breakfast,Takeaway,2,762.05,263.06,33,3
+DINE-0456,2025-04-06,University,Lunch,Takeaway,1,599.77,130.36,6,4
+DINE-0457,2025-04-07,Central,Breakfast,Takeaway,3,1138.18,347.1,6,5
+DINE-0458,2025-04-08,Central,Lunch,Dine in,6,1950.94,654.74,24,4
+DINE-0459,2025-04-09,Central,Dinner,Dine in,2,410.25,248.26,10,4
+DINE-0460,2025-04-10,University,Breakfast,Dine in,3,1376.43,448.75,18,5
+DINE-0461,2025-04-11,University,Dinner,Delivery,6,978.65,728.26,11,5
+DINE-0462,2025-04-12,University,Lunch,Takeaway,5,3018.84,375.93,15,5
+DINE-0463,2025-04-13,University,Breakfast,Delivery,2,726.86,212.17,48,3
+DINE-0464,2025-04-14,Riverside,Breakfast,Dine in,1,194.28,118.34,12,5
+DINE-0465,2025-04-15,Central,Lunch,Dine in,3,960.39,267.13,7,5
+DINE-0466,2025-04-16,University,Breakfast,Delivery,3,912.79,342.25,12,5
+DINE-0467,2025-04-17,Central,Breakfast,Delivery,6,2017.4,840.66,16,4
+DINE-0468,2025-04-18,Riverside,Lunch,Delivery,2,382.91,290.41,21,4
+DINE-0469,2025-04-19,Riverside,Dinner,Takeaway,1,240.66,89.48,18,4
+DINE-0470,2025-04-20,Riverside,Lunch,Takeaway,2,838.01,143.25,50,2
+DINE-0471,2025-04-21,University,Dinner,Dine in,3,522.01,290.45,6,5
+DINE-0472,2025-04-22,University,Dinner,Delivery,2,400.32,221.39,38,3
+DINE-0473,2025-04-23,Riverside,Dinner,Delivery,1,218.98,118.05,21,3
+DINE-0474,2025-04-24,Central,Lunch,Delivery,1,542.62,117.78,24,4
+DINE-0475,2025-04-25,University,Breakfast,Dine in,3,1793.86,259.19,11,5
+DINE-0476,2025-04-26,University,Lunch,Dine in,2,583.83,280.04,7,5
+DINE-0477,2025-04-27,University,Dinner,Delivery,1,357.66,85.6,29,3
+DINE-0478,2025-04-28,University,Dinner,Takeaway,6,3306.25,797.91,37,3
+DINE-0479,2025-04-29,University,Dinner,Dine in,5,2475.41,652.81,43,3
+DINE-0480,2025-04-30,Central,Breakfast,Delivery,2,1080.49,180.48,42,4
+DINE-0481,2025-01-01,Riverside,Dinner,Dine in,4,1267.86,446.27,43,4
+DINE-0482,2025-01-02,Central,Lunch,Dine in,3,825.68,214.9,16,4
+DINE-0483,2025-01-03,Riverside,Lunch,Delivery,3,1546.43,290.47,13,4
+DINE-0484,2025-01-04,University,Breakfast,Takeaway,3,1183.63,329.72,23,4
+DINE-0485,2025-01-05,University,Lunch,Takeaway,5,1495.43,485.13,12,4
+DINE-0486,2025-01-06,Riverside,Breakfast,Dine in,3,1057.49,292.76,51,3
+DINE-0487,2025-01-07,Riverside,Breakfast,Dine in,4,1166.71,541.59,39,4
+DINE-0488,2025-01-08,Central,Dinner,Dine in,3,1434.11,283.83,48,3
+DINE-0489,2025-01-09,Central,Lunch,Delivery,2,494.25,160.84,43,3
+DINE-0490,2025-01-10,Riverside,Breakfast,Takeaway,2,997.22,162.97,24,4
+DINE-0491,2025-01-11,University,Dinner,Takeaway,4,1813.06,543.08,11,4
+DINE-0492,2025-01-12,Central,Dinner,Dine in,6,3787.12,527.99,41,4
+DINE-0493,2025-01-13,University,Breakfast,Dine in,6,1050.88,573.47,7,4
+DINE-0494,2025-01-14,Central,Lunch,Takeaway,5,2463.21,530.84,27,4
+DINE-0495,2025-01-15,Central,Lunch,Delivery,3,995.99,227.84,19,4
+DINE-0496,2025-01-16,Central,Dinner,Takeaway,3,1445.98,424.74,51,3
+DINE-0497,2025-01-17,University,Lunch,Takeaway,2,1233.79,264.67,14,5
+DINE-0498,2025-01-18,Riverside,Lunch,Takeaway,5,2110.29,495.68,19,3
+DINE-0499,2025-01-19,Central,Dinner,Delivery,6,3721.58,740.42,31,4
+DINE-0500,2025-01-20,University,Lunch,Takeaway,5,1723.68,718.05,9,5
+DINE-0501,2025-01-21,Central,Lunch,Dine in,2,1142.08,225.69,46,2
+DINE-0502,2025-01-22,Central,Breakfast,Delivery,5,1397.98,553.61,32,4
+DINE-0503,2025-01-23,University,Dinner,Takeaway,1,326.06,100.61,6,5
+DINE-0504,2025-01-24,Central,Dinner,Delivery,4,1450.13,466.62,21,5
+DINE-0505,2025-01-25,Central,Dinner,Delivery,1,176.17,90.03,49,1
+DINE-0506,2025-01-26,University,Lunch,Takeaway,2,638.02,204.73,17,4
+DINE-0507,2025-01-27,Central,Breakfast,Delivery,3,736.59,312.16,23,3
+DINE-0508,2025-01-28,Central,Breakfast,Dine in,5,1736.95,637.42,14,4
+DINE-0509,2025-01-29,Central,Lunch,Delivery,2,1281.95,153.33,46,2
+DINE-0510,2025-01-30,University,Lunch,Takeaway,3,551.73,316.98,5,5
+DINE-0511,2025-01-31,University,Lunch,Delivery,6,2359.79,538.21,21,4
+DINE-0512,2025-02-01,Central,Breakfast,Takeaway,3,1101.16,361.84,5,5
+DINE-0513,2025-02-02,University,Breakfast,Dine in,5,1705.23,478.1,50,3
+DINE-0514,2025-02-03,University,Breakfast,Takeaway,1,479.15,113.54,33,4
+DINE-0515,2025-02-04,Riverside,Dinner,Takeaway,2,1104.83,196.14,43,4
+DINE-0516,2025-02-05,University,Dinner,Delivery,6,1912.91,643.26,43,3
+DINE-0517,2025-02-06,Riverside,Lunch,Takeaway,6,2776.24,591.76,13,5
+DINE-0518,2025-02-07,Central,Dinner,Dine in,2,929.51,151.67,12,4
+DINE-0519,2025-02-08,Riverside,Lunch,Takeaway,2,1234.15,180.92,44,3
+DINE-0520,2025-02-09,Riverside,Breakfast,Takeaway,3,603.43,420.47,53,2
+DINE-0521,2025-02-10,Central,Breakfast,Takeaway,6,1327.03,549.93,27,4
+DINE-0522,2025-02-11,Riverside,Lunch,Dine in,3,1521.87,320.34,14,4
+DINE-0523,2025-02-12,Riverside,Breakfast,Dine in,4,888.2,577.44,35,4
+DINE-0524,2025-02-13,Central,Breakfast,Delivery,2,809.76,162.93,25,4
+DINE-0525,2025-02-14,Central,Breakfast,Delivery,4,1789.4,340.32,35,3
+DINE-0526,2025-02-15,Central,Breakfast,Dine in,3,1010.87,274.54,47,3
+DINE-0527,2025-02-16,University,Breakfast,Dine in,3,1234.96,395.49,21,5
+DINE-0528,2025-02-17,Riverside,Dinner,Dine in,5,1394.77,545.09,40,4
+DINE-0529,2025-02-18,University,Dinner,Takeaway,4,1861.44,349.7,12,4
+DINE-0530,2025-02-19,University,Dinner,Delivery,5,855.0,386.88,43,3
+DINE-0531,2025-02-20,Riverside,Breakfast,Dine in,5,2196.1,686.24,37,3
+DINE-0532,2025-02-21,Riverside,Lunch,Delivery,6,1043.12,619.56,46,3
+DINE-0533,2025-02-22,Central,Lunch,Dine in,5,1966.18,690.4,31,3
+DINE-0534,2025-02-23,University,Breakfast,Dine in,3,1763.67,373.82,45,2
+DINE-0535,2025-02-24,Central,Dinner,Dine in,6,2383.16,767.09,7,5
+DINE-0536,2025-02-25,University,Dinner,Takeaway,3,1327.78,426.59,9,4
+DINE-0537,2025-02-26,Central,Dinner,Dine in,5,1399.04,498.75,21,4
+DINE-0538,2025-02-27,Riverside,Dinner,Takeaway,5,1970.16,499.01,53,3
+DINE-0539,2025-02-28,University,Lunch,Dine in,2,936.03,190.63,23,4
+DINE-0540,2025-03-01,University,Dinner,Dine in,3,1168.69,384.67,23,5
+DINE-0541,2025-03-02,University,Breakfast,Takeaway,6,3186.18,754.43,43,3
+DINE-0542,2025-03-03,University,Lunch,Dine in,4,1920.06,441.58,11,4
+DINE-0543,2025-03-04,University,Breakfast,Takeaway,1,637.2,116.23,8,5
+DINE-0544,2025-03-05,Riverside,Breakfast,Delivery,3,1228.78,448.49,20,4
+DINE-0545,2025-03-06,University,Breakfast,Takeaway,4,1960.95,540.99,55,1
+DINE-0546,2025-03-07,Central,Breakfast,Takeaway,6,2400.63,701.57,37,4
+DINE-0547,2025-03-08,Riverside,Lunch,Takeaway,5,2615.7,657.18,55,2
+DINE-0548,2025-03-09,University,Lunch,Takeaway,6,3128.78,576.82,23,4
+DINE-0549,2025-03-10,Central,Lunch,Takeaway,5,2889.82,484.88,32,4
+DINE-0550,2025-03-11,Central,Dinner,Delivery,2,1183.4,166.6,29,3
+DINE-0551,2025-03-12,University,Dinner,Delivery,5,2943.19,523.07,37,4
+DINE-0552,2025-03-13,University,Breakfast,Takeaway,5,2751.17,548.39,43,2
+DINE-0553,2025-03-14,University,Dinner,Delivery,4,799.93,513.78,29,3
+DINE-0554,2025-03-15,University,Breakfast,Dine in,1,504.39,110.91,49,2
+DINE-0555,2025-03-16,University,Breakfast,Takeaway,1,393.12,124.93,32,3
+DINE-0556,2025-03-17,Central,Lunch,Dine in,4,2578.53,320.1,15,4
+DINE-0557,2025-03-18,Riverside,Breakfast,Takeaway,2,1247.95,158.17,40,5
+DINE-0558,2025-03-19,Riverside,Lunch,Dine in,6,3731.54,744.01,23,4
+DINE-0559,2025-03-20,University,Lunch,Dine in,4,996.56,299.66,12,4
+DINE-0560,2025-03-21,University,Lunch,Dine in,2,397.4,188.71,27,4
+DINE-0561,2025-03-22,Central,Lunch,Delivery,5,1709.32,638.07,18,4
+DINE-0562,2025-03-23,Central,Breakfast,Takeaway,4,1863.03,547.35,44,2
+DINE-0563,2025-03-24,Central,Lunch,Takeaway,4,773.12,331.16,33,5
+DINE-0564,2025-03-25,University,Breakfast,Takeaway,3,533.2,441.16,26,2
+DINE-0565,2025-03-26,Central,Dinner,Takeaway,1,640.3,107.56,17,4
+DINE-0566,2025-03-27,Central,Dinner,Delivery,5,2400.91,609.13,10,5
+DINE-0567,2025-03-28,Riverside,Lunch,Takeaway,1,566.93,136.25,7,5
+DINE-0568,2025-03-29,Central,Lunch,Takeaway,3,1295.43,234.33,6,5
+DINE-0569,2025-03-30,Riverside,Dinner,Delivery,1,304.71,148.41,29,4
+DINE-0570,2025-03-31,University,Dinner,Delivery,6,1114.63,898.57,49,3
+DINE-0571,2025-04-01,University,Breakfast,Delivery,2,350.0,161.69,31,3
+DINE-0572,2025-04-02,Central,Lunch,Delivery,2,678.92,183.53,24,4
+DINE-0573,2025-04-03,Central,Lunch,Delivery,2,1159.59,237.24,27,3
+DINE-0574,2025-04-04,Central,Lunch,Dine in,4,2072.23,417.83,22,4
+DINE-0575,2025-04-05,Central,Lunch,Takeaway,4,663.36,496.29,48,2
+DINE-0576,2025-04-06,Central,Lunch,Dine in,4,1132.76,423.51,15,4
+DINE-0577,2025-04-07,Riverside,Breakfast,Takeaway,4,996.86,552.98,5,4
+DINE-0578,2025-04-08,Riverside,Breakfast,Delivery,5,1524.76,551.31,50,3
+DINE-0579,2025-04-09,Central,Dinner,Delivery,1,292.84,145.2,8,5
+DINE-0580,2025-04-10,Riverside,Lunch,Dine in,5,2447.29,449.18,13,3
+DINE-0581,2025-04-11,Central,Breakfast,Takeaway,5,1219.9,387.9,27,3
+DINE-0582,2025-04-12,Riverside,Dinner,Takeaway,4,771.2,324.74,7,4
+DINE-0583,2025-04-13,Central,Dinner,Dine in,1,606.98,92.64,37,3
+DINE-0584,2025-04-14,Riverside,Breakfast,Dine in,5,2580.78,530.29,43,3
+DINE-0585,2025-04-15,Riverside,Lunch,Takeaway,2,925.14,234.95,8,4
+DINE-0586,2025-04-16,University,Dinner,Dine in,4,1580.67,480.93,42,2
+DINE-0587,2025-04-17,Central,Lunch,Takeaway,6,1241.11,694.37,20,4
+DINE-0588,2025-04-18,Central,Breakfast,Dine in,6,1125.46,432.13,44,2
+DINE-0589,2025-04-19,Central,Lunch,Dine in,4,2012.47,504.31,12,5
+DINE-0590,2025-04-20,Riverside,Dinner,Dine in,3,1847.7,334.04,32,4
+DINE-0591,2025-04-21,Riverside,Breakfast,Takeaway,4,1775.03,580.61,13,4
+DINE-0592,2025-04-22,Central,Breakfast,Delivery,5,1247.45,536.63,50,2
+DINE-0593,2025-04-23,Central,Dinner,Delivery,2,1244.72,258.43,32,3
+DINE-0594,2025-04-24,Riverside,Dinner,Takeaway,5,2634.63,595.02,53,2
+DINE-0595,2025-04-25,Riverside,Breakfast,Delivery,4,1011.24,372.32,39,4
+DINE-0596,2025-04-26,Central,Breakfast,Delivery,1,298.88,87.13,36,2
+DINE-0597,2025-04-27,Riverside,Breakfast,Delivery,3,1541.65,260.04,39,4
+DINE-0598,2025-04-28,Riverside,Lunch,Takeaway,3,1914.12,253.81,18,5
+DINE-0599,2025-04-29,Central,Lunch,Dine in,2,661.31,170.17,23,3
+DINE-0600,2025-04-30,Riverside,Lunch,Delivery,3,1206.64,255.82,29,3

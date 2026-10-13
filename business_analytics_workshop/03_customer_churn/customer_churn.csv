@@ -1,0 +1,481 @@
+customer_id,region,contract,tenure_months,monthly_fee,support_tickets,satisfaction_score,churned
+CUST-0001,East,Two year,13,799,0,8,0
+CUST-0002,South,Monthly,27,499,1,7,1
+CUST-0003,West,Annual,49,499,1,7,0
+CUST-0004,North,Two year,12,999,1,9,0
+CUST-0005,South,Monthly,54,499,1,7,0
+CUST-0006,West,Two year,33,999,1,8,0
+CUST-0007,West,Annual,47,299,2,6,0
+CUST-0008,West,Two year,25,1499,2,5,0
+CUST-0009,North,Monthly,48,1499,0,6,0
+CUST-0010,North,Annual,27,499,2,6,1
+CUST-0011,West,Annual,26,999,0,10,1
+CUST-0012,North,Two year,16,799,4,5,0
+CUST-0013,North,Two year,45,999,0,9,0
+CUST-0014,North,Two year,49,1499,0,8,0
+CUST-0015,East,Two year,32,1499,2,7,0
+CUST-0016,North,Two year,49,1499,0,6,0
+CUST-0017,North,Monthly,1,1499,2,6,0
+CUST-0018,North,Annual,49,799,0,9,0
+CUST-0019,North,Annual,48,799,2,4,0
+CUST-0020,East,Annual,35,499,1,7,0
+CUST-0021,West,Annual,6,1499,2,6,1
+CUST-0022,East,Monthly,33,999,1,9,0
+CUST-0023,East,Two year,5,499,0,8,0
+CUST-0024,East,Annual,27,1499,3,3,0
+CUST-0025,East,Annual,38,999,2,4,0
+CUST-0026,South,Annual,46,499,2,5,1
+CUST-0027,East,Monthly,47,1499,2,5,1
+CUST-0028,West,Two year,42,1499,0,5,0
+CUST-0029,West,Monthly,58,299,0,6,1
+CUST-0030,South,Two year,36,799,1,9,0
+CUST-0031,North,Two year,20,999,3,6,1
+CUST-0032,East,Monthly,14,999,1,7,0
+CUST-0033,East,Monthly,21,299,0,8,1
+CUST-0034,East,Monthly,32,299,4,5,0
+CUST-0035,West,Two year,26,299,2,7,0
+CUST-0036,North,Two year,42,799,1,5,0
+CUST-0037,West,Two year,38,999,0,6,0
+CUST-0038,East,Monthly,13,299,0,8,0
+CUST-0039,West,Monthly,2,1499,1,7,0
+CUST-0040,East,Two year,54,499,1,7,0
+CUST-0041,East,Two year,8,799,0,8,0
+CUST-0042,South,Monthly,54,999,1,7,0
+CUST-0043,West,Annual,22,1499,0,8,0
+CUST-0044,East,Two year,30,799,0,8,0
+CUST-0045,North,Two year,9,499,0,4,0
+CUST-0046,North,Monthly,54,799,4,6,0
+CUST-0047,South,Annual,54,1499,2,7,0
+CUST-0048,South,Annual,58,499,1,10,0
+CUST-0049,East,Two year,37,999,0,7,0
+CUST-0050,East,Annual,55,999,5,6,0
+CUST-0051,North,Annual,28,499,5,5,0
+CUST-0052,South,Two year,10,999,0,8,1
+CUST-0053,West,Two year,22,1499,0,7,0
+CUST-0054,East,Monthly,16,499,3,7,1
+CUST-0055,South,Monthly,11,999,4,7,0
+CUST-0056,North,Annual,48,299,0,7,1
+CUST-0057,West,Two year,59,999,2,6,0
+CUST-0058,South,Two year,18,299,4,4,0
+CUST-0059,South,Monthly,33,799,0,10,0
+CUST-0060,West,Annual,35,799,0,7,0
+CUST-0061,North,Monthly,55,1499,2,7,1
+CUST-0062,East,Annual,41,499,3,5,1
+CUST-0063,North,Annual,8,1499,2,6,0
+CUST-0064,North,Two year,41,999,0,7,0
+CUST-0065,North,Annual,54,1499,4,4,1
+CUST-0066,North,Two year,43,299,2,7,0
+CUST-0067,West,Annual,38,499,0,9,0
+CUST-0068,South,Monthly,10,1499,5,4,1
+CUST-0069,South,Two year,56,499,5,3,1
+CUST-0070,East,Monthly,41,499,4,8,1
+CUST-0071,North,Annual,50,799,0,9,1
+CUST-0072,North,Annual,20,499,0,10,0
+CUST-0073,East,Monthly,49,1499,4,4,0
+CUST-0074,North,Two year,46,799,3,6,0
+CUST-0075,South,Annual,52,1499,4,5,0
+CUST-0076,West,Two year,40,999,4,7,0
+CUST-0077,West,Two year,45,1499,3,7,0
+CUST-0078,West,Monthly,28,499,2,7,1
+CUST-0079,West,Two year,45,1499,4,6,0
+CUST-0080,North,Monthly,6,799,2,7,0
+CUST-0081,West,Monthly,30,1499,1,10,0
+CUST-0082,East,Two year,29,999,3,7,0
+CUST-0083,North,Monthly,31,1499,3,6,0
+CUST-0084,West,Monthly,5,799,5,4,0
+CUST-0085,East,Two year,6,999,1,7,0
+CUST-0086,West,Two year,26,999,2,7,1
+CUST-0087,South,Two year,58,999,1,6,0
+CUST-0088,South,Annual,23,799,1,8,0
+CUST-0089,West,Annual,44,499,2,8,1
+CUST-0090,East,Monthly,44,499,3,8,1
+CUST-0091,West,Monthly,3,1499,0,7,0
+CUST-0092,North,Monthly,2,299,0,8,0
+CUST-0093,West,Monthly,31,299,0,7,1
+CUST-0094,North,Two year,6,299,2,6,0
+CUST-0095,West,Two year,44,999,0,4,0
+CUST-0096,East,Two year,25,999,0,6,0
+CUST-0097,East,Monthly,33,999,5,5,1
+CUST-0098,South,Monthly,41,299,1,6,0
+CUST-0099,South,Monthly,8,299,1,7,0
+CUST-0100,West,Annual,59,799,3,5,0
+CUST-0101,South,Annual,56,999,2,7,1
+CUST-0102,South,Two year,32,499,1,7,0
+CUST-0103,South,Monthly,4,1499,2,7,0
+CUST-0104,South,Monthly,47,499,3,6,0
+CUST-0105,West,Annual,59,799,2,6,0
+CUST-0106,West,Two year,8,299,0,5,0
+CUST-0107,East,Two year,15,799,1,9,0
+CUST-0108,West,Two year,19,799,1,9,0
+CUST-0109,West,Monthly,60,799,4,6,0
+CUST-0110,East,Annual,1,499,2,5,0
+CUST-0111,South,Annual,49,799,0,8,0
+CUST-0112,South,Annual,10,999,1,7,0
+CUST-0113,West,Monthly,7,499,0,10,0
+CUST-0114,North,Annual,32,299,4,4,0
+CUST-0115,West,Monthly,59,799,2,8,0
+CUST-0116,West,Two year,19,999,1,8,0
+CUST-0117,North,Annual,41,299,1,7,0
+CUST-0118,North,Monthly,49,299,5,4,1
+CUST-0119,West,Monthly,23,999,0,7,1
+CUST-0120,South,Monthly,10,299,3,5,1
+CUST-0121,North,Monthly,18,1499,2,7,1
+CUST-0122,North,Two year,13,299,0,7,0
+CUST-0123,North,Annual,30,499,4,7,0
+CUST-0124,West,Monthly,20,299,0,10,0
+CUST-0125,West,Monthly,59,799,1,7,1
+CUST-0126,North,Two year,17,999,4,6,1
+CUST-0127,West,Monthly,11,799,1,9,0
+CUST-0128,North,Two year,33,799,1,9,0
+CUST-0129,East,Two year,8,299,0,6,0
+CUST-0130,West,Monthly,56,999,0,7,0
+CUST-0131,West,Two year,43,499,0,10,0
+CUST-0132,North,Two year,40,499,5,1,0
+CUST-0133,West,Monthly,6,999,5,3,0
+CUST-0134,South,Monthly,22,1499,3,6,0
+CUST-0135,West,Two year,58,1499,0,9,0
+CUST-0136,North,Annual,3,299,1,8,0
+CUST-0137,North,Annual,54,799,3,4,0
+CUST-0138,West,Annual,9,299,1,6,0
+CUST-0139,North,Annual,39,499,0,7,0
+CUST-0140,South,Annual,25,1499,1,8,0
+CUST-0141,East,Two year,22,999,3,6,0
+CUST-0142,North,Two year,29,999,2,6,0
+CUST-0143,North,Two year,34,499,4,4,0
+CUST-0144,East,Monthly,5,799,0,9,0
+CUST-0145,South,Annual,34,499,0,9,0
+CUST-0146,East,Two year,46,299,2,6,0
+CUST-0147,North,Two year,59,1499,1,5,0
+CUST-0148,East,Two year,49,499,4,7,0
+CUST-0149,North,Two year,49,499,0,8,0
+CUST-0150,South,Annual,46,299,1,8,0
+CUST-0151,South,Monthly,23,999,4,5,0
+CUST-0152,North,Monthly,54,499,0,6,1
+CUST-0153,North,Annual,37,799,0,8,0
+CUST-0154,South,Two year,51,999,0,10,1
+CUST-0155,South,Annual,1,299,4,6,0
+CUST-0156,South,Two year,48,1499,1,8,0
+CUST-0157,West,Annual,60,299,4,4,0
+CUST-0158,West,Annual,31,999,3,5,1
+CUST-0159,West,Monthly,37,299,5,5,0
+CUST-0160,South,Monthly,36,799,3,6,0
+CUST-0161,South,Two year,54,299,1,8,0
+CUST-0162,West,Two year,17,1499,3,6,0
+CUST-0163,West,Monthly,7,499,0,6,0
+CUST-0164,North,Annual,20,999,5,5,0
+CUST-0165,South,Annual,8,299,0,9,0
+CUST-0166,West,Two year,51,499,5,5,1
+CUST-0167,North,Monthly,52,1499,1,7,0
+CUST-0168,West,Two year,48,1499,5,2,1
+CUST-0169,North,Annual,3,499,0,9,0
+CUST-0170,West,Two year,32,999,1,6,0
+CUST-0171,West,Annual,57,799,1,10,0
+CUST-0172,East,Two year,7,499,2,7,0
+CUST-0173,North,Annual,6,1499,2,7,1
+CUST-0174,East,Annual,50,299,0,9,1
+CUST-0175,East,Two year,20,299,1,6,0
+CUST-0176,South,Annual,13,799,4,5,0
+CUST-0177,East,Monthly,49,1499,5,5,1
+CUST-0178,East,Two year,41,799,2,7,0
+CUST-0179,North,Two year,34,299,0,6,0
+CUST-0180,East,Monthly,2,299,0,6,0
+CUST-0181,South,Annual,54,1499,0,7,0
+CUST-0182,West,Monthly,28,1499,2,7,0
+CUST-0183,West,Annual,48,1499,1,6,1
+CUST-0184,East,Two year,54,1499,0,7,0
+CUST-0185,East,Two year,43,799,3,5,0
+CUST-0186,East,Annual,59,1499,2,6,1
+CUST-0187,East,Monthly,21,799,4,4,0
+CUST-0188,West,Annual,21,299,0,8,0
+CUST-0189,South,Annual,54,999,0,9,0
+CUST-0190,North,Annual,1,299,3,5,0
+CUST-0191,South,Two year,56,499,1,6,0
+CUST-0192,West,Annual,12,799,1,9,0
+CUST-0193,West,Two year,36,299,3,10,0
+CUST-0194,East,Annual,17,799,4,5,0
+CUST-0195,South,Two year,36,799,0,9,0
+CUST-0196,South,Annual,12,1499,2,4,0
+CUST-0197,South,Annual,9,1499,1,9,0
+CUST-0198,East,Two year,32,499,3,7,1
+CUST-0199,East,Monthly,44,499,2,6,0
+CUST-0200,South,Annual,44,1499,1,6,0
+CUST-0201,West,Two year,53,1499,3,6,0
+CUST-0202,North,Two year,1,499,0,7,0
+CUST-0203,North,Annual,36,1499,3,6,0
+CUST-0204,West,Two year,16,299,0,10,0
+CUST-0205,North,Annual,18,999,4,7,0
+CUST-0206,South,Monthly,31,499,5,4,1
+CUST-0207,East,Two year,25,1499,2,7,0
+CUST-0208,North,Annual,56,999,1,9,1
+CUST-0209,South,Two year,54,999,2,5,0
+CUST-0210,East,Annual,41,799,1,6,0
+CUST-0211,North,Monthly,56,999,5,5,1
+CUST-0212,South,Annual,28,1499,0,8,0
+CUST-0213,West,Monthly,41,1499,2,8,1
+CUST-0214,South,Annual,8,499,5,6,0
+CUST-0215,East,Monthly,31,799,0,6,1
+CUST-0216,West,Two year,10,799,3,8,0
+CUST-0217,North,Annual,40,299,2,6,0
+CUST-0218,South,Monthly,45,999,3,6,0
+CUST-0219,West,Monthly,8,1499,0,9,0
+CUST-0220,South,Annual,13,799,0,9,0
+CUST-0221,South,Two year,13,799,0,8,0
+CUST-0222,West,Two year,60,999,0,9,0
+CUST-0223,North,Annual,58,999,2,5,0
+CUST-0224,South,Monthly,41,1499,1,7,1
+CUST-0225,South,Two year,38,999,3,7,0
+CUST-0226,West,Monthly,26,299,0,6,0
+CUST-0227,West,Monthly,53,499,1,9,0
+CUST-0228,South,Annual,38,1499,1,9,0
+CUST-0229,West,Monthly,20,299,0,7,0
+CUST-0230,North,Monthly,53,999,0,6,0
+CUST-0231,South,Monthly,53,299,1,7,0
+CUST-0232,North,Two year,36,999,1,6,0
+CUST-0233,East,Two year,22,999,1,7,0
+CUST-0234,North,Annual,37,499,1,9,0
+CUST-0235,North,Annual,37,299,2,7,0
+CUST-0236,East,Annual,54,999,3,5,1
+CUST-0237,South,Annual,49,499,3,6,0
+CUST-0238,South,Two year,6,799,2,5,1
+CUST-0239,West,Monthly,20,299,0,5,1
+CUST-0240,North,Two year,42,499,0,7,0
+CUST-0241,West,Two year,18,499,4,4,1
+CUST-0242,West,Annual,27,1499,4,5,0
+CUST-0243,South,Annual,39,1499,3,4,0
+CUST-0244,West,Monthly,6,499,1,7,1
+CUST-0245,West,Monthly,12,1499,1,8,0
+CUST-0246,West,Monthly,14,1499,1,7,1
+CUST-0247,West,Annual,58,999,1,9,0
+CUST-0248,East,Annual,10,499,4,6,0
+CUST-0249,South,Monthly,4,999,2,9,0
+CUST-0250,West,Two year,53,999,0,7,0
+CUST-0251,South,Monthly,20,1499,1,8,1
+CUST-0252,South,Annual,39,299,3,9,0
+CUST-0253,East,Monthly,60,999,3,9,0
+CUST-0254,West,Two year,7,799,1,10,0
+CUST-0255,West,Monthly,38,299,0,9,0
+CUST-0256,East,Annual,25,1499,4,3,0
+CUST-0257,West,Annual,12,299,0,10,0
+CUST-0258,West,Monthly,39,999,3,8,0
+CUST-0259,West,Monthly,32,299,0,7,0
+CUST-0260,South,Annual,10,999,3,4,0
+CUST-0261,West,Two year,51,299,1,5,0
+CUST-0262,West,Monthly,58,1499,1,8,0
+CUST-0263,East,Annual,18,1499,0,7,0
+CUST-0264,North,Monthly,3,499,0,8,1
+CUST-0265,North,Annual,30,499,1,7,0
+CUST-0266,West,Two year,41,799,1,7,0
+CUST-0267,South,Monthly,45,999,1,8,0
+CUST-0268,East,Monthly,35,499,0,6,0
+CUST-0269,North,Annual,49,799,0,10,0
+CUST-0270,East,Annual,52,299,1,6,1
+CUST-0271,North,Annual,37,299,1,4,0
+CUST-0272,South,Annual,32,799,2,5,0
+CUST-0273,West,Annual,3,299,0,9,0
+CUST-0274,East,Two year,49,499,0,8,0
+CUST-0275,West,Annual,17,1499,0,8,0
+CUST-0276,North,Annual,49,499,1,9,0
+CUST-0277,South,Monthly,29,999,4,5,0
+CUST-0278,West,Annual,59,299,1,5,0
+CUST-0279,South,Two year,14,299,5,5,0
+CUST-0280,East,Annual,22,299,4,2,0
+CUST-0281,West,Two year,21,999,2,6,1
+CUST-0282,North,Two year,53,499,0,10,0
+CUST-0283,South,Annual,27,299,3,5,0
+CUST-0284,North,Annual,17,1499,5,6,1
+CUST-0285,North,Two year,54,1499,5,4,0
+CUST-0286,North,Monthly,60,799,1,8,0
+CUST-0287,East,Annual,51,1499,0,8,0
+CUST-0288,East,Two year,49,999,0,7,0
+CUST-0289,South,Annual,14,299,0,8,0
+CUST-0290,North,Annual,39,499,2,7,0
+CUST-0291,East,Monthly,35,499,0,9,0
+CUST-0292,South,Two year,21,999,1,7,0
+CUST-0293,North,Two year,35,799,0,8,0
+CUST-0294,South,Monthly,2,499,0,9,0
+CUST-0295,East,Monthly,51,499,2,6,0
+CUST-0296,South,Two year,51,1499,1,9,0
+CUST-0297,West,Monthly,44,799,1,7,0
+CUST-0298,East,Two year,57,1499,5,6,0
+CUST-0299,South,Two year,2,799,0,7,0
+CUST-0300,West,Annual,36,499,3,5,1
+CUST-0301,East,Monthly,47,799,2,8,1
+CUST-0302,East,Annual,37,499,3,6,0
+CUST-0303,South,Monthly,46,499,4,5,1
+CUST-0304,East,Monthly,26,999,1,8,1
+CUST-0305,North,Monthly,41,999,0,9,0
+CUST-0306,South,Annual,57,499,2,7,0
+CUST-0307,North,Two year,47,499,2,6,0
+CUST-0308,East,Annual,39,799,0,10,0
+CUST-0309,South,Annual,12,499,1,7,0
+CUST-0310,West,Annual,27,1499,3,6,0
+CUST-0311,South,Monthly,13,299,0,7,0
+CUST-0312,West,Annual,16,999,1,7,0
+CUST-0313,North,Monthly,20,1499,5,5,1
+CUST-0314,South,Annual,58,799,0,6,0
+CUST-0315,North,Annual,26,799,1,7,0
+CUST-0316,East,Annual,49,1499,0,9,0
+CUST-0317,North,Monthly,19,799,2,6,1
+CUST-0318,North,Two year,27,299,0,8,0
+CUST-0319,South,Two year,26,999,4,5,0
+CUST-0320,West,Monthly,20,299,3,7,0
+CUST-0321,West,Monthly,19,1499,1,8,0
+CUST-0322,East,Annual,17,799,0,8,0
+CUST-0323,South,Annual,30,1499,3,8,0
+CUST-0324,North,Annual,55,1499,0,7,0
+CUST-0325,South,Annual,26,999,0,8,0
+CUST-0326,South,Monthly,6,999,1,4,1
+CUST-0327,South,Two year,13,999,0,8,0
+CUST-0328,South,Monthly,12,799,1,6,1
+CUST-0329,South,Annual,16,1499,0,6,1
+CUST-0330,North,Monthly,15,999,1,9,1
+CUST-0331,West,Annual,24,1499,0,8,0
+CUST-0332,East,Monthly,15,999,3,7,0
+CUST-0333,North,Monthly,43,299,2,6,1
+CUST-0334,South,Annual,38,299,2,7,1
+CUST-0335,East,Monthly,10,999,1,8,0
+CUST-0336,East,Annual,1,1499,3,8,0
+CUST-0337,West,Two year,19,1499,0,8,0
+CUST-0338,South,Annual,51,799,1,8,0
+CUST-0339,West,Annual,43,799,3,6,0
+CUST-0340,North,Two year,58,799,1,9,0
+CUST-0341,South,Monthly,6,999,5,5,1
+CUST-0342,West,Two year,40,999,4,5,0
+CUST-0343,West,Two year,41,499,3,4,1
+CUST-0344,West,Two year,46,999,1,8,0
+CUST-0345,South,Monthly,35,999,2,8,0
+CUST-0346,West,Monthly,1,299,1,5,0
+CUST-0347,North,Annual,43,799,3,3,0
+CUST-0348,East,Monthly,50,499,1,6,0
+CUST-0349,South,Two year,2,499,2,7,0
+CUST-0350,East,Annual,29,1499,0,9,0
+CUST-0351,West,Two year,52,1499,2,6,0
+CUST-0352,West,Annual,52,499,0,7,0
+CUST-0353,South,Two year,5,799,1,8,0
+CUST-0354,East,Monthly,30,1499,5,3,1
+CUST-0355,East,Monthly,19,999,1,8,0
+CUST-0356,North,Two year,18,799,3,7,1
+CUST-0357,West,Monthly,31,299,2,6,1
+CUST-0358,West,Two year,8,499,0,7,0
+CUST-0359,South,Annual,34,299,0,9,0
+CUST-0360,South,Annual,49,999,0,6,0
+CUST-0361,East,Monthly,55,499,4,4,1
+CUST-0362,West,Annual,28,499,1,5,0
+CUST-0363,South,Monthly,52,299,0,10,1
+CUST-0364,West,Monthly,54,799,0,9,0
+CUST-0365,South,Two year,15,499,0,8,0
+CUST-0366,South,Annual,8,999,0,8,0
+CUST-0367,South,Two year,45,1499,2,5,0
+CUST-0368,South,Annual,54,799,3,7,0
+CUST-0369,South,Monthly,56,1499,2,8,0
+CUST-0370,South,Monthly,25,999,0,9,0
+CUST-0371,South,Annual,16,499,0,8,0
+CUST-0372,East,Annual,9,799,1,7,1
+CUST-0373,East,Annual,9,299,1,10,0
+CUST-0374,North,Annual,30,799,1,6,0
+CUST-0375,West,Monthly,5,499,0,9,0
+CUST-0376,East,Two year,39,499,0,8,0
+CUST-0377,East,Monthly,10,299,0,9,0
+CUST-0378,East,Monthly,10,1499,3,7,1
+CUST-0379,South,Monthly,60,999,1,9,1
+CUST-0380,West,Annual,34,1499,4,4,0
+CUST-0381,West,Two year,52,299,3,8,0
+CUST-0382,East,Annual,46,1499,3,7,0
+CUST-0383,West,Monthly,11,1499,0,9,0
+CUST-0384,North,Two year,38,799,0,6,0
+CUST-0385,East,Two year,23,999,4,6,1
+CUST-0386,North,Annual,19,1499,0,7,0
+CUST-0387,West,Annual,51,999,0,7,0
+CUST-0388,South,Annual,30,499,3,8,1
+CUST-0389,North,Two year,28,799,3,5,0
+CUST-0390,South,Two year,25,299,2,8,0
+CUST-0391,South,Two year,51,1499,1,8,0
+CUST-0392,East,Annual,55,1499,0,10,0
+CUST-0393,North,Monthly,23,499,0,9,0
+CUST-0394,East,Monthly,50,1499,2,8,0
+CUST-0395,West,Annual,44,999,3,7,0
+CUST-0396,West,Annual,45,299,0,9,0
+CUST-0397,South,Monthly,47,1499,4,5,1
+CUST-0398,East,Annual,42,999,0,10,0
+CUST-0399,South,Two year,13,999,1,8,0
+CUST-0400,West,Annual,15,1499,1,9,0
+CUST-0401,North,Annual,28,999,2,4,0
+CUST-0402,East,Two year,16,499,0,9,0
+CUST-0403,East,Monthly,5,1499,4,5,0
+CUST-0404,East,Monthly,19,499,1,7,1
+CUST-0405,North,Monthly,6,299,2,7,0
+CUST-0406,South,Monthly,22,999,2,7,0
+CUST-0407,South,Two year,5,299,0,7,0
+CUST-0408,East,Monthly,11,799,3,6,0
+CUST-0409,South,Two year,39,999,2,5,0
+CUST-0410,South,Monthly,43,299,3,7,0
+CUST-0411,West,Annual,53,799,1,9,1
+CUST-0412,East,Two year,29,299,1,8,0
+CUST-0413,East,Two year,13,499,0,7,0
+CUST-0414,South,Monthly,47,299,1,6,0
+CUST-0415,East,Monthly,19,299,2,4,0
+CUST-0416,South,Monthly,46,1499,0,7,1
+CUST-0417,South,Monthly,28,299,1,6,0
+CUST-0418,South,Annual,32,299,2,6,0
+CUST-0419,West,Two year,52,799,0,6,0
+CUST-0420,South,Monthly,1,299,4,6,0
+CUST-0421,East,Two year,16,799,4,6,0
+CUST-0422,West,Monthly,6,499,3,9,0
+CUST-0423,West,Annual,50,299,5,6,1
+CUST-0424,North,Annual,57,499,1,8,0
+CUST-0425,South,Monthly,16,499,2,8,1
+CUST-0426,North,Two year,27,799,2,8,0
+CUST-0427,South,Annual,32,499,5,4,0
+CUST-0428,South,Monthly,5,1499,0,9,0
+CUST-0429,South,Monthly,8,1499,0,8,0
+CUST-0430,North,Annual,43,1499,0,9,0
+CUST-0431,South,Monthly,34,499,1,5,0
+CUST-0432,North,Two year,13,999,0,8,0
+CUST-0433,East,Two year,42,1499,0,9,0
+CUST-0434,East,Annual,30,499,4,8,1
+CUST-0435,North,Two year,24,499,3,3,0
+CUST-0436,West,Two year,39,799,1,9,0
+CUST-0437,South,Annual,4,1499,3,7,0
+CUST-0438,South,Two year,6,999,0,9,0
+CUST-0439,West,Two year,39,999,4,7,0
+CUST-0440,West,Monthly,58,299,4,7,0
+CUST-0441,West,Annual,43,1499,4,6,0
+CUST-0442,South,Monthly,36,499,2,6,0
+CUST-0443,West,Monthly,17,1499,1,7,0
+CUST-0444,West,Monthly,54,499,2,5,0
+CUST-0445,West,Annual,39,1499,2,5,0
+CUST-0446,East,Monthly,45,799,1,7,1
+CUST-0447,South,Monthly,46,799,0,7,0
+CUST-0448,East,Two year,16,799,2,9,0
+CUST-0449,West,Annual,33,799,3,6,1
+CUST-0450,East,Two year,5,799,2,8,0
+CUST-0451,South,Monthly,24,499,1,4,1
+CUST-0452,South,Two year,20,1499,0,10,0
+CUST-0453,East,Monthly,15,499,0,10,0
+CUST-0454,West,Two year,8,999,4,5,0
+CUST-0455,North,Two year,40,1499,0,8,0
+CUST-0456,South,Annual,2,299,0,6,0
+CUST-0457,West,Annual,2,499,2,7,0
+CUST-0458,East,Monthly,41,1499,4,6,1
+CUST-0459,North,Annual,56,499,2,7,0
+CUST-0460,West,Annual,30,999,1,8,0
+CUST-0461,West,Annual,7,1499,1,5,0
+CUST-0462,South,Monthly,53,1499,0,9,0
+CUST-0463,South,Annual,36,799,0,6,1
+CUST-0464,East,Monthly,55,1499,5,6,0
+CUST-0465,North,Two year,6,799,0,9,0
+CUST-0466,West,Annual,48,499,3,6,0
+CUST-0467,North,Two year,41,499,3,5,0
+CUST-0468,South,Two year,36,799,0,7,1
+CUST-0469,East,Annual,18,999,3,7,0
+CUST-0470,West,Monthly,19,1499,0,10,0
+CUST-0471,South,Two year,11,299,0,8,1
+CUST-0472,East,Annual,17,299,3,5,0
+CUST-0473,West,Two year,40,999,1,7,0
+CUST-0474,North,Annual,43,799,2,7,0
+CUST-0475,South,Monthly,60,299,0,10,0
+CUST-0476,East,Monthly,6,299,0,7,0
+CUST-0477,North,Monthly,5,999,1,9,0
+CUST-0478,East,Monthly,19,999,3,4,1
+CUST-0479,North,Two year,45,499,4,6,0
+CUST-0480,East,Two year,14,799,5,5,0

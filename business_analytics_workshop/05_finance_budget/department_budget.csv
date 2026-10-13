@@ -1,0 +1,193 @@
+month,department,expense_category,budget,actual
+2025-01-01,Sales,People,112000,131473.15
+2025-01-01,Sales,Software,82000,111991.54
+2025-01-01,Sales,Travel,172000,119684.36
+2025-01-01,Sales,Facilities,56000,59246.32
+2025-01-01,Engineering,People,109000,150863.92
+2025-01-01,Engineering,Software,113000,102337.36
+2025-01-01,Engineering,Travel,118000,124126.47
+2025-01-01,Engineering,Facilities,133000,154843.11
+2025-01-01,Operations,People,166000,153352.45
+2025-01-01,Operations,Software,141000,172797.34
+2025-01-01,Operations,Travel,178000,235846.1
+2025-01-01,Operations,Facilities,59000,75829.99
+2025-01-01,Customer Success,People,153000,179330.92
+2025-01-01,Customer Success,Software,154000,215157.46
+2025-01-01,Customer Success,Travel,103000,133296.11
+2025-01-01,Customer Success,Facilities,175000,171441.74
+2025-02-01,Sales,People,81000,84164.07
+2025-02-01,Sales,Software,97000,123032.98
+2025-02-01,Sales,Travel,115000,157901.64
+2025-02-01,Sales,Facilities,158000,121365.21
+2025-02-01,Engineering,People,62000,83620.97
+2025-02-01,Engineering,Software,51000,57464.09
+2025-02-01,Engineering,Travel,128000,128956.2
+2025-02-01,Engineering,Facilities,133000,139256.51
+2025-02-01,Operations,People,69000,79935.08
+2025-02-01,Operations,Software,131000,159666.01
+2025-02-01,Operations,Travel,126000,113782.65
+2025-02-01,Operations,Facilities,78000,67957.2
+2025-02-01,Customer Success,People,98000,110574.55
+2025-02-01,Customer Success,Software,111000,126252.65
+2025-02-01,Customer Success,Travel,165000,230141.08
+2025-02-01,Customer Success,Facilities,57000,47055.62
+2025-03-01,Sales,People,85000,68749.55
+2025-03-01,Sales,Software,46000,43028.82
+2025-03-01,Sales,Travel,52000,60196.18
+2025-03-01,Sales,Facilities,103000,70166.9
+2025-03-01,Engineering,People,54000,56450.81
+2025-03-01,Engineering,Software,125000,127230.64
+2025-03-01,Engineering,Travel,75000,60633.95
+2025-03-01,Engineering,Facilities,48000,56682.72
+2025-03-01,Operations,People,123000,110963.0
+2025-03-01,Operations,Software,157000,144806.08
+2025-03-01,Operations,Travel,112000,136747.83
+2025-03-01,Operations,Facilities,130000,87117.04
+2025-03-01,Customer Success,People,153000,203353.03
+2025-03-01,Customer Success,Software,170000,227817.36
+2025-03-01,Customer Success,Travel,72000,79836.59
+2025-03-01,Customer Success,Facilities,111000,84246.84
+2025-04-01,Sales,People,147000,103089.91
+2025-04-01,Sales,Software,171000,203473.26
+2025-04-01,Sales,Travel,63000,73498.93
+2025-04-01,Sales,Facilities,126000,101761.63
+2025-04-01,Engineering,People,116000,114396.87
+2025-04-01,Engineering,Software,151000,155463.37
+2025-04-01,Engineering,Travel,149000,134919.73
+2025-04-01,Engineering,Facilities,169000,183269.25
+2025-04-01,Operations,People,120000,107080.08
+2025-04-01,Operations,Software,128000,155603.78
+2025-04-01,Operations,Travel,117000,144535.55
+2025-04-01,Operations,Facilities,141000,177213.75
+2025-04-01,Customer Success,People,69000,80544.0
+2025-04-01,Customer Success,Software,167000,120020.88
+2025-04-01,Customer Success,Travel,75000,95381.59
+2025-04-01,Customer Success,Facilities,118000,86279.75
+2025-05-01,Sales,People,117000,97980.25
+2025-05-01,Sales,Software,135000,137621.36
+2025-05-01,Sales,Travel,103000,122671.05
+2025-05-01,Sales,Facilities,68000,50903.44
+2025-05-01,Engineering,People,152000,106618.95
+2025-05-01,Engineering,Software,52000,47153.48
+2025-05-01,Engineering,Travel,94000,118046.93
+2025-05-01,Engineering,Facilities,141000,98947.07
+2025-05-01,Operations,People,134000,152370.2
+2025-05-01,Operations,Software,127000,153977.18
+2025-05-01,Operations,Travel,124000,108723.03
+2025-05-01,Operations,Facilities,93000,88963.96
+2025-05-01,Customer Success,People,70000,47091.19
+2025-05-01,Customer Success,Software,103000,108186.87
+2025-05-01,Customer Success,Travel,129000,178060.1
+2025-05-01,Customer Success,Facilities,103000,68304.39
+2025-06-01,Sales,People,176000,118243.89
+2025-06-01,Sales,Software,87000,99118.75
+2025-06-01,Sales,Travel,174000,124715.19
+2025-06-01,Sales,Facilities,163000,205519.06
+2025-06-01,Engineering,People,97000,130593.9
+2025-06-01,Engineering,Software,143000,162861.32
+2025-06-01,Engineering,Travel,73000,81702.44
+2025-06-01,Engineering,Facilities,179000,118766.46
+2025-06-01,Operations,People,145000,97623.72
+2025-06-01,Operations,Software,147000,163430.36
+2025-06-01,Operations,Travel,78000,108250.63
+2025-06-01,Operations,Facilities,117000,100030.78
+2025-06-01,Customer Success,People,52000,46507.43
+2025-06-01,Customer Success,Software,127000,101713.97
+2025-06-01,Customer Success,Travel,103000,91101.17
+2025-06-01,Customer Success,Facilities,119000,131521.55
+2025-07-01,Sales,People,71000,95032.49
+2025-07-01,Sales,Software,84000,105690.66
+2025-07-01,Sales,Travel,170000,201181.72
+2025-07-01,Sales,Facilities,106000,114716.46
+2025-07-01,Engineering,People,85000,107032.44
+2025-07-01,Engineering,Software,98000,101736.03
+2025-07-01,Engineering,Travel,75000,92105.93
+2025-07-01,Engineering,Facilities,143000,128337.32
+2025-07-01,Operations,People,103000,113531.27
+2025-07-01,Operations,Software,145000,157376.92
+2025-07-01,Operations,Travel,170000,127344.08
+2025-07-01,Operations,Facilities,80000,55565.69
+2025-07-01,Customer Success,People,156000,123158.27
+2025-07-01,Customer Success,Software,161000,153318.7
+2025-07-01,Customer Success,Travel,161000,180549.62
+2025-07-01,Customer Success,Facilities,96000,110623.81
+2025-08-01,Sales,People,167000,137117.35
+2025-08-01,Sales,Software,138000,143779.33
+2025-08-01,Sales,Travel,90000,118583.82
+2025-08-01,Sales,Facilities,161000,214006.57
+2025-08-01,Engineering,People,96000,65356.36
+2025-08-01,Engineering,Software,45000,52773.88
+2025-08-01,Engineering,Travel,102000,135422.14
+2025-08-01,Engineering,Facilities,138000,106606.5
+2025-08-01,Operations,People,158000,176253.56
+2025-08-01,Operations,Software,78000,106651.2
+2025-08-01,Operations,Travel,49000,44800.21
+2025-08-01,Operations,Facilities,47000,39826.47
+2025-08-01,Customer Success,People,171000,201383.81
+2025-08-01,Customer Success,Software,109000,89327.05
+2025-08-01,Customer Success,Travel,165000,212952.69
+2025-08-01,Customer Success,Facilities,70000,73052.85
+2025-09-01,Sales,People,112000,107978.1
+2025-09-01,Sales,Software,57000,71076.82
+2025-09-01,Sales,Travel,168000,168856.81
+2025-09-01,Sales,Facilities,71000,46278.12
+2025-09-01,Engineering,People,54000,36345.33
+2025-09-01,Engineering,Software,51000,44702.32
+2025-09-01,Engineering,Travel,103000,96797.35
+2025-09-01,Engineering,Facilities,102000,69518.15
+2025-09-01,Operations,People,120000,115397.94
+2025-09-01,Operations,Software,156000,199130.02
+2025-09-01,Operations,Travel,91000,100918.4
+2025-09-01,Operations,Facilities,85000,92454.61
+2025-09-01,Customer Success,People,135000,91057.27
+2025-09-01,Customer Success,Software,83000,101454.46
+2025-09-01,Customer Success,Travel,80000,62080.74
+2025-09-01,Customer Success,Facilities,172000,115838.59
+2025-10-01,Sales,People,170000,174016.52
+2025-10-01,Sales,Software,148000,127638.99
+2025-10-01,Sales,Travel,178000,240674.94
+2025-10-01,Sales,Facilities,52000,69528.08
+2025-10-01,Engineering,People,47000,50363.23
+2025-10-01,Engineering,Software,82000,78757.38
+2025-10-01,Engineering,Travel,90000,78232.85
+2025-10-01,Engineering,Facilities,160000,129811.87
+2025-10-01,Operations,People,113000,130736.5
+2025-10-01,Operations,Software,178000,197297.52
+2025-10-01,Operations,Travel,123000,126538.46
+2025-10-01,Operations,Facilities,119000,81578.16
+2025-10-01,Customer Success,People,146000,170122.32
+2025-10-01,Customer Success,Software,50000,54655.17
+2025-10-01,Customer Success,Travel,145000,157991.35
+2025-10-01,Customer Success,Facilities,57000,47599.13
+2025-11-01,Sales,People,87000,80365.52
+2025-11-01,Sales,Software,89000,89006.5
+2025-11-01,Sales,Travel,146000,157216.76
+2025-11-01,Sales,Facilities,60000,81435.72
+2025-11-01,Engineering,People,172000,169781.03
+2025-11-01,Engineering,Software,64000,71974.2
+2025-11-01,Engineering,Travel,161000,154835.46
+2025-11-01,Engineering,Facilities,111000,112908.87
+2025-11-01,Operations,People,119000,128387.31
+2025-11-01,Operations,Software,124000,101358.9
+2025-11-01,Operations,Travel,163000,160976.51
+2025-11-01,Operations,Facilities,103000,133330.28
+2025-11-01,Customer Success,People,113000,101637.72
+2025-11-01,Customer Success,Software,167000,186551.33
+2025-11-01,Customer Success,Travel,116000,122776.51
+2025-11-01,Customer Success,Facilities,175000,152769.56
+2025-12-01,Sales,People,45000,37585.7
+2025-12-01,Sales,Software,92000,66778.45
+2025-12-01,Sales,Travel,81000,58131.79
+2025-12-01,Sales,Facilities,117000,163073.68
+2025-12-01,Engineering,People,102000,96477.32
+2025-12-01,Engineering,Software,126000,84906.05
+2025-12-01,Engineering,Travel,145000,196252.57
+2025-12-01,Engineering,Facilities,134000,159524.96
+2025-12-01,Operations,People,180000,233158.51
+2025-12-01,Operations,Software,107000,128168.15
+2025-12-01,Operations,Travel,169000,162715.39
+2025-12-01,Operations,Facilities,119000,78037.34
+2025-12-01,Customer Success,People,40000,38552.76
+2025-12-01,Customer Success,Software,174000,129100.58
+2025-12-01,Customer Success,Travel,128000,138252.4
+2025-12-01,Customer Success,Facilities,44000,45392.96

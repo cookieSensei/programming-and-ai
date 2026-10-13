@@ -202,3 +202,9 @@ The manifest recognizes `.md` and `.ipynb` lessons, lists permitted resource ext
 ## License and attribution
 
 The repository's existing README declared **MIT License**; a standalone `LICENSE` file is not currently included. This documentation update preserves that declaration rather than introducing new license terms. Credit CookieSensei and link back to this repository when sharing material; consult the [published reuse guidance](https://cookiesensei.com/learn) for the program's attribution information.
+
+## Business Analytics Workshop
+
+Practice Streamlit dashboards, exploratory data analysis, Matplotlib, Seaborn and
+Plotly with [six standalone business projects](business_analytics_workshop/README.md).
+Each project contains an app and its fictional CSV dataset.
