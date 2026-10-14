@@ -23,14 +23,25 @@ analysis; their patterns are not evidence about real businesses.
 Create a workspace from **Business Analytics Workshop**. In VS Code and
 JupyterLab, open `business_analytics_workshop` in the project file browser.
 The **Business Analytics Dashboard** app opens the project selector. Select any
-project in its sidebar, then change the filters, inspect the charts, and download
-the filtered records. Edit that project's `app.py` or CSV and rerun the dashboard
-to experiment. Each app is also runnable independently.
+project in its sidebar, then change the filters and read the explanations below
+each chart. **Guided workshop** opens the current course edition with detailed
+reports. Choose **My editable projects** to run your personal `app.py` and CSV
+changes from the project folder. Each app is also runnable independently.
+
+Every project explains the business problem, decision context, row meaning, KPI
+formulas, chart axes and units, interpretation, and unanswered questions. The
+**Full report** tab presents a complete 12-section report with an executive
+summary, results calculated from your filters, explanations of all five visuals,
+data quality, suggested investigations, limitations, and reproduction steps.
+Download it as Markdown with **Download full report (Markdown)**. Both the report
+and the filtered CSV reflect the current selections.
 
 New workspaces receive a pinned copy of this folder. An existing workspace must
 be updated to the workshop-projects template version and restarted by its owner
 to receive the folder. Student files are preserved, so repository updates do not
-automatically overwrite a previously copied workshop folder.
+automatically overwrite a previously copied workshop folder. After an owner
+updates the workspace, Guided workshop shows the new explanations while
+My editable projects preserves their existing work.
 
 To run a separate app in a Coder terminal:
 
@@ -68,7 +79,9 @@ streamlit run app.py
    plots or heatmaps. Use Plotly hover, zoom and legend toggles on the dashboard.
 5. Inspect **Data and quality** for source types, missing cells, duplicate rows,
    descriptive statistics, and a filtered CSV download.
-6. Complete the exercises at the bottom of each app. Add one filter, one chart,
+6. Read **Full report**, change a filter and compare the updated findings.
+   Download the report and explain one conclusion and one unanswered question.
+7. Complete the exercises at the bottom of each app. Add one filter, one chart,
    and a short explanation of a business finding and its limitations.
 
 Start with retail and marketing, then try churn, inventory, finance and
