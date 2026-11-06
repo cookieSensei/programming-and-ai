@@ -1,8 +1,9 @@
 # Business Analytics Workshop
 
 Six independent, beginner-friendly Streamlit projects. Each numbered project
-folder contains exactly two files: `app.py` and its CSV dataset. No shared Python
-helpers, API keys, database or internet connection are needed to run the apps.
+folder contains `app.py`, its CSV dataset, and an `EXPLANATION.md` learning guide.
+No shared Python helpers, API keys, database or internet connection are needed
+to run the apps after the Python dependencies are installed.
 
 All datasets are fictional, generated teaching examples, not real company or
 customer records. Monetary values are INR. Dates are historical teaching periods
@@ -15,8 +16,35 @@ analysis; their patterns are not evidence about real businesses.
 | [02_marketing_campaigns](02_marketing_campaigns) | `marketing_campaigns.csv` | 360 daily channel/campaign observations | Conversion funnels, weighted rates, ROAS and acquisition cost |
 | [03_customer_churn](03_customer_churn) | `customer_churn.csv` | 480 customers in one snapshot | Segment comparisons, sample sizes, tenure, satisfaction and churn |
 | [04_inventory_planning](04_inventory_planning) | `inventory.csv` | 180 SKU/warehouse pairs | Stock cover, reorder points, inventory value and a safety-buffer scenario |
-| [05_finance_budget](05_finance_budget) | `department_budget.csv` | 192 month/department/expense-category lines | Budget utilization, variance, overspend and cumulative trends |
+| [05_finance_budget](05_finance_budget) | `department_budget.csv` | 192 month/department/expense-category lines | Budget utilization, variance, overspend and monthly trends |
 | [06_restaurant_operations](06_restaurant_operations) | `restaurant_orders.csv` | 600 orders | Sales, service time, ratings, contribution and operational comparisons |
+
+## Detailed project and code explanations
+
+Open the guide beside each project's `app.py`. Each guide connects the business
+problem to the exact source code, explains the data and formulas with worked
+examples, and walks through every source line. The guides also explain why pandas
+is used, how the charts answer different questions, and how Streamlit turns the
+analysis into an interactive browser app.
+
+| Guide | Main questions explained |
+| --- | --- |
+| [Retail sales explanation](01_retail_sales/EXPLANATION.md) | How do discounts and product costs affect sales and gross profit? Which regions and categories lead, and what does a typical order look like? |
+| [Marketing campaigns explanation](02_marketing_campaigns/EXPLANATION.md) | Which channels produce attributed revenue efficiently? Why do conversion rate, CPA and ROAS use different denominators? |
+| [Customer churn explanation](03_customer_churn/EXPLANATION.md) | Which customer groups have higher observed churn proportions? How do sample sizes, tenure and satisfaction change the interpretation? |
+| [Inventory planning explanation](04_inventory_planning/EXPLANATION.md) | Which SKU locations fall below the reorder threshold? How do demand, lead time and an extra buffer change suggested quantities and purchase cost? |
+| [Finance budget explanation](05_finance_budget/EXPLANATION.md) | Where does actual spending exceed the budget? Why can an overall total hide overspent lines and departments? |
+| [Restaurant operations explanation](06_restaurant_operations/EXPLANATION.md) | How do sales, wait times, ratings and food-cost contribution vary across branches and meal periods? |
+
+Read the business problem and data dictionary first, work through a small manual
+calculation, and then follow the numbered code walkthrough with `app.py` open.
+Run the app and change one filter to connect the code to its visible result.
+The guides explain the current implementation and identify proposed exercises
+separately. Their line numbers refer to the source revision stated in each guide.
+
+These static learning guides complement the app's **Full report** tab. The guides
+teach how the program works; the downloaded report contains results for the
+filters currently selected in the running app.
 
 ## Open in CookieSensei Coder
 
