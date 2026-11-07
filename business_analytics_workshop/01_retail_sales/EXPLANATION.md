@@ -1,701 +1,1188 @@
-# Retail Sales Explorer - business questions, calculations and every line of code
+# Retail Sales Explorer - a worked tutorial with code, comments and real outputs
 
-This guide explains the [actual `app.py` in this folder](app.py), using its [bundled `retail_sales.csv`](retail_sales.csv). It is written for a learner who can open a Python file but has not yet built a data analysis application. Keep the source open beside this guide and enable line numbers in your editor.
+**Run the lesson:** [Open the step-by-step Jupyter notebook](TUTORIAL.ipynb) for executable cells, saved outputs, checkpoints, and practice tasks.
 
-**Source revision:** `c10a61c36fffdd048b69dd78926e6663bc986fce`. The line numbers below refer to the 264-line `app.py` at that revision. Blank lines separate ideas and do not execute; the walkthrough covers every nonblank line, including comments, display text and closing delimiters. If the Python file changes, its line numbers and example results may change too.
+This tutorial works through the analysis behind [the existing `app.py`](app.py), using the real [teaching CSV in this folder](retail_sales.csv). Each step asks a business question, executes commented Python code, shows the output from that code, and explains what the result means. The numbers and charts below were generated from the bundled dataset.
 
-The data is fictional teaching material, not CookieSensei sales or another company's records. Amounts are INR. This document teaches how the application works; the app's **Full report** tab separately produces a report about whichever rows the user selects.
+**How to use the code cells:** Markdown shows static code and saved outputs; it does not execute Python itself. Open a Jupyter notebook with this project folder as its working directory and run the **analysis cells in order in one kernel**. Their variables carry forward, just as in a notebook. A final separate section contains a complete **Streamlit-only teaching app**: save that cell as `practice_app.py` beside the CSV and run it with Streamlit. Do not paste that final app into the analysis notebook as another analysis step.
+
+The source app inspected here is unchanged from revision `c10a61c36fffdd048b69dd78926e6663bc986fce`. These teaching cells expose its calculations in smaller steps and add useful intermediate printouts. The final teaching app is a compact reconstruction; the existing app also contains its fuller case-study explanations and 12-section report. All 720 source orders are fictional, dates belong to the 2025 teaching period, and monetary amounts are INR.
 
 ## Contents
 
-1. [The business problem and the purpose of the solution](#1-the-business-problem-and-the-purpose-of-the-solution)
-2. [Understand the dataset before writing code](#2-understand-the-dataset-before-writing-code)
-3. [Why these Python libraries are used](#3-why-these-python-libraries-are-used)
-4. [From a business question to a defensible calculation](#4-from-a-business-question-to-a-defensible-calculation)
-5. [How the analysis becomes a Streamlit application](#5-how-the-analysis-becomes-a-streamlit-application)
-6. [Run the project and reproduce the starting results](#6-run-the-project-and-reproduce-the-starting-results)
-7. [Read all five charts correctly](#7-read-all-five-charts-correctly)
-8. [Line-by-line walkthrough](#8-line-by-line-walkthrough)
-9. [Data quality, edge cases and limits](#9-data-quality-edge-cases-and-limits)
-10. [Practice and worked examples](#10-practice-and-worked-examples)
-11. [Troubleshooting](#11-troubleshooting)
-12. [Sources and further reading](#12-sources-and-further-reading)
+- [The business problem](#the-business-problem)
+- [Environment and first principles](#environment-and-first-principles)
+- [Part 1 - Load and understand the orders](#part-1---load-and-understand-the-orders)
+- [Part 2 - Filter and calculate business measures](#part-2---filter-and-calculate-business-measures)
+- [Part 3 - Answer questions with grouped tables](#part-3---answer-questions-with-grouped-tables)
+- [Part 4 - Create all five visual outputs](#part-4---create-all-five-visual-outputs)
+- [Part 5 - Inspect, explain and export the evidence](#part-5---inspect-explain-and-export-the-evidence)
+- [Part 6 - Turn the analysis into a Streamlit app](#part-6---turn-the-analysis-into-a-streamlit-app)
+- [Limits, troubleshooting and next questions](#limits-troubleshooting-and-next-questions)
+- [Sources](#sources)
 
-## 1. The business problem and the purpose of the solution
+## The business problem
 
-Imagine that a retail manager receives a spreadsheet of orders. The manager can see individual purchases but cannot immediately answer: How much did we sell after discounts? How much remained after paying for the products? Which region produced most sales? Which category had the highest margin? Is our average order a good description of an ordinary order? Did sales and gross profit move together over time?
+A retail manager has order records but needs answers: How much did we sell after discounts? How much remained after paying product costs? Which regions and categories contributed most? Is the average order representative? Are monthly sales and profit moving together?
 
-These are different questions. A category can sell expensive products and therefore lead revenue while earning little profit per rupee of sales. A region can have a large total because it has more orders, rather than because each order is more valuable. An unusually large order can lift the average without changing most customers' purchases. Reading only one total hides these distinctions.
+One total cannot answer all these questions. High revenue can come from many orders, expensive products, or deep discounts. A category can lead sales while earning little margin. A large order can move the mean far above a typical order. The solution is to keep the original observations inspectable, calculate explicit measures, compare groups, and show distributions as well as totals.
 
-The app solves this information problem by turning order records into a repeatable investigation. It loads the CSV, checks that essential information can be used, lets the reader select regions, categories and dates, calculates the same measures for that selection, and presents complementary views. A manager can inspect a large pattern, drill into source records, and export both the selected data and an explanatory report.
+This is exploratory data analysis (EDA). It helps choose a pricing, cost or merchandising question to investigate. It does not establish that a discount causes higher demand, calculate net profit, or forecast sales. Those tasks would require additional data and methods.
 
-The intended decision is **where to investigate pricing, product costs, merchandising or promotions next**. The app does not automatically change a price, buy stock, forecast sales or decide that a promotion worked. Its output gives a reason to ask a more precise question. For example: "Electronics leads sales and has a relatively high aggregate margin in this selection; which products and order sizes explain that result?" is supported by this dataset. "Increasing the Electronics discount will increase future profit" is not established by the analysis.
+## Environment and first principles
 
-This is exploratory data analysis, or EDA: inspect the data's structure, summarize it, compare groups, study distributions, and look for relationships worth investigating. It also includes descriptive reporting. No machine learning model is trained, and none is necessary to answer the questions actually implemented in this project. The project's own `CASE`, `DECISION` and `LIMITATIONS` strings define that scope in [the source](app.py).
+Use Python 3.12 and the versions documented in the [workshop README](../README.md):
 
-## 2. Understand the dataset before writing code
-
-### 2.1 What one row means
-
-The unit represented by a row is often called its **grain**. Here one row is one order, assigned one category, one region and one sales channel. An order may contain multiple units, but this simplified dataset supplies one price and one cost per unit for that row. It does not contain separate product lines for a multi-category shopping basket.
-
-The bundled CSV has **720 rows and 9 source columns**, covering **1 January through 29 June 2025**. The app describes this as January to June 2025; that description does not mean every day in June is present. There are 720 distinct order IDs, no exact duplicate rows and no missing cells in this bundled version. These are observations about the supplied file, not promises about a CSV you edit later.
-
-Knowing the grain makes the calculation `filtered["revenue"].mean()` meaningful: because one row is one order, the mean of row revenues is average order value. If future data contained one row per product line, the same expression would instead calculate average line value. Before reusing code with another dataset, check what a row represents.
-
-### 2.2 Source field dictionary
-
-| Column | Meaning and units | Why the app needs it |
-| --- | --- | --- |
-| `order_id` | A synthetic order identifier, such as `ORD-0001` | Helps locate a transaction. The loader requires this field but does not enforce uniqueness. |
-| `order_date` | The order's date | Supports inclusive date filters and monthly grouping. It is converted from CSV text into pandas datetime values. |
-| `region` | East, North, South or West in the supplied file | Supports the region filter and regional sales comparisons. |
-| `category` | Electronics, Fashion, Grocery or Home | Supports category filtering, category totals, margins and profit distributions. |
-| `channel` | Store or Online | Describes where the order occurred. It appears in data and report scope, but the current sidebar has no channel filter. |
-| `units` | Number of units in the order | Converts per-unit prices and costs into order amounts. |
-| `unit_price` | INR per unit before the stated discount | The starting selling price in the revenue formula. |
-| `discount_pct` | Percentage discount, intended to be between 0 and 100 | Converts list-price sales into sales after discount. A stored `10` means 10%, not 0.10%. |
-| `unit_cost` | Product cost in INR per unit | Calculates the product cost associated with all units in the order. |
-
-These definitions come from `FIELD_GUIDE` and the workshop [README](../README.md). The intended units are part of the data contract. A CSV column named `unit_price` containing paise rather than rupees could still parse as numeric, but its resulting business calculations would be wrong by a factor of 100.
-
-### 2.3 Source columns and derived columns
-
-The CSV does **not** already contain `revenue` or `gross_profit`. Lines 150-151 calculate them on the selected DataFrame. The filtered table and its CSV export therefore normally contain 11 columns: the 9 source fields plus these 2 derived fields. The raw `frame` remains the loaded source table; source-quality checks inspect that table rather than the derived columns.
-
-This separation is useful. You can trace every reported amount back to its inputs without overwriting the original CSV. Changing a filter changes the in-memory selection; clicking a download saves a new file in the browser. Neither operation writes back to `retail_sales.csv`.
-
-## 3. Why these Python libraries are used
-
-### 3.1 Why pandas is central
-
-A CSV is text arranged into rows and columns. Python can read text without pandas, but we would then need to write our own parsing, type conversion, filtering, grouping, aggregation and table-export code. Pandas supplies those operations in a form that maps directly to this problem. Its central two-dimensional object is a **DataFrame**; selecting one column usually produces a **Series**, a one-dimensional labeled collection. See the official [pandas introductory guide](https://pandas.pydata.org/pandas-docs/stable/getting_started/intro_tutorials/01_table_oriented.html).
-
-In this app:
-
-```python
-frame = pd.read_csv(DATA_FILE)
+```bash
+python -m pip install streamlit==1.50.0 pandas==2.2.3 numpy==2.3.5 matplotlib==3.10.8 seaborn==0.13.2 plotly==6.5.2
 ```
 
-creates a DataFrame. The column names become labels, and pandas supplies a row index. The index is not the `order_id` business identifier. For example, `frame["units"]` selects the entire units column, while `frame[["units", "unit_price"]]` selects a two-column DataFrame. The second example has nested square brackets because the outer brackets select columns and the inner brackets construct the list of column names.
+Use your workshop environment or a virtual environment. The repository's root README recommends a Linux Cloud Lab or WSL for a full clone because other phase folders contain `>` characters that native Windows filenames cannot represent. The project itself needs the CSV and installed packages, not an API key or database.
 
-Pandas **vectorized operations** apply calculations to a whole Series at once. In:
+**Why pandas?** The input is a table, and the questions require table operations: parsing, selecting rows, calculating columns, grouping, aggregation and export. A pandas **DataFrame** stores a two-dimensional labeled table. Selecting one column usually returns a **Series**. The library lets the business operation remain visible instead of requiring a manual loop and dictionary for every total. Pandas performs arithmetic; it does not decide which denominator or business interpretation is correct.
+
+**Why the other tools?** `Path` handles filenames. Matplotlib provides figure/axes control and the histogram. Seaborn builds the boxplot and heatmap on Matplotlib axes. Plotly Express builds interactive line and bar figures. Streamlit supplies the browser interface, widgets and downloads. NumPy belongs to the workshop environment but is not directly imported by this app.
+
+In the analysis cells, `fig` as the final expression displays the figure in a notebook. The image immediately below each chart cell is the actual captured result of that expression. Plotly's saved PNG is a static view; the live Plotly figure in a notebook or Streamlit additionally supports hover and zoom.
+
+## Part 1 - Load and understand the orders
+
+### Cell 01 - Load the CSV as a pandas table
+
+**Question:** What data do we actually have to analyze?
+
+<!-- cell:analysis:01 -->
 
 ```python
-filtered["units"] * filtered["unit_price"]
+from pathlib import Path  # Build a path without hard-coding a machine-specific folder.
+import pandas as pd       # Read and transform tables.
+import matplotlib.pyplot as plt  # Create figures and axes.
+import plotly.express as px      # Build interactive charts from DataFrames.
+import seaborn as sns            # Create statistical distribution plots.
+
+# In a notebook, start in the folder containing retail_sales.csv.
+DATA_FILE = Path("retail_sales.csv")
+frame = pd.read_csv(DATA_FILE)  # CSV headers become DataFrame column names.
+
+# shape gives (rows, columns); it does not count units or customers.
+print(f"Loaded {frame.shape[0]} rows and {frame.shape[1]} source columns.")
+print("Source file:", DATA_FILE.name)
 ```
 
-each order's quantity is multiplied by the corresponding order's price. We do not manually write a Python loop that retrieves each row and appends each result. This makes the business formula more visible and reduces opportunities to mix one row's quantity with another row's price. Pandas aligns Series by their index; here both Series come from the same DataFrame and therefore refer to matching rows.
-
-Pandas also provides the vocabulary needed for the analysis:
-
-| Operation | Meaning in this project |
-| --- | --- |
-| `read_csv()` | Parse the file into a table. |
-| `to_datetime()` and `to_numeric()` | Convert dates and measures to types that support comparisons and arithmetic. |
-| `.isin()` and Boolean indexing | Keep rows matching selected categories or regions. |
-| `.dt.date.between()` | Keep rows inside an inclusive date interval. |
-| `.sum()`, `.mean()`, `.median()` | Answer questions about total, average and typical order amounts. |
-| `.groupby().agg()` | Collect orders into business groups and calculate multiple summaries per group. |
-| `.corr()` | Quantify pairwise linear relationships between selected numeric measures. |
-| `.describe()` | Produce a statistical overview of numeric columns. |
-| `.to_csv(index=False)` | Serialize the current selected table for a download without adding the pandas row index. |
-
-Pandas computes the analytical tables. It does not itself create the sidebar, run a web server, or decide what a manager should do.
-
-### 3.2 Responsibilities of the other imports
-
-| Import | Responsibility here | Why it is a separate tool |
-| --- | --- | --- |
-| `Path` from `pathlib` | Locate the CSV beside the Python script | File location should not depend on which directory the terminal happened to start in. |
-| `matplotlib.pyplot as plt` | Create figures and axes; draw the histogram; provide axes for Seaborn | It gives explicit control over figure size, axes, labels and cleanup. |
-| `plotly.express as px` | Build the interactive monthly line chart and stacked regional bar chart | Hover and zoom help a reader inspect exact groups and periods. |
-| `seaborn as sns` | Draw the category boxplot and correlation heatmap on Matplotlib axes | It expresses distribution and statistical comparison plots compactly. |
-| `streamlit as st` | Create the browser interface and connect widget values to Python execution | It exposes a Python analysis to a reader who should not have to edit code to explore it. |
-
-The aliases `pd`, `plt`, `px`, `sns` and `st` are shorter local names introduced by `as`; they do not install libraries or change their behavior. This file does not import NumPy directly, although NumPy is included in the workshop environment. There are no external service calls, API keys, database queries or authentication routines inside this particular app. Those are separate concerns from its local CSV analysis.
-
-### 3.3 Python syntax that will recur
-
-`=` assigns a value to a name or a column. It does not mean mathematical equality testing; `==` would test equality. Parentheses call a function, group an expression, or delimit a tuple. Square brackets construct lists or select items. Curly braces in `{"key": "value"}` construct a dictionary. In an f-string such as `f"{revenue:,.0f}"`, braces insert a computed value into text; the format after `:` requests separators and a number of displayed decimal places.
-
-Indentation defines a block. The lines indented beneath `if`, `for`, `try`, `except`, `def` or `with` belong to that statement. A `#` comment and a descriptive docstring explain code; they do not calculate a business metric. Strings written beside one another inside parentheses are joined by Python, which is why the long business explanations span several source lines without explicit `+` signs.
-
-## 4. From a business question to a defensible calculation
-
-### 4.1 Sales after discount
-
-For each order:
+**Output**
 
 ```text
-list-price order amount = units * unit_price
-discount fraction = discount_pct / 100
-retained fraction = 1 - discount fraction
-net sales = list-price order amount * retained fraction
+Loaded 720 rows and 9 source columns.
+Source file: retail_sales.csv
 ```
 
-Line 150 writes this whole expression directly:
+**Interpretation and reasoning**
+
+`pd` is just an alias for pandas. `read_csv()` parses text into a DataFrame called `frame`. Here one row is one order, so 720 rows mean 720 recorded orders. A quantity column can contain several units per order. In the existing script, `Path(__file__).resolve().with_name(...)` finds the CSV beside `app.py`; notebooks usually have no `__file__`, so this cell deliberately uses the notebook's project working directory.
+
+### Cell 02 - Look at actual orders before calculating anything
+
+**Question:** What does one record mean, and which quantities belong together?
+
+<!-- cell:analysis:02 -->
 
 ```python
+# head(5) selects the first five rows without changing frame.
+# to_string produces a stable text table; index=False hides the pandas row index.
+print(frame.head(5).to_string(index=False))
+```
+
+**Output**
+
+```text
+order_id order_date region category channel  units  unit_price  discount_pct  unit_cost
+ORD-0001 2025-01-01   West     Home   Store      7     1043.19           0.0     658.69
+ORD-0002 2025-01-02   East     Home  Online      2      766.05           0.0     435.11
+ORD-0003 2025-01-03  South     Home   Store      7     1098.99           0.0     807.30
+ORD-0004 2025-01-04   West     Home  Online      8      860.70          10.0     574.83
+ORD-0005 2025-01-05   West     Home   Store      3     1143.13          10.0     837.20
+```
+
+**Interpretation and reasoning**
+
+An order has one region, one category and one channel in this simplified dataset. `unit_price` and `unit_cost` are INR per unit; `units` is the quantity; `discount_pct` is percentage points, so 10 means 10%. `order_id` is a business identifier, distinct from pandas' row index. There are no customer IDs, refunds or operating expenses in these rows. Revenue and gross profit are not source columns: we will derive them.
+
+### Cell 03 - Convert text dates and numeric measures to usable types
+
+**Question:** Why cannot we treat all CSV values as ordinary text?
+
+<!-- cell:analysis:03 -->
+
+```python
+print("Date type before conversion:", frame["order_date"].dtype)
+
+# Dates must be parsed before chronological filtering and monthly grouping.
+frame["order_date"] = pd.to_datetime(frame["order_date"], errors="raise")
+
+# These columns must support arithmetic, not string concatenation.
+numeric_columns = ["units", "unit_price", "discount_pct", "unit_cost"]
+for column in numeric_columns:
+    frame[column] = pd.to_numeric(frame[column], errors="raise")
+
+print("\nTypes after conversion:")
+print(frame.dtypes.to_string())
+```
+
+**Output**
+
+```text
+Date type before conversion: object
+
+Types after conversion:
+order_id                object
+order_date      datetime64[ns]
+region                  object
+category                object
+channel                 object
+units                    int64
+unit_price             float64
+discount_pct           float64
+unit_cost              float64
+```
+
+**Interpretation and reasoning**
+
+A date stored as text does not supply pandas' datetime operations. A number stored as a string can fail arithmetic or behave differently from a number. `errors='raise'` makes invalid data visible rather than silently replacing it. `frame['units']` selects one Series; assigning a converted Series back updates that column. This conversion does not prove a number is sensible: negative quantities or discounts above 100 still need domain validation.
+
+### Cell 04 - Check the schema, missing values and duplicate rows
+
+**Question:** Are the essential inputs present and usable?
+
+<!-- cell:analysis:04 -->
+
+```python
+required_columns = [
+    "order_id", "order_date", "region", "category", "channel",
+    "units", "unit_price", "discount_pct", "unit_cost",
+]
+
+# issubset allows extra columns but requires every named analysis input.
+if not set(required_columns).issubset(frame.columns):
+    raise ValueError("The CSV is missing required columns.")
+if frame.empty:
+    raise ValueError("The CSV contains no rows.")
+
+# First any() reduces each column; second any() reduces to one yes/no result.
+if frame[required_columns].isna().any().any():
+    raise ValueError("Fill missing required values before analysis.")
+
+quality = pd.DataFrame({
+    "column": frame.columns,
+    "type": frame.dtypes.astype(str).values,
+    "missing": frame.isna().sum().values,
+})
+print(quality.to_string(index=False))
+print("Exact duplicate rows:", int(frame.duplicated().sum()))
+print("Distinct order IDs:", frame["order_id"].nunique())
+```
+
+**Output**
+
+```text
+      column           type  missing
+    order_id         object        0
+  order_date datetime64[ns]        0
+      region         object        0
+    category         object        0
+     channel         object        0
+       units          int64        0
+  unit_price        float64        0
+discount_pct        float64        0
+   unit_cost        float64        0
+Exact duplicate rows: 0
+Distinct order IDs: 720
+```
+
+**Interpretation and reasoning**
+
+The bundled file passes these checks. Missing required values should be corrected deliberately; the app does not automatically drop rows or fill them with zero. `duplicated()` compares entire rows and counts later copies; a repeated ID with changed amounts is a different issue. The distinct-ID check is an additional teaching inspection, not a uniqueness validation implemented by the app. The existing app wraps loading/conversion in `try/except` and uses `st.error()` plus `st.stop()`; a notebook normally shows the raised error directly.
+
+### Cell 05 - Inspect the available dates and business groups
+
+**Question:** Which comparisons and filters are possible?
+
+<!-- cell:analysis:05 -->
+
+```python
+# min/max describe observed data coverage, not an audited trading calendar.
+print("Observed dates:", frame["order_date"].min().date(),
+      "to", frame["order_date"].max().date())
+
+# unique() removes repeated labels; sorted() produces a predictable order.
+for column in ["region", "category", "channel"]:
+    print(f"{column}: {', '.join(sorted(frame[column].unique()))}")
+
+# size counts order rows, not units sold.
+print("\nOrders per region:")
+print(frame.groupby("region").size().rename("orders").to_string())
+```
+
+**Output**
+
+```text
+Observed dates: 2025-01-01 to 2025-06-29
+region: East, North, South, West
+category: Electronics, Fashion, Grocery, Home
+channel: Online, Store
+
+Orders per region:
+region
+East     168
+North    191
+South    166
+West     195
+```
+
+**Interpretation and reasoning**
+
+The observed period ends on 29 June, even though the static case description says January-June. A missing date is not automatically a zero-sales day. Group sizes matter because a larger regional total may reflect more orders. `channel` exists in the data, but the current source app's sidebar filters region, category and dates only; adding a channel control is an extension.
+
+## Part 2 - Filter and calculate business measures
+
+### Cell 06 - Apply the same default selection as the app
+
+**Question:** How do user choices become a precise analysis population?
+
+<!-- cell:analysis:06 -->
+
+```python
+# These variables represent the default values returned by sidebar widgets.
+selected_regions = sorted(frame["region"].unique())
+selected_categories = sorted(frame["category"].unique())
+dates = (frame["order_date"].min().date(), frame["order_date"].max().date())
+
+filtered = frame.copy()  # Keep the full source available for quality reporting.
+filtered = filtered[filtered["region"].isin(selected_regions)]
+filtered = filtered[filtered["category"].isin(selected_categories)]
+filtered = filtered[filtered["order_date"].dt.date.between(dates[0], dates[1])]
+
+if filtered.empty:
+    raise ValueError("No rows match the selected groups and dates.")
+print(f"Selected {len(filtered)} of {len(frame)} orders.")
+print(f"Requested interval: {dates[0]} to {dates[1]} (inclusive)")
+
+# A second mask demonstrates a narrower selection without changing filtered.
+north_mask = frame["region"].isin(["North"])
+print("Rows a North-only selection would keep:", int(north_mask.sum()))
+```
+
+**Output**
+
+```text
+Selected 720 of 720 orders.
+Requested interval: 2025-01-01 to 2025-06-29 (inclusive)
+Rows a North-only selection would keep: 191
+```
+
+**Interpretation and reasoning**
+
+`.isin(...)` creates one True/False value per row. Outer indexing retains True rows. Sequential region, category and date filters combine as AND: every surviving order satisfies all three. `.between()` is inclusive by default. The main tutorial keeps all default rows so its results can be compared directly with the app. The separate North mask shows a real narrower selection without silently changing subsequent cells. In a live widget, selecting no labels keeps no rows; it does not mean 'all'.
+
+### Cell 07 - Derive net sales and gross profit for each order
+
+**Question:** What did each order sell for after discounts, and what remained after product cost?
+
+<!-- cell:analysis:07 -->
+
+```python
+# Turn percentage points into a fraction, then keep the undiscounted fraction.
 filtered["revenue"] = (
     filtered["units"] * filtered["unit_price"]
     * (1 - filtered["discount_pct"] / 100)
 )
+
+# Both revenue and cost cover all units in the same order.
+filtered["gross_profit"] = (
+    filtered["revenue"] - filtered["units"] * filtered["unit_cost"]
+)
+preview_columns = [
+    "order_id", "units", "unit_price", "discount_pct",
+    "unit_cost", "revenue", "gross_profit",
+]
+print(filtered[preview_columns].head(5).to_string(index=False))
+
+# Check one actual order manually against the vectorized calculation.
+first = filtered.iloc[0]  # iloc[0] selects the first row by position.
+print(f"\n{first['order_id']}: {first['units']} units x INR {first['unit_price']:.2f}")
+print(f"Net sales: INR {first['revenue']:.2f}; gross profit: INR {first['gross_profit']:.2f}")
 ```
 
-This is the same calculation as the source, reformatted for reading. The parentheses matter: they calculate the retained fraction before multiplication. For a **made-up arithmetic example**, sell 2 units at INR 1,000 each with a 10% discount. The list-price amount is INR 2,000; the retained fraction is 0.90; net sales are INR 1,800. Using `discount_pct` directly as 10 would produce a negative multiplier; dividing by 100 converts percentage points to a fraction.
+**Output**
 
-Why does summing this derived column answer the sales question? Each selected row represents one order and the derived value represents that order's net sales. Adding one amount for every selected order gives total net sales for that selection. It is not necessarily money collected: this file has no payment-status or cash-receipt information.
+```text
+order_id  units  unit_price  discount_pct  unit_cost  revenue  gross_profit
+ORD-0001      7     1043.19           0.0     658.69 7302.330      2691.500
+ORD-0002      2      766.05           0.0     435.11 1532.100       661.880
+ORD-0003      7     1098.99           0.0     807.30 7692.930      2041.830
+ORD-0004      8      860.70          10.0     574.83 6197.040      1598.400
+ORD-0005      3     1143.13          10.0     837.20 3086.451       574.851
 
-### 4.2 Gross profit and gross margin
-
-Product cost for an order is `units * unit_cost`. Gross profit subtracts that amount from net sales. Continuing the made-up example, if each unit costs INR 600, total product cost is INR 1,200 and gross profit is INR 600. The gross margin is `600 / 1800 = 0.3333...`, displayed as 33.3%.
-
-Why subtract cost for **every unit**? Subtracting only `unit_cost` would account for one unit while recording revenue from two. Both sides of the calculation must cover the same quantity and selected orders.
-
-Why divide profit by revenue? Margin asks what fraction of sales remains after product costs. Dividing profit by cost instead would answer a different question, markup on cost. This app reports margin, not markup.
-
-The app's total margin is:
-
-```python
-profit = filtered["gross_profit"].sum()
-revenue = filtered["revenue"].sum()
-total_margin = ratio(profit, revenue)
+ORD-0001: 7 units x INR 1043.19
+Net sales: INR 7302.33; gross profit: INR 2691.50
 ```
 
-It does not average each order's margin. Consider two **invented** orders: one has INR 100 sales and INR 50 profit, and the other has INR 900 sales and INR 180 profit. Their margins are 50% and 20%. The unweighted average is 35%, but the overall business earned INR 230 from INR 1,000 sales: **23%**. Summing numerators and denominators gives the revenue-weighted answer. An average of percentages would give a tiny order equal weight to a large order.
+**Interpretation and reasoning**
 
-Gross profit in this project excludes operating expenses and taxes. The file also omits refunds, acquisition costs and other information needed for a complete profitability picture. A positive gross profit is therefore not proof of positive net profit.
+Pandas multiplies aligned Series row by row, so the formula is applied to every selected order without a manual loop. Parentheses ensure the retained fraction is calculated before multiplication. The first source order has 7 units, no discount and INR 658.69 cost per unit: sales are INR 7,302.33 and gross profit is INR 2,691.50. `revenue` here means sales after the stated discount; it is not verified cash collected. Gross profit excludes operating expenses and tax. `frame` still has nine source columns; `filtered` now has eleven.
 
-### 4.3 Average, median and distribution
+### Cell 08 - Calculate the KPIs and a typical-order comparison
 
-Average order value is total selected revenue divided by the number of selected orders. `.mean()` implements that arithmetic mean. `.median()` finds the middle value after ordering the observations. With **invented** order values of 100, 120, 130, 150 and 1,000, the mean is 300 but the median is 130. The large order changes the mean strongly while leaving the middle order small.
+**Question:** What does the selected business look like overall?
 
-The app therefore shows an average card, includes the median in its generated insights, and draws a histogram. These outputs answer related questions: the mean describes revenue per order overall, the median describes the center of the ordered observations, and the histogram shows how values are distributed rather than reducing everything to one number.
-
-### 4.4 Grouping answers segment questions
+<!-- cell:analysis:08 -->
 
 ```python
+def ratio(numerator, denominator):
+    # This matches the source helper's scalar zero-denominator fallback.
+    return numerator / denominator if denominator else 0.0
+
+revenue = filtered["revenue"].sum()          # Add selected order sales.
+profit = filtered["gross_profit"].sum()     # Add selected order profits.
+average_order = filtered["revenue"].mean()  # One row is one order.
+median_order = filtered["revenue"].median() # Middle ordered value.
+
+print(f"Net sales: INR {revenue:,.2f}")
+print(f"Gross profit: INR {profit:,.2f}")
+print(f"Gross margin: {ratio(profit, revenue):.2%}")
+print(f"Average order: INR {average_order:,.2f}")
+print(f"Median order: INR {median_order:,.2f}")
+```
+
+**Output**
+
+```text
+Net sales: INR 3,014,163.59
+Gross profit: INR 991,908.14
+Gross margin: 32.91%
+Average order: INR 4,186.34
+Median order: INR 2,847.03
+```
+
+**Interpretation and reasoning**
+
+A total adds amounts. A mean divides by the number of orders. Margin divides total gross profit by total sales, answering how much of each sales rupee remains after product cost. It is margin, not markup on cost. The mean exceeds the median, motivating the distribution chart below. `:,.2f` inserts separators and two decimal places; `:.2%` formats a fraction as a percentage. Formatting does not change the stored numbers. The source app's cards round some INR amounts to whole rupees; its report is more precise. The net-sales intermediate is approximately 3,014,163.595; floating-point representation causes the shown two-decimal formatting to end in .59. The app does not apply an accounting-grade per-order currency rounding policy.
+
+### Cell 09 - Demonstrate why total margin is not the mean of order margins
+
+**Question:** Why does the app divide totals instead of averaging percentages?
+
+<!-- cell:analysis:09 -->
+
+```python
+# Zero revenue makes an individual margin undefined, represented here by NaN.
+order_margins = filtered["gross_profit"].div(
+    filtered["revenue"].replace(0, float("nan"))
+)
+simple_mean = order_margins.mean()
+
+# Each order's weight is its revenue share, not an equal 1/order-count share.
+revenue_weights = filtered["revenue"] / revenue
+weighted_margin = (order_margins * revenue_weights).sum()
+
+print(f"Unweighted mean of order margins: {simple_mean:.2%}")
+print(f"Revenue-weighted order margin:    {weighted_margin:.2%}")
+print(f"Total profit / total revenue:    {ratio(profit, revenue):.2%}")
+```
+
+**Output**
+
+```text
+Unweighted mean of order margins: 32.24%
+Revenue-weighted order margin:    32.91%
+Total profit / total revenue:    32.91%
+```
+
+**Interpretation and reasoning**
+
+A small order and a large order should not receive equal influence when the question is profit per rupee of total sales. The weighted result matches the ratio of totals because revenue is the denominator of an order's margin. The unweighted mean answers a different question: the average margin percentage of an order chosen with equal probability. The extra row-margin calculation is a teaching demonstration; the source app directly uses total profit divided by total revenue. This demonstration assumes the positive-revenue bundled data, not arbitrary zero or negative sales.
+
+## Part 3 - Answer questions with grouped tables
+
+### Cell 10 - Find the sales-leading region and its share
+
+**Question:** Where are selected sales concentrated?
+
+<!-- cell:analysis:10 -->
+
+```python
+# Split selected orders by region, then add each group's revenue.
 sales_by_region = filtered.groupby("region")["revenue"].sum()
+regional_table = sales_by_region.rename("sales_INR").to_frame()
+regional_table["orders"] = filtered.groupby("region").size()
+regional_table["share_pct"] = 100 * sales_by_region / revenue
+
+# idxmax returns the label at the maximum; max would return the number alone.
+top_region = sales_by_region.idxmax()
+print(regional_table.round(2).to_string())
+print(f"\nSales leader: {top_region}")
 ```
 
-means: partition selected rows by their region label, take each group's revenue column, and add the values. The result is a Series indexed by region. Calling `.idxmax()` returns the region label attached to the highest total; `.max()` would return the highest amount instead. The app needs the label to name the region in a sentence.
+**Output**
 
-The category summary uses **named aggregation**:
+```text
+        sales_INR  orders  share_pct
+region
+East    691161.34     168      22.93
+North   864633.53     191      28.69
+South   701146.60     166      23.26
+West    757222.12     195      25.12
+
+Sales leader: North
+```
+
+**Interpretation and reasoning**
+
+`groupby()` partitions rows by the region label. The sum gives one revenue value per region; the label becomes the Series index. `.to_frame()` lets us put the supporting order count and sales share alongside it. North leads this default selection, but total sales do not measure productivity per store, person or customer. The CSV has no store-size or regional-population denominator. The count/share display exposes supporting evidence rather than treating the largest total as a complete performance ranking.
+
+### Cell 11 - Compare category revenue with category margin
+
+**Question:** Does the category with most sales also earn the highest margin?
+
+<!-- cell:analysis:11 -->
 
 ```python
+# Named aggregation declares output_name=(source_column, operation).
 category_summary = filtered.groupby("category").agg(
     sales=("revenue", "sum"),
     profit=("gross_profit", "sum"),
     orders=("revenue", "size"),
 )
-```
-
-Each output name is paired with the source column and operation. `size` counts rows in each group, which correspond to orders under this dataset's grain. It is not the number of units sold or a distinct-customer count. Category margin is then derived from each category's summed profit and sales, preserving the same weighted logic used for total margin.
-
-### 4.5 Question-to-code map
-
-| Business question | Actual calculation or display | Why it answers the question | Limit on interpretation |
-| --- | --- | --- | --- |
-| How much selected business occurred? | Derive row revenue and profit; sum both; count selected rows (150-153, 168) | Adds comparable order amounts over exactly the chosen scope | Orders are fictional; sales are not confirmed cash collections |
-| Which region leads sales? | `groupby("region")`, `.sum()`, `.idxmax()` (160, 164, 169) | Compares total selected sales by region | Total sales do not measure productivity per store, person or customer |
-| Which category leads sales? | Category aggregation and sales `.idxmax()` (161, 165, 170) | Identifies the largest category revenue total and its row count | The wording "volume of sales" refers to revenue here, not maximum units |
-| Which category leads margin? | Category profit divided by category sales (162, 166, 171) | Compares profit per rupee of sales rather than absolute sales size | A high percentage can occur on a small sales base |
-| What is a typical order worth? | Mean, median and histogram (172, 227) | Compares the average with the distribution's center and shape | Averages alone conceal variation and mix differences |
-| Which month contributes most? | Group dates as monthly periods, sum revenue and find the maximum (163, 173) | Combines all selected dates belonging to the same calendar month | A partly selected month has less exposure than a complete month |
-| Which measures move together? | `.corr()` and a heatmap (237) | Summarizes pairwise linear association | Shared inputs create mechanical relationships; correlation is not causation |
-
-## 5. How the analysis becomes a Streamlit application
-
-### 5.1 The execution cycle
-
-The file is a normal Python script with Streamlit commands inserted where information or controls should appear. Running `streamlit run app.py` starts Streamlit's server. A browser connects to that server, while the Python calculations run in the Python environment. Streamlit translates calls such as `st.title()`, `st.metric()` and `st.plotly_chart()` into interface elements. You do not manually write HTML, CSS or JavaScript in this project.
-
-On the initial run, all region and category values are selected and the date interval spans the source data. When a user changes an input widget, Streamlit normally reruns the script from top to bottom using that widget's current value. That execution model is why the code can be read as a single pipeline rather than a collection of manually wired browser event handlers. The official [Streamlit main concepts](https://docs.streamlit.io/develop/concepts/architecture/run-your-app) explain this model.
-
-The sequence is:
-
-1. Set the page title and display the case-study context.
-2. Read and validate the CSV into `frame`.
-3. Receive region, category and date choices from sidebar widgets.
-4. Build `filtered` and stop early if the selection is incomplete or empty.
-5. Calculate derived order measures, totals, grouped summaries and text insights.
-6. Assemble report text using those same results.
-7. Render charts, source records, quality tables, exercises and downloads.
-
-The file intentionally has no `@st.cache_data` decoration. A rerun reads the CSV again, so a saved CSV edit is reflected on the next rerun. Editing the CSV is not itself a guarantee that Streamlit immediately reruns; trigger a rerun if necessary. At this small teaching-data size, understandable execution and visible edits are the design priority.
-
-### 5.2 Widgets return data, not just decorations
-
-`st.sidebar.multiselect()` returns the selected list of labels. The app converts that list into a Boolean mask with `.isin()`. A mask is a Series of `True` and `False`, one value for each current row. `filtered[mask]` retains only the `True` rows. Region, category and date filters are applied sequentially, so a row must satisfy all of them.
-
-Each widget has a project-specific `key`. This identifies the widget's state; it does not name a CSV field or create a database entry. The available choices are read from the complete `frame`, not progressively narrowed by previous filters. Therefore, a user can choose a combination that contains no orders; the `filtered.empty` guard then displays guidance and stops the remainder of that run.
-
-`st.date_input()` receives a pair of initial dates, making it a date-range widget. While the user is choosing a range, it may not yet return two dates. The app checks `len(dates) != 2` before trying to access both ends. It then uses `.between()` with its inclusive default, retaining orders on either boundary date.
-
-### 5.3 Layout and outputs
-
-`st.columns(4)` allocates four neighboring metric containers. `columns[0]` selects the first because Python indexing begins at zero. `with overview:` directs subsequent rendering calls into the dashboard tab. `with st.expander(...):` creates a collapsible explanation area. These `with` statements control where elements render; they do not change which rows belong to the analysis.
-
-In the pinned Streamlit version, the code inside all four `st.tabs()` containers runs on each full script rerun, even though only one tab's content is visible at a time. A tab is not a lazy-loading condition. Likewise, collapsing an expander does not prevent its code from being executed. See the official [tabs API](https://docs.streamlit.io/1.50.0/develop/api-reference/layout/st.tabs).
-
-The report is built from `insights`, `kpi_values`, scope information and the same filtered table used for the charts. The app does not ask an AI model to invent its findings: Python f-strings insert calculated values into predefined explanatory sentences. A download offers the assembled text; it does not modify this `EXPLANATION.md` or commit anything to GitHub.
-
-## 6. Run the project and reproduce the starting results
-
-### 6.1 Local environment
-
-The workshop [README](../README.md) specifies Python 3.12 and the following package versions. From the repository root in a Linux/macOS terminal, create a virtual environment and install that environment's dependencies:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install streamlit==1.50.0 pandas==2.2.3 numpy==2.3.5 matplotlib==3.10.8 seaborn==0.13.2 plotly==6.5.2
-cd business_analytics_workshop/01_retail_sales
-python -m streamlit run app.py
-```
-
-Confirm that `python` points to Python 3.12 before creating the environment, or use your Python 3.12 executable explicitly. On Windows PowerShell, activation is `.venv\Scripts\Activate.ps1`; however, the full repository contains phase folder names with `>`, which native Windows filenames cannot represent. The repository [root README](../../README.md) recommends a Linux Cloud Lab or a clone inside WSL's Linux filesystem. The workshop subfolder itself uses ordinary compatible names.
-
-Open the local URL printed by Streamlit, normally `http://localhost:8501`. The Python environment and server must stay running while the browser uses the application. Installation needs access to the package source, but the app's subsequent analysis uses its local CSV and makes no external data request.
-
-### 6.2 CookieSensei Cloud Labs
-
-For the prepared workshop workspace, follow its existing project selector or run a separate instance on port 8502, because the built-in dashboard already uses 8501:
-
-```bash
-cd /home/coder/project/business_analytics_workshop/01_retail_sales
-streamlit run app.py --server.port 8502
-```
-
-Use the forwarded port offered by your workspace. The standalone script does not implement the shared project selector; the workspace supplies that surrounding interface. The workshop README also explains that previously copied student files are preserved and are not automatically overwritten by a repository update.
-
-### 6.3 Check the bundled-data baseline
-
-The following values were recalculated directly from the supplied CSV using the formulas in `app.py`, with all regions and categories selected and the complete available date range. They are baseline checks, not claims about a live retail business.
-
-| Measure | Baseline result |
-| --- | ---: |
-| Selected orders | 720 |
-| Net sales | INR 3,014,163.59 when formatted to two decimals as in the report |
-| Gross profit | INR 991,908.14 |
-| Gross margin | 32.91% |
-| Average order value | INR 4,186.34 |
-| Median order value | INR 2,847.03 |
-| Sales-leading region | North, INR 864,633.53 |
-| Sales-leading category | Electronics, INR 1,533,289.74 |
-| Highest aggregate category margin | Electronics, about 33.44% |
-| Highest monthly sales total | May 2025, INR 605,230.59 |
-
-Cards show some amounts with zero decimal places and margin with one decimal place, while the report often shows two. Display rounding does not alter the underlying calculations. The app uses floating-point arithmetic and does not round every order amount to paise before summing. Its unrounded net-sales total is approximately 3,014,163.595; binary representation and formatting can affect the final displayed paisa. A production accounting system would need an explicit currency rounding policy.
-
-You can reproduce selected values without launching the interface. Run this **standalone verification example** from the folder containing the CSV:
-
-```python
-import pandas as pd
-
-orders = pd.read_csv("retail_sales.csv")
-orders["revenue"] = orders["units"] * orders["unit_price"] * (1 - orders["discount_pct"] / 100)
-orders["gross_profit"] = orders["revenue"] - orders["units"] * orders["unit_cost"]
-print(len(orders))
-print(f"Net sales: {orders['revenue'].sum():,.2f}")
-print(f"Gross profit: {orders['gross_profit'].sum():,.2f}")
-print(f"Margin: {orders['gross_profit'].sum() / orders['revenue'].sum():.2%}")
-```
-
-The first actual CSV row is also easy to check manually: `ORD-0001` has 7 units, unit price INR 1,043.19, discount 0%, and unit cost INR 658.69. Net sales are `7 * 1043.19 = 7302.33`; product cost is `7 * 658.69 = 4610.83`; gross profit is INR 2,691.50. This is a source-data example, unlike the invented arithmetic examples earlier.
-
-## 7. Read all five charts correctly
-
-### 7.1 Monthly sales and gross profit
-
-Line 216 creates a new `month` column from each date's calendar month, groups orders by that month, and sums revenue and gross profit. The chart uses a common INR axis for both lines, making the distance between them meaningful as the difference between selected sales and gross profit. Markers identify actual monthly observations; hover reveals values.
-
-A monthly total answers "how much in the selected portion of this month?" It does not measure revenue per day. If the user selects 20 January through 10 March, January and March are partial months. The code does not normalize by selected days or insert zero-sales months missing from the data. Apparent rises and falls need that context before being called growth or decline.
-
-### 7.2 Regional category mix
-
-Line 219 groups by the pair `region` and `category`, not by region alone. Each grouped amount becomes a colored segment in a stacked bar. Total bar height is regional revenue; colored portions show which categories contribute to it. This is useful when two regions have similar totals but different product mixes.
-
-The chart does not show category margin. A large segment could have high cost or many orders. Use the category summary, filtered records and profit distributions to investigate why it is large rather than interpreting bar height as profitability.
-
-### 7.3 Order value distribution
-
-The Matplotlib histogram places order revenue into 20 bins and counts orders in each bin. Its horizontal unit is INR per order; its vertical unit is number of orders. It helps explain why mean and median differ. A long right tail means some relatively large orders extend far beyond most values.
-
-Twenty is a chosen visualization setting, not a conclusion discovered by the data. Fewer bins smooth detail; more bins can make the plot look noisy. A high-value order is worth inspecting, but it is not automatically an error. The app does not delete outliers.
-
-### 7.4 Profit spread by category
-
-The boxplot works with **individual order profits**, not category total profit. Each category's box summarizes its order distribution. The middle line is the median, the box runs from the first to third quartile, and its height is the interquartile range. By default, whiskers reach the most extreme observations within 1.5 interquartile ranges of the box; farther observations are plotted separately. See the [Seaborn boxplot documentation](https://seaborn.pydata.org/generated/seaborn.boxplot.html).
-
-A category can have the highest total profit because it has many orders, even if its median order profit is modest. Box widths here are not a sample-size encoding. Read counts in the category table before comparing how much evidence each distribution contains.
-
-### 7.5 Correlation between measures
-
-The heatmap compares `units`, `discount_pct`, `revenue` and `gross_profit`. `.corr()` defaults to Pearson correlation, which measures linear co-movement. Values near +1 indicate that larger values tend to accompany larger values; near -1 they tend to accompany smaller values; near 0 there is little measured linear association. Zero correlation does not rule out a curved relationship.
-
-The color scale is fixed from -1 to +1, making a filtered chart's colors comparable in scale with another selection. The numbers printed in cells are rounded to two decimals. Constant columns or insufficient observations produce undefined correlations, shown as missing cells rather than meaningful zeros.
-
-Revenue and gross profit share inputs by construction: gross profit is revenue minus product cost. Their correlation in the full bundled file is about 0.90. That is not independent evidence that a managerial intervention caused profit to rise. Similarly, the discount-profit relationship combines the formula's arithmetic with whatever product and order mix exists in the sample. The app calculates no causal model or significance test.
-
-## 8. Line-by-line walkthrough
-
-The line references in this section are for [app.py](app.py) at the revision stated at the top. Consecutive literal-string lines are occasionally grouped because together they construct one value. Every executable line, explanatory comment and delimiter is accounted for; blank lines are only visual spacing.
-
-### 8.1 Imports and page setup: lines 1-15
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 1 | The triple-quoted module docstring identifies this as the Retail Sales Explorer teaching project. It documents the module; it is not rendered in the browser automatically. |
-| 2 | `from pathlib import Path` imports the standard-library path class so the code can construct a file path from the script's location. |
-| 4 | Imports Matplotlib's plotting interface under `plt`, used for figures, axes, the histogram and figure cleanup. |
-| 5 | Imports pandas under `pd`, providing CSV loading, DataFrames, conversion, filtering and aggregation. |
-| 6 | Imports Plotly Express as `px`, used to create interactive line and bar figures. |
-| 7 | Imports Seaborn as `sns`, used for the boxplot and heatmap. |
-| 8 | Imports Streamlit as `st`, giving Python commands for widgets and browser output. |
-| 10 | Configures the browser page title, chart icon and wide layout. Keyword arguments name each option rather than relying on positional order. |
-| 11 | Renders the visible page title. This is separate from the browser-tab title configured above. |
-| 12 | Renders a smaller caption describing the workshop, fictional data and INR currency. |
-| 13 | Renders the opening explanation so readers know the app compares revenue, discounts and gross profit. |
-| 15 | A comment introduces the case-study text. Python ignores this line during computation. |
-
-### 8.2 Reusable case-study content: lines 16-80
-
-The uppercase names below are a convention for configuration-like content. Python does not make them immutable. These values are stored once per run and reused in the interface and exported report.
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 16-18 | Assigns one concatenated string to `CASE`. The three adjacent literals explain why revenue alone can conceal discounts, costs and unusual orders. Parentheses allow the assignment to span lines. |
-| 19-20 | Assigns `DECISION`, defining investigation of pricing, merchandising and costs as the dashboard's intended decision context. |
-| 21-23 | Assigns `DATA_CONTEXT`, explaining row grain, fictional sample size, teaching period and omitted expenses/customer history. This is static documentation, not a freshly calculated row count. |
-| 24-26 | Begins the `FORMULAS` list and adds its first three-item tuple: net-sales name, formula text and interpretation. These strings explain a calculation; they do not execute it. |
-| 27-29 | Adds the gross-profit definition and the cost scope it includes. |
-| 30-32 | Adds the gross-margin definition and explicitly distinguishes total weighted margin from an average of order margins. |
-| 33-35 | Adds the average-order definition and median comparison, then closes the tuple and `FORMULAS` list. |
-| 36-42 | Starts `VISUAL_GUIDE` with a five-item tuple for monthly sales/profit: title, purpose, reading instructions, question and caution. Continued strings describe axes and partial-month limits. |
-| 43-49 | Adds the regional-mix guide: a stacked regional sales view, its component categories and the limits of interpreting total revenue. |
-| 50-55 | Adds the histogram guide: order-value bins, count axis, average representativeness and outlier caution. |
-| 56-63 | Adds the category boxplot guide: median, middle 50%, whiskers, variable profitability and unequal sample sizes. |
-| 64-71 | Adds the correlation guide: signed linear relationships, shared mathematical inputs, causation limits and undefined cells. The final `]` closes all five visual-guide entries. |
-| 72-73 | Starts `RECOMMENDATIONS` with one string about comparing the revenue leader with the margin leader. |
-| 74-75 | Adds a second recommendation to inspect unusual or negative-profit orders rather than assuming they are errors. |
-| 76-77 | Adds the equal-period/additional-data recommendation and closes the list. |
-| 78-80 | Builds `LIMITATIONS`, spelling out omitted costs and identifiers and the absence of forecasting or causal estimation. |
-
-### 8.3 Context, dictionary and a reusable rendering function: lines 82-106
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 82 | Opens an expander titled Business problem and context, initially expanded. The indented commands render inside it. |
-| 83 | Concatenates a bold Markdown label with `CASE` and displays it. `+` joins strings here; it is not adding numeric values. |
-| 84 | Displays `DECISION` with its bold context label. |
-| 85 | Displays the row-grain and dataset explanation from `DATA_CONTEXT`. |
-| 86 | Adds an informational notice identifying the evidence as fictional teaching data. |
-| 87 | Displays the suggested reading sequence and explains that filters recalculate outputs. |
-| 90 | Begins `FIELD_GUIDE`, a dictionary mapping `order_id` to its meaning. |
-| 91 | Adds the date definition, including inclusive filtering semantics. |
-| 92 | Adds the region definition used for grouping. |
-| 93 | Adds the product-category definition. |
-| 94 | Adds the sales-channel definition. |
-| 95 | Adds the units definition. |
-| 96 | Adds the pre-discount INR-per-unit price definition. |
-| 97 | Adds the discount-percentage definition and intended range. The string does not itself validate that range. |
-| 98 | Adds product cost per unit and closes the dictionary. |
-| 100 | Defines `explain_visual(index, container=st)`. It creates a reusable function; its body runs only when called. `container` defaults to Streamlit but can be a column container. |
-| 101 | Selects one `VISUAL_GUIDE` tuple by zero-based index and unpacks its five elements into meaningful variable names. |
-| 102 | Uses an f-string to insert the selected title into a bold Markdown heading in the requested container. |
-| 103 | Writes the visual's purpose into that same container. |
-| 104 | Displays its reading instructions beneath a bold label. |
-| 105 | Displays the business question the chart addresses. |
-| 106 | Displays the caution as a caption. One function keeps the explanation format consistent across all five charts. |
-
-### 8.4 Load and validate: lines 108-130
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 108 | Comment introducing script-relative CSV loading. |
-| 109 | Comment explaining the deliberate absence of caching so a subsequent rerun reads saved CSV changes. |
-| 110 | `__file__` identifies this script. `Path(...)` wraps it, `.resolve()` makes an absolute resolved path, and `.with_name("retail_sales.csv")` replaces the filename while keeping its directory. |
-| 111 | Starts a `try` block so expected file, conversion and lookup failures can be shown in the interface. |
-| 112 | Reads the CSV into `frame`. The header supplies columns and pandas infers initial data types. |
-| 113 | Parses the date column with errors raised instead of silently converting invalid dates to missing values. This access happens before the full required-column check, so a missing `order_date` triggers a caught `KeyError`. |
-| 114 | Lists the four fields that must be numeric for this project's arithmetic. |
-| 115 | Lists all required source columns, including identifiers and segmentation fields. |
-| 116 | Converts required names to a set and checks that every required name is present in `frame.columns`. Extra columns are allowed. `not` reverses the success condition. |
-| 117 | Raises a clear `ValueError` if required columns are absent, transferring control to the matching `except` block. |
-| 118 | Checks whether the loaded table has no rows. A table can have headers and still be empty. |
-| 119 | Raises a useful error instead of letting later date and summary operations run on empty data. |
-| 120 | Loops over the numeric column names, binding the current name to `column`. |
-| 121 | Converts that column with `pd.to_numeric(..., errors="raise")` and stores the converted Series back. Non-numeric text fails rather than silently becoming zero. |
-| 122 | Restricts to required fields, marks missing cells with `.isna()`, then uses `.any()` twice: any missing cell in each column, then any such column overall. |
-| 123 | Raises an error requiring the learner to fix essential missing values. It does not drop affected rows or fill them automatically. |
-| 124 | Catches `OSError`, `ValueError` and `KeyError`, storing the exception object in `error` for a useful message. |
-| 125 | Displays the CSV basename and exception text using `st.error()`. |
-| 126 | Stops the current Streamlit script run, preventing downstream calculations from using invalid or unavailable data. |
-| 128 | Defines a small helper for scalar division, accepting a numerator and denominator. |
-| 129 | Documents its zero-denominator fallback. The docstring describes implementation behavior; mathematically the rate is undefined when its denominator is zero. |
-| 130 | Returns the quotient if the denominator is truthy, otherwise `0.0`. For numeric zero this avoids division by zero. It is not general validation for NaN, infinity or negative denominators. |
-
-### 8.5 Sidebar selection: lines 132-147
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 132 | Comment stating the important order: filter first, then calculate every KPI and chart. |
-| 133 | Creates a sidebar heading for the controls. |
-| 134 | Copies the source table into the working `filtered` variable so later derived columns do not overwrite `frame`. |
-| 135 | Gets unique region names from the full source, sorts them for stable display, initially selects all, and assigns a unique widget key. The widget returns the current selected list. |
-| 136 | `.isin(selected_region)` creates a True/False mask, and outer DataFrame indexing retains matching region rows. |
-| 137 | Creates the category multiselect with the same pattern. Its choices come from full `frame`, even if a region has already been filtered out. |
-| 138 | Further narrows current rows to selected categories, combining this condition with the earlier region choice. |
-| 139 | Creates a date-range widget initialized and bounded by source min/max dates. `.date()` converts a Timestamp into a Python date suitable for the control. |
-| 140 | Checks that the user has supplied both ends of the range before indexing the pair. |
-| 141 | Displays instructions when a complete interval is not available yet. |
-| 142 | Stops that incomplete run, avoiding an index error or ambiguous analysis period. |
-| 143 | Extracts each timestamp's date with `.dt.date`, checks inclusive interval membership with `.between()`, and retains matching rows. |
-| 144 | Displays selected and source row counts. The `:,` format adds separators but leaves the counts unchanged. |
-| 145 | Checks whether the combined filter leaves zero rows. |
-| 146 | Explains how to recover from an empty selection instead of displaying misleading zero totals or empty leader rankings. |
-| 147 | Stops the empty-selection run. Everything below assumes at least one selected order. |
-
-### 8.6 Measures, rankings and answer sentences: lines 149-175
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 149 | Comment introducing calculation of business measures and comparisons. |
-| 150 | Creates a revenue value for each selected order from quantity, list price and the fraction remaining after discount. Column-wise arithmetic applies the formula to every selected row. |
-| 151 | Creates each order's gross profit by subtracting total product cost, not merely one unit's cost, from its revenue. |
-| 152 | Reduces the revenue Series to a scalar total using `.sum()`. The variable `revenue` is now a total; `filtered["revenue"]` remains a column. |
-| 153 | Similarly reduces row gross profits to one selected total. |
-| 154 | Creates four horizontal metric containers and stores them in `columns`. |
-| 155 | Shows total net sales in the first container. `:,.0f` adds thousands separators and rounds only the displayed string to zero decimal places. |
-| 156 | Shows gross profit in the second container with the same display format. |
-| 157 | Shows total profit divided by total revenue. `:.1%` multiplies a fraction by 100 for display and adds a percent sign with one decimal; the stored ratio remains a fraction. |
-| 158 | Shows mean order revenue in the fourth container. This is valid as average order value because one row is one order. |
-| 159 | Adds an interpretation caption distinguishing discounted sales and gross profit from broader profit measures. |
-| 160 | Groups orders by region and sums revenue, producing a region-indexed Series. |
-| 161 | Builds a category-indexed table of summed sales, summed profit and row counts using named aggregations. |
-| 162 | Divides category profit by category sales. Replacing zero denominators with `float("nan")` marks undefined group margins as missing rather than producing infinity. This differs from the scalar helper's zero fallback. |
-| 163 | Converts dates to monthly periods and groups revenue by them; year and month stay together, so January of different years would not be merged. |
-| 164 | Finds the region label at the highest regional sales value with `.idxmax()`. |
-| 165 | Finds the category label at the highest category sales total. |
-| 166 | Finds the category label at the highest defined category margin. This line assumes at least one margin is defined. |
-| 167 | Starts a list of question-and-answer tuples, later reused for on-screen explanations and the exported report. |
-| 168 | Builds the selected-scope answer from row count, total revenue, total profit and weighted total margin. The numbers are calculated, not manually typed findings. |
-| 169 | Builds the leading-region answer, including its share of selected revenue. Series indexing by `top_region` retrieves that group's total. |
-| 170 | Builds the leading-category revenue answer. `.loc[row_label, column_label]` retrieves the category's sales and order count from the summary table. |
-| 171 | Builds the margin-leader answer using the category label and its aggregate margin. A wholly undefined margin column needs additional handling before this lookup could work on arbitrary data. |
-| 172 | Builds the mean-versus-median answer to expose the influence of order-value distribution. |
-| 173 | Builds the highest-month answer using `.idxmax()` for the period and `.max()` for the amount, then warns about partial months. |
-| 174 | Closes the insights list. |
-| 175 | Creates label/value pairs for report KPI rows, often with more decimal places than the metric cards. These are formatted strings for presentation, not replacement numeric columns. |
-
-### 8.7 Scope and visible explanations: lines 177-194
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 177 | Comment explaining that the report should describe the same filtered table as the charts. |
-| 178 | Creates an empty list to collect human-readable scope descriptions. |
-| 179 | Iterates over source columns whose dtype is `object`, which includes the ordinary text columns in this CSV. |
-| 180 | Includes only columns with at most 12 distinct source values, avoiding an enormous list of identifiers. This threshold is a display heuristic, not a business rule. |
-| 181 | Replaces underscores in the field name, sorts distinct selected values, converts them to strings, joins them with commas, and appends one description to `scope_parts`. |
-| 182 | Iterates over source datetime columns. In this project that includes parsed `order_date`. |
-| 183 | Appends the earliest/latest **observed selected dates**, formatted as year-month-day. These may differ from requested boundaries if no order occurred on a boundary day. |
-| 184 | Also records the user's requested date window, preserving both the control values and actual observed coverage. |
-| 185 | Joins the separate scope descriptions with semicolons into one printable string. |
-| 187 | Opens an expander for metric definitions. |
-| 188 | Converts the list of formula tuples into a three-column DataFrame, displays it without its row index, and stretches it to the container width. |
-| 189 | Explains that outputs share the selection, rates use appropriate totals, and zero-denominator fallbacks require interpretation. |
-| 191 | Adds the section heading for calculated answers. |
-| 192 | Iterates over only `insights[:3]`, a slice containing the first three question-answer pairs. The remaining insights still appear in the full report. |
-| 193 | Displays each selected question in bold followed by its computed answer. |
-| 194 | Displays selected/source row counts and the scope string beneath the answers. |
-
-### 8.8 Build the downloadable report: lines 196-212
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 196 | Opens `report_parts`, a list whose elements are Markdown sections stored as strings. |
-| 197 | Adds the report's top-level title. It becomes list position 0. |
-| 198 | Adds section 1 using `CASE`; `\n` inserts a newline inside the resulting text. |
-| 199 | Adds section 2 by combining decision context and dataset context, separated by a blank line (`\n\n`). |
-| 200 | Adds section 3 with filename, row counts, current scope and a statement of descriptive/fictional status. |
-| 201 | Adds the executive summary by joining the first three answer strings. The underscore variable ignores each question during tuple unpacking. |
-| 202 | Builds a Markdown KPI table header and uses a generator expression to format one row for each `(name, value)` in `kpi_values`. |
-| 203 | Builds a three-column definitions table from the three components of every `FORMULAS` tuple. This report section is list position 6, because the title occupies position 0. |
-| 204 | Adds all six question-and-answer pairs as subheadings and answer text, including those not shown in the short summary. |
-| 205 | Adds explanations for every visual by unpacking each five-item guide tuple. It exports written chart guidance, not the chart images themselves. |
-| 206 | Adds source quality counts using full `frame`, not only selected rows, and describes what the checks can and cannot establish. `.duplicated().sum()` counts repeat rows after their first occurrence. |
-| 207 | Numbers recommendation strings using `enumerate(RECOMMENDATIONS, 1)` and explicitly frames them as investigation steps. |
-| 208 | Adds limitations, tie-handling information and cautions about confidence and correlation. No confidence interval is computed here. |
-| 209 | Adds reproduction and extension instructions as static report text. |
-| 210 | Closes the report section list. |
-| 211 | Appends the field dictionary to `report_parts[5]`. Because indexing is zero-based and the title is element 0, this is actually the **KPI results section**, not Definitions and methods. The dictionary still appears in the report, but its placement follows this exact index. |
-| 212 | Joins all report sections with blank lines into `full_report`, the single Markdown string displayed and downloaded later. |
-
-### 8.9 Dashboard and exploratory charts: lines 214-240
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 214 | Creates four tabs and unpacks their containers into `overview`, `explore`, `data_tab` and `report_tab`. These names control output placement. |
-| 215 | Enters the dashboard tab's output context. |
-| 216 | `.assign()` creates a month label, `.dt.to_period("M")` extracts year-month, `.astype(str)` makes a chart-friendly string, and grouping sums revenue/profit. `as_index=False` keeps `month` as a normal column for Plotly. |
-| 217 | Creates a Plotly line chart using `month` on x and two y columns, adds markers and INR labels, and renders the figure at container width. The chart receives already aggregated monthly data. |
-| 218 | Calls guide entry 0 to explain the monthly line chart below it. |
-| 219 | Groups by region and category simultaneously and returns one revenue total per present pair. |
-| 220 | Creates a bar chart with region on x, revenue on y and category as color. Plotly's default relative bar layout stacks the category contributions for these positive values. |
-| 221 | Renders guide entry 1 for the regional category mix. |
-| 222 | Builds another category table with order count, total units, revenue and gross profit, rounds its displayed numbers to two decimals, and renders it. `orders` and `units` deliberately count different things. |
-| 223 | Reminds readers to compare group sizes alongside totals or rates and inspect source observations when needed. |
-| 224 | Enters the exploration tab's context. |
-| 225 | Creates left and right containers so the first two exploratory plots appear side by side. |
-| 226 | Creates a Matplotlib figure and axes, unpacked into `fig` and `ax`; `figsize=(7,4)` specifies inches for the underlying figure. |
-| 227 | Draws a 20-bin histogram of order revenue, choosing a blue fill and white bin edges for readability. |
-| 228 | Sets the histogram title and x/y labels, preserving the distinction between INR/order and order count. |
-| 229 | Sends the figure to the left container, then closes its Matplotlib handle. The semicolon separates two statements on one physical line; closing avoids accumulating open figures across reruns. |
-| 230 | Renders guide entry 2 in the left container beneath its histogram. |
-| 231 | Creates a fresh figure and axes for the boxplot instead of reusing the histogram axes. |
-| 232 | Draws category on x and individual order gross profit on y with Seaborn, explicitly targeting `ax` and selecting a uniform fill color. |
-| 233 | Sets the boxplot's title and meaningful category/profit labels. |
-| 234 | Displays the boxplot in the right container and closes the figure's Matplotlib handle. |
-| 235 | Renders guide entry 3 under the boxplot in the right container. |
-| 236 | Creates a wider figure and axes for the correlation matrix. |
-| 237 | Selects four numeric measures, computes their Pearson correlation matrix and draws a heatmap. `annot=True` prints cell values, `fmt=".2f"` formats them, and `vmin=-1`, `vmax=1` fix a consistent scale. |
-| 238 | Adds a descriptive title to the correlation axes. |
-| 239 | Displays the heatmap in the tab's main area and closes the Matplotlib figure. |
-| 240 | Renders guide entry 4 beneath the heatmap. |
-
-### 8.10 Data inspection, exercises and export: lines 242-264
-
-| Line(s) | What happens and why |
-| --- | --- |
-| 242 | Comment introducing underlying-data inspection and explanation practice. |
-| 243 | Enters the Data and quality tab's output context. |
-| 244 | Adds the field-dictionary heading. |
-| 245 | Converts dictionary `.items()` pairs into a two-column DataFrame and displays readable field definitions without a numeric row index. |
-| 246 | Adds the filtered-records heading. |
-| 247 | Explains that this table contains the exact selected observations, including derived columns, and that browser table sorting does not change analytical filters. |
-| 248 | Displays `filtered` as a table, hiding its pandas index and using available width. |
-| 249 | Serializes `filtered` to CSV without its row index and provides a download named `filtered_retail_sales.csv` with MIME type `text/csv`. It does not overwrite the source file. |
-| 250 | Adds the numeric-summary heading. |
-| 251 | Explains count, average, spread, extremes and quartiles before displaying those statistics. |
-| 252 | Selects only numeric columns, runs `.describe()`, rounds the displayed result to two decimals and renders it. Here derived revenue and profit are included. |
-| 253 | Adds the source-quality heading. |
-| 254 | Displays full-source row count, exact duplicate count and missing-cell count. Two `.sum()` operations reduce the missingness table first by column and then to one total. |
-| 255 | Builds a new quality DataFrame containing each source column's name, dtype converted to text and missing-value count. `.values` supplies arrays aligned to the source column order. |
-| 257 | Opens the workshop exercises expander outside the tab contexts. |
-| 258 | Displays four numbered practice tasks using newline-separated Markdown text. These instructions are not automatically executed. |
-| 259 | Explains the learning purpose of the three plotting libraries. |
-| 260 | Adds a reminder to distinguish associations from cause and effect. |
-| 262 | Enters the Full report tab's output context. |
-| 263 | Offers `full_report` as a Markdown download with filename `01_retail_sales_report.md` and MIME type `text/markdown`. |
-| 264 | Renders the same `full_report` string as Markdown inside the tab, so the visible report and its download share content. |
-
-## 9. Data quality, edge cases and limits
-
-### 9.1 What is checked
-
-The loader catches missing/unreadable files, absent required columns, an empty dataset, dates or numeric fields that cannot be parsed, and missing values in required analysis columns. Filtering checks for an incomplete date interval and a selection containing no rows. These checks prevent several common beginner errors from becoming confusing chart failures.
-
-Quality tables report missing cells and exact duplicate rows across the loaded source. They do not remove duplicates, fill missing data, repair labels, or prove that a row is accurate. A duplicate `order_id` with a changed amount is not an exact duplicate row and requires a separate uniqueness check. Rows with valid numbers but incorrect business meaning still need investigation.
-
-### 9.2 What the current code does not validate
-
-The current loader does not enforce positive quantities, nonnegative price/cost, whole-number quantities, finite numbers, a 0-100 discount range, known category labels, or unique order IDs. For example, a discount of 150 is numeric and nonmissing, so it passes these checks even though the documented discount convention is violated. Leading/trailing spaces in a region name can produce a separate group. Source data should be inspected before treating a successful render as proof of valid business data.
-
-The `ratio()` helper safely substitutes `0.0` for a zero scalar denominator, but a zero sales denominator makes margin undefined, not a measured 0% profit margin. Group margins instead use NaN for zero sales. If every selected category has zero sales, all group margins can become NaN; the code's `.idxmax()` followed by `.loc[...]` does not guard that case. It may fail when building the margin-leader sentence. These guides document the current behavior rather than silently changing the app.
-
-No exception handler surrounds the entire analysis after loading. A value that parses successfully but breaks a later operation is not covered by the initial `try` block. A small selection can also make a correlation undefined or a boxplot uninformative without representing an application defect.
-
-### 9.3 How to phrase a useful conclusion
-
-A strong conclusion states the selected scope, the measured result, a plausible investigation and the missing evidence. For example: "Across all 720 supplied teaching orders, North has the largest selected sales total. We should compare its order count, product mix and store coverage before interpreting that as stronger regional demand."
-
-An unsupported conclusion would be: "North's manager is better" or "discounts cause customers to buy more." This dataset contains neither managerial-performance controls nor an experiment on discounts. The app also lacks customer identities, returns, store size, acquisition costs, operating expenses and tax. It cannot calculate repeat purchase, customer lifetime value, net profit or future demand from fields that do not exist.
-
-Tied maximum values are another limit: `.idxmax()` names the first maximum encountered. With the source's default sorted grouping, that usually follows group-label order. A named leader therefore does not establish a unique winner when groups tie. Inspect the tables, especially after selecting a narrow sample.
-
-## 10. Practice and worked examples
-
-### Worked example 1: Explain the first order without running the app
-
-**Task:** Use `ORD-0001` to calculate revenue and gross profit and identify which inputs determine them.
-
-**Reasoning:** Its 7 units at INR 1,043.19 with no discount generate INR 7,302.33. Cost is 7 times INR 658.69, or INR 4,610.83. Gross profit is INR 2,691.50. `region` and `category` decide which groups include that order; they do not appear directly in its arithmetic formula.
-
-### Worked example 2: Add a channel filter
-
-**Task:** The source contains `channel`, but the sidebar currently filters only region, category and dates. How can you add Store/Online selection without making charts disagree with KPI cards?
-
-**Suggested extension, not currently present in `app.py`:** Place this after the existing category filter and before derived measures are calculated:
-
-```python
-selected_channels = st.sidebar.multiselect(
-    "Channels",
-    sorted(frame["channel"].unique()),
-    default=sorted(frame["channel"].unique()),
-    key="01_retail_sales_channel",
+category_summary["margin"] = category_summary["profit"].div(
+    category_summary["sales"].replace(0, float("nan"))
 )
-filtered = filtered[filtered["channel"].isin(selected_channels)]
+top_category = category_summary["sales"].idxmax()
+margin_category = category_summary["margin"].idxmax()
+
+print(category_summary.round(4).to_string())
+print(f"\nSales leader: {top_category}; margin leader: {margin_category}")
 ```
 
-All downstream results already use `filtered`, so the new selection propagates to totals, plots, report and export. Do not add the filter only around one chart: that would make its scope different from the cards. Retain the empty-selection guard after all filters.
+**Output**
 
-### Worked example 3: Compare North and South fairly
+```text
+                    sales       profit  orders  margin
+category
+Electronics  1.533290e+06  512784.0995     158  0.3344
+Fashion      5.635478e+05  186993.6365     195  0.3318
+Grocery      1.448902e+05   46664.7915     185  0.3221
+Home         7.724358e+05  245465.6075     182  0.3178
 
-**Task:** Choose the same date interval for North and South. What should you compare beyond sales totals?
+Sales leader: Electronics; margin leader: Electronics
+```
 
-**Reasoning:** Compare order counts, average/median order values, category mix and aggregate margin. Larger sales may arise from more orders or more expensive categories. A comparison per store, customer or regional population requires fields absent from the CSV. Keep the date interval identical and report sample sizes so the comparison's scope is explicit.
+**Interpretation and reasoning**
 
-### Worked example 4: Find high revenue with low margin
+The app aggregates sales and profit first, then divides, preserving the weighted-margin logic. `size` counts order rows rather than units or distinct customers. In the full bundled selection Electronics happens to lead both sales and margin; do not invent different winners merely to illustrate a possible contrast. Other selections can differ. Zero category sales produce NaN margins. The source leader path assumes at least one category margin is defined; an all-NaN margin column is an unguarded edge case.
 
-**Task:** Explain how a category can lead sales without leading margin.
+### Cell 12 - Prepare monthly totals before drawing the trend
 
-**Reasoning:** Sales total depends on units and discounted prices. Margin also depends on the product costs relative to that revenue. Calculate category totals first, then `profit / sales`; do not average row margins. The supplied full dataset happens to have Electronics leading both sales and margin, so do not invent a different winner merely because the exercise asks you to investigate the possibility. Try legitimate filter changes and report what the selected data actually shows.
+**Question:** Which month contributed most sales, and did profit follow?
 
-### Worked example 5: Change a discount as an arithmetic scenario
+<!-- cell:analysis:12 -->
 
-**Task:** In the invented two-unit example above, raise discount from 10% to 20% while holding quantity, list price and cost fixed.
+```python
+# A monthly Period includes the year, so different years' Januaries stay separate.
+monthly_totals = filtered.groupby(
+    filtered["order_date"].dt.to_period("M")
+)["revenue"].sum()
 
-**Reasoning:** Net sales become `2 * 1000 * 0.8 = 1600`; gross profit becomes `1600 - 1200 = 400`; margin becomes 25%. This is a calculation under explicit fixed-input assumptions. It does not predict how real customer demand would react to a larger discount, because the scenario fixes demand rather than estimating it.
+# assign creates a chart-friendly month column; the source table stays unchanged.
+monthly = (
+    filtered.assign(month=filtered["order_date"].dt.to_period("M").astype(str))
+    .groupby("month", as_index=False)[["revenue", "gross_profit"]]
+    .sum()
+)
+print(monthly.round(2).to_string(index=False))
+print(f"\nLargest selected month: {monthly_totals.idxmax()}")
+```
 
-### Worked example 6: Explain the two kinds of Markdown
+**Output**
 
-**Task:** How does this file differ from the app's Download full report button?
+```text
+  month   revenue  gross_profit
+2025-01 474748.58     146857.78
+2025-02 450480.82     137977.29
+2025-03 573776.01     181227.83
+2025-04 451840.63     161124.12
+2025-05 605230.59     204044.58
+2025-06 458086.97     160676.54
 
-**Reasoning:** `EXPLANATION.md` is a versioned teaching guide describing the code and methodology. `01_retail_sales_report.md` is generated at runtime from the current selection, with current results and scope. Editing this guide does not change app calculations, and changing a sidebar filter does not rewrite this file.
+Largest selected month: 2025-05
+```
 
-## 11. Troubleshooting
+**Interpretation and reasoning**
 
-| Symptom | Likely reason and useful check |
+Monthly grouping changes the grain from one order to one calendar month. `as_index=False` retains `month` as an ordinary column for Plotly. May is the largest selected total in this file. A date filter can leave partial boundary months; the code does not divide by selected days, fill missing months, compare with last year or prove a growth rate. Preparing the table first makes the chart's arithmetic inspectable.
+
+## Part 4 - Create all five visual outputs
+
+### Cell 13 - Plot monthly sales and gross profit
+
+**Question:** When were sales and product-level profit strongest?
+
+<!-- cell:analysis:13 -->
+
+```python
+# Two y-column names produce two lines with a shared INR value axis.
+fig = px.line(
+    monthly, x="month", y=["revenue", "gross_profit"], markers=True,
+    title="Monthly sales and gross profit",
+    labels={"value": "INR", "month": "Month"},
+)
+fig  # A notebook displays the figure returned by the final expression.
+```
+
+**Output**
+
+![Plot monthly sales and gross profit](tutorial_assets/01_monthly_sales_profit.png)
+
+**Interpretation and reasoning**
+
+Each marker summarizes selected orders in one month, not an individual order. Both lines use INR, so their heights can be compared as monetary amounts. The profit line remains below sales because it subtracts product costs in this data. The interactive version supplies exact values on hover and lets readers hide a line through the legend. A higher total is not automatically higher daily demand, especially for partial months.
+
+### Cell 14 - Plot the category mix within each region
+
+**Question:** Is a region's total explained by a particular product mix?
+
+<!-- cell:analysis:14 -->
+
+```python
+# Group by the pair so each region has a separate amount for each category.
+by_region = filtered.groupby(["region", "category"], as_index=False)["revenue"].sum()
+fig = px.bar(
+    by_region, x="region", y="revenue", color="category",
+    title="Where do sales come from?",
+    labels={"revenue": "Net sales (INR)"},
+)
+fig
+```
+
+**Output**
+
+![Plot the category mix within each region](tutorial_assets/02_regional_category_mix.png)
+
+**Interpretation and reasoning**
+
+The positive category contributions stack into each regional total. The bar's full height measures regional sales; each colored segment measures one category's contribution. It is a revenue-mix chart, not a margin chart. Large Electronics segments can reflect higher prices, more units or more orders; the data table is needed to investigate those explanations. Grouping by only region would lose the mix information.
+
+### Cell 15 - Plot the distribution of individual order values
+
+**Question:** Does average order value represent an ordinary order?
+
+<!-- cell:analysis:15 -->
+
+```python
+# Matplotlib separates the whole figure from the axes that receive commands.
+fig, ax = plt.subplots(figsize=(8, 4.5))
+ax.hist(filtered["revenue"], bins=20, color="#2563eb", edgecolor="white")
+ax.set(
+    title="Order value distribution",
+    xlabel="Net sales per order (INR)", ylabel="Orders",
+)
+fig
+```
+
+**Output**
+
+![Plot the distribution of individual order values](tutorial_assets/03_order_value_histogram.png)
+
+**Interpretation and reasoning**
+
+The horizontal axis is INR per order; the vertical axis counts orders in each of 20 ranges. The right tail shows larger orders that can pull the mean upward relative to the median. Twenty bins is a visualization choice: different bin counts change appearance, not the underlying transactions. A large order is not automatically invalid. The existing app displays this Matplotlib figure with `st.pyplot(fig)` and closes it afterward with `plt.close(fig)` to avoid accumulating figures across reruns.
+
+### Cell 16 - Compare order-level profit distributions by category
+
+**Question:** Which categories have consistently profitable orders, and which vary widely?
+
+<!-- cell:analysis:16 -->
+
+```python
+fig, ax = plt.subplots(figsize=(8, 4.5))
+# Seaborn uses the selected order rows, not the category-total table.
+sns.boxplot(data=filtered, x="category", y="gross_profit", ax=ax, color="#a7f3d0")
+ax.set(
+    title="Profit spread by category",
+    xlabel="Category", ylabel="Gross profit per order (INR)",
+)
+fig
+```
+
+**Output**
+
+![Compare order-level profit distributions by category](tutorial_assets/04_profit_boxplot.png)
+
+**Interpretation and reasoning**
+
+The center line is the median; the box spans the middle 50% of order profits. Default whiskers reach observed values within 1.5 interquartile ranges of the box, with farther points shown individually. Those points are observations to inspect, not instructions to delete data. This chart describes profit per order, whereas the category table describes total profit and aggregate margin. Box widths are not sample-size encodings, so consult the order counts alongside it.
+
+### Cell 17 - Calculate and plot correlations
+
+**Question:** Which quantities move together in the selected orders?
+
+<!-- cell:analysis:17 -->
+
+```python
+# corr() defaults to Pearson correlation between the selected numeric columns.
+correlations = filtered[["units", "discount_pct", "revenue", "gross_profit"]].corr()
+print(correlations.round(2).to_string())
+
+fig, ax = plt.subplots(figsize=(8, 4.5))
+sns.heatmap(
+    correlations, annot=True, fmt=".2f", cmap="RdBu_r",
+    vmin=-1, vmax=1, ax=ax,  # Fix the same scale for every future selection.
+)
+ax.set_title("Correlation: which measures move together?")
+fig
+```
+
+**Output**
+
+```text
+              units  discount_pct  revenue  gross_profit
+units          1.00         -0.02     0.47          0.41
+discount_pct  -0.02          1.00    -0.19         -0.27
+revenue        0.47         -0.19     1.00          0.90
+gross_profit   0.41         -0.27     0.90          1.00
+```
+
+![Calculate and plot correlations](tutorial_assets/05_correlation_heatmap.png)
+
+**Interpretation and reasoning**
+
+Positive Pearson correlation means the quantities tend to rise together; negative means they tend to move in opposite directions. It measures linear association, not all possible relationships. The strong sales/profit correlation is partly mechanical because profit contains revenue in its formula. A discount/profit association is not proof of a causal promotion effect. Constant columns or too little data yield undefined cells, not meaningful zero correlations. No significance test or causal model is being fitted.
+
+## Part 5 - Inspect, explain and export the evidence
+
+### Cell 18 - Inspect numeric summaries and extreme orders
+
+**Question:** Which records explain the distribution's tail?
+
+<!-- cell:analysis:18 -->
+
+```python
+# describe gives count, mean, standard deviation, extremes and quartiles.
+print(filtered.select_dtypes(include="number").describe().round(2).to_string())
+
+# Sorting a separate view helps inspection without deleting any observations.
+largest_orders = filtered.nlargest(3, "revenue")
+print("\nThree largest orders:")
+print(largest_orders[["order_id", "category", "units", "revenue", "gross_profit"]]
+      .round(2).to_string(index=False))
+```
+
+**Output**
+
+```text
+        units  unit_price  discount_pct  unit_cost   revenue  gross_profit
+count  720.00      720.00        720.00     720.00    720.00        720.00
+mean     4.57      981.05          7.05     613.63   4186.34       1377.65
+std      2.30      788.22          7.63     506.45   4278.34       1623.12
+min      1.00      126.31          0.00      62.33    101.64          3.07
+25%      2.75      246.70          0.00     174.71   1053.32        307.34
+50%      5.00      789.60          5.00     477.57   2847.03        844.89
+75%      7.00     1193.16         10.00     787.13   5696.44       1763.56
+max      8.00     3068.24         20.00    2391.12  22798.96      10079.84
+
+Three largest orders:
+order_id    category  units  revenue  gross_profit
+ORD-0323 Electronics      8 22798.96       6553.68
+ORD-0319 Electronics      8 22494.88      10079.84
+ORD-0126 Electronics      8 22274.16       9641.20
+```
+
+**Interpretation and reasoning**
+
+The 50% row is the median; the 25% and 75% rows are quartiles. Standard deviation measures spread in each column's own unit, so do not compare a rupee spread with a percentage-point spread as if they were the same quantity. The three-order table is a teaching inspection beyond the source's numeric summary, using actual selected records. It identifies examples to investigate without automatically removing outliers or rewriting the source file.
+
+### Cell 19 - Make a focused North-versus-South comparison
+
+**Question:** Is the larger sales total accompanied by more orders, a larger average order or a different margin?
+
+<!-- cell:analysis:19 -->
+
+```python
+# This new variable keeps the main filtered selection unchanged.
+comparison_rows = filtered[filtered["region"].isin(["North", "South"])]
+comparison = comparison_rows.groupby("region").agg(
+    orders=("order_id", "size"),
+    sales=("revenue", "sum"),
+    profit=("gross_profit", "sum"),
+    average_order=("revenue", "mean"),
+)
+comparison["margin_pct"] = 100 * comparison["profit"] / comparison["sales"]
+print(comparison.round(2).to_string())
+```
+
+**Output**
+
+```text
+        orders      sales     profit  average_order  margin_pct
+region
+North      191  864633.53  293602.16        4526.88       33.96
+South      166  701146.60  223176.87        4223.77       31.83
+```
+
+**Interpretation and reasoning**
+
+This worked comparison uses the same date interval for both regions and keeps counts beside amounts. It illustrates why a regional sales leader is not automatically more productive. Store count, population and customer identities are absent, so those denominators cannot be recovered from a chart. The separate `comparison_rows` object ensures later report cells still describe the original default selection.
+
+### Cell 20 - Observe empty filters and undefined rates explicitly
+
+**Question:** What should we infer when there are no selected rows or a denominator is zero?
+
+<!-- cell:analysis:20 -->
+
+```python
+# Membership in an empty list is False for every row.
+empty_selection = frame[frame["region"].isin([])]
+print("Orders after selecting no regions:", len(empty_selection))
+
+# This is the original helper's programming fallback, not a defined margin.
+print("Scalar ratio(100, 0) fallback:", ratio(100, 0))
+
+# The source's grouped-margin formula instead marks a zero denominator missing.
+example_profit = pd.Series([100.0], name="profit")
+example_sales = pd.Series([0.0], name="sales")
+undefined_margin = example_profit.div(example_sales.replace(0, float("nan")))
+print("Grouped-margin result with zero sales:", undefined_margin.iloc[0])
+```
+
+**Output**
+
+```text
+Orders after selecting no regions: 0
+Scalar ratio(100, 0) fallback: 0.0
+Grouped-margin result with zero sales: nan
+```
+
+**Interpretation and reasoning**
+
+The tiny zero-denominator Series is an explicit edge-case demonstration, separate from the bundled data. An empty selection should stop analysis; the Streamlit app shows a message and stops. A displayed fallback zero is not evidence of a genuine 0% margin. Group ratios use NaN, but the original `idxmax()`/leader-text path is unguarded if all selected category margins are NaN. The loader also does not enforce positive quantities, finite values, unique IDs or the documented 0-100 discount range.
+
+### Cell 21 - Record the scope so a finding has context
+
+**Question:** What exactly does our report describe?
+
+<!-- cell:analysis:21 -->
+
+```python
+scope_parts = []
+# Include low-cardinality text fields; omit hundreds of individual order IDs.
+for column in frame.select_dtypes(include="object").columns:
+    if frame[column].nunique() <= 12:
+        labels = ", ".join(map(str, sorted(filtered[column].unique())))
+        scope_parts.append(column.replace("_", " ") + ": " + labels)
+
+# Observed dates and requested boundaries are related but not identical ideas.
+scope_parts.append(
+    f"Observed records: {filtered['order_date'].min():%Y-%m-%d} "
+    f"to {filtered['order_date'].max():%Y-%m-%d}"
+)
+scope_parts.append(f"Requested dates: {dates[0]} to {dates[1]} (inclusive)")
+scope = "; ".join(scope_parts)
+print(scope)
+```
+
+**Output**
+
+```text
+region: East, North, South, West; category: Electronics, Fashion, Grocery, Home; channel: Online, Store; Observed records: 2025-01-01 to 2025-06-29; Requested dates: 2025-01-01 to 2025-06-29 (inclusive)
+```
+
+**Interpretation and reasoning**
+
+This follows the source's low-cardinality-field and date-scope pattern. With another selection, a requested boundary may have no observed order, so observed minimum/maximum dates can differ from the control values. Scope is essential when comparing findings. It is a human-readable description, not a serialized copy of all data or a guarantee of reproducibility if the source CSV changes later.
+
+### Cell 22 - Turn calculations into evidence-based answer sentences
+
+**Question:** How does the app write a conclusion that changes with the filters?
+
+<!-- cell:analysis:22 -->
+
+```python
+# f-strings insert measured values into fixed explanations; no AI call is needed.
+insights = [
+    ("How much business is represented?",
+     f"{len(filtered):,} selected orders generated INR {revenue:,.2f} sales "
+     f"and INR {profit:,.2f} gross profit."),
+    ("Which region leads sales?",
+     f"{top_region}: INR {sales_by_region[top_region]:,.2f}, "
+     f"or {ratio(sales_by_region[top_region], revenue):.1%} of selected sales."),
+    ("Which category leads sales?",
+     f"{top_category}: INR {category_summary.loc[top_category, 'sales']:,.2f}."),
+    ("Which category leads margin?",
+     f"{margin_category}: {category_summary.loc[margin_category, 'margin']:.1%}."),
+    ("What is a typical order worth?",
+     f"Mean INR {average_order:,.2f}; median INR {median_order:,.2f}."),
+    ("Which month contributed most sales?",
+     f"{monthly_totals.idxmax()}: INR {monthly_totals.max():,.2f}."),
+]
+for question, answer in insights:
+    print(question)
+    print(answer)
+    print()
+```
+
+**Output**
+
+```text
+How much business is represented?
+720 selected orders generated INR 3,014,163.59 sales and INR 991,908.14 gross profit.
+
+Which region leads sales?
+North: INR 864,633.53, or 28.7% of selected sales.
+
+Which category leads sales?
+Electronics: INR 1,533,289.74.
+
+Which category leads margin?
+Electronics: 33.4%.
+
+What is a typical order worth?
+Mean INR 4,186.34; median INR 2,847.03.
+
+Which month contributed most sales?
+2025-05: INR 605,230.59.
+```
+
+**Interpretation and reasoning**
+
+These concise teaching sentences use the same calculated facts as the source's fuller insights. `.loc[label, column]` retrieves a category result by its name; Series lookup retrieves a regional total. Because the sentences are rebuilt after filtering, they follow the selection instead of becoming stale manually typed claims. The source shows the first three insights in its short summary and all six in its full report. Tied maxima are named according to the first maximum in the grouped ordering, so inspect tables before claiming a unique winner.
+
+### Cell 23 - Build a readable source-field dictionary
+
+**Question:** How can the report keep units and row meaning close to the numbers?
+
+<!-- cell:analysis:23 -->
+
+```python
+# A dictionary associates exact field names with their meaning and units.
+field_guide = {
+    "order_id": "One synthetic order identifier",
+    "order_date": "Order date; inclusive filter boundaries",
+    "region": "Sales region",
+    "category": "Product category represented by the order",
+    "channel": "Store or Online sales channel",
+    "units": "Units sold in the order",
+    "unit_price": "INR per unit before discount",
+    "discount_pct": "Discount percentage points, intended 0-100",
+    "unit_cost": "Product cost in INR per unit",
+}
+dictionary_table = pd.DataFrame(field_guide.items(), columns=["Field", "Meaning"])
+print(dictionary_table.to_string(index=False))
+```
+
+**Output**
+
+```text
+       Field                                    Meaning
+    order_id             One synthetic order identifier
+  order_date    Order date; inclusive filter boundaries
+      region                               Sales region
+    category  Product category represented by the order
+     channel              Store or Online sales channel
+       units                    Units sold in the order
+  unit_price               INR per unit before discount
+discount_pct Discount percentage points, intended 0-100
+   unit_cost               Product cost in INR per unit
+```
+
+**Interpretation and reasoning**
+
+`.items()` supplies key/value pairs; the DataFrame constructor turns them into a two-column table. The original app keeps its field definitions in `FIELD_GUIDE` and reuses them on screen and in report text. A field dictionary documents a convention; it does not enforce it. A price accidentally recorded in paise would still parse as numeric but would have the wrong business unit.
+
+### Cell 24 - Assemble a compact Markdown report from the same results
+
+**Question:** How do Python calculations become a Markdown document?
+
+<!-- cell:analysis:24 -->
+
+```python
+kpi_values = [
+    ("Net sales (INR)", f"{revenue:,.2f}"),
+    ("Gross profit (INR)", f"{profit:,.2f}"),
+    ("Gross margin", f"{ratio(profit, revenue):.2%}"),
+    ("Average order (INR)", f"{average_order:,.2f}"),
+]
+
+# Each element is a report section. join inserts the Markdown line breaks.
+report_parts = [
+    "# Retail sales - teaching report",
+    "## Business question\nWhere should the manager investigate sales, costs and margins?",
+    "## Scope\n" + scope,
+    "## KPI results\n| Measure | Result |\n| --- | --- |\n"
+    + "\n".join(f"| {name} | {value} |" for name, value in kpi_values),
+    "## Questions answered\n"
+    + "\n\n".join(f"### {question}\n{answer}" for question, answer in insights),
+    "## Source fields\n| Field | Meaning |\n| --- | --- |\n"
+    + "\n".join(f"| {name} | {meaning} |" for name, meaning in field_guide.items()),
+    "## Limits\nFictional orders. Gross profit excludes operating expenses and tax. "
+    "Group totals do not establish causation or forecast future demand.",
+]
+full_report = "\n\n".join(report_parts)
+
+# Print an actual excerpt, rather than claiming to display the whole report.
+print("\n".join(full_report.splitlines()[:23]))
+print("\n[Preview ends; full_report contains the remaining sections.]")
+```
+
+**Output**
+
+```text
+# Retail sales - teaching report
+
+## Business question
+Where should the manager investigate sales, costs and margins?
+
+## Scope
+region: East, North, South, West; category: Electronics, Fashion, Grocery, Home; channel: Online, Store; Observed records: 2025-01-01 to 2025-06-29; Requested dates: 2025-01-01 to 2025-06-29 (inclusive)
+
+## KPI results
+| Measure | Result |
 | --- | --- |
-| `ModuleNotFoundError` | The terminal is using an environment without a required library. Activate the intended environment and install the workshop versions with that interpreter's `python -m pip`. |
-| Running `python app.py` does not give the normal app experience | Start the Streamlit runner with `python -m streamlit run app.py`. It establishes the server and script context. |
-| The CSV cannot be loaded | Keep the correctly named `retail_sales.csv` beside `app.py`. The script resolves its neighbor, not an arbitrary CSV in the terminal's current directory. |
-| A required-column error appears | Check spelling and capitalization in the CSV header. The field names are exact, such as `discount_pct` rather than `discount`. |
-| Numeric or date parsing fails | Inspect the named field for text, invalid dates or symbols such as currency text embedded in numbers. Correct the source deliberately rather than replacing bad values with zero. |
-| The app asks for an end date | Complete both ends of the date range; the guard intentionally stops until the interval is usable. |
-| No rows match | Re-enable at least one category/region or widen the interval. Filter choices are drawn from the whole dataset, so not every combination must exist. |
-| CSV edits are not visible yet | Save the CSV and rerun the app. Loading is uncached, but the next run still needs to be triggered. |
-| A card and report show slightly different digits | Compare their formatting. Cards often round INR to whole numbers while the report keeps two decimals. Both use the same underlying selection and formulas. |
-| Heatmap cells are blank after strong filtering | A constant column or very small sample cannot support a defined Pearson correlation. Restore a broader selection before interpreting a relationship. |
-| Zero-valued edited data breaks a leader sentence | Check whether every category margin is undefined. The current leader lookup does not handle an all-NaN margin column. |
-| Port 8501 is occupied in a Cloud Lab | Use the workshop's separate-instance example with port 8502 and open its forwarded port. |
+| Net sales (INR) | 3,014,163.59 |
+| Gross profit (INR) | 991,908.14 |
+| Gross margin | 32.91% |
+| Average order (INR) | 4,186.34 |
 
-## 12. Sources and further reading
+## Questions answered
+### How much business is represented?
+720 selected orders generated INR 3,014,163.59 sales and INR 991,908.14 gross profit.
 
-Repository-specific statements and baseline calculations come from [this project's `app.py`](app.py), [its CSV](retail_sales.csv), the [workshop instructions](../README.md) and the [repository instructions](../../README.md), inspected at the source revision noted above. The official references below explain library behavior; they are references, not evidence about real retail performance. API documentation may describe releases newer than the pinned workshop environment, so use the project's versions when reproducing it.
+### Which region leads sales?
+North: INR 864,633.53, or 28.7% of selected sales.
 
-- [Python `pathlib` documentation](https://docs.python.org/3/library/pathlib.html): paths, resolution and filename replacement.
-- [Pandas: what kind of data does pandas handle?](https://pandas.pydata.org/pandas-docs/stable/getting_started/intro_tutorials/01_table_oriented.html): DataFrame and Series concepts.
-- [Pandas indexing and selecting data](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html): column selection, Boolean masks and label-based access.
-- [Pandas GroupBy guide](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/groupby.html): grouping and named aggregation.
-- [Pandas `DataFrame.corr`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.corr.html): pairwise correlations and defaults.
-- [Streamlit architecture and concepts](https://docs.streamlit.io/develop/concepts/architecture/run-your-app): script execution and interaction.
-- [Streamlit `st.tabs`](https://docs.streamlit.io/1.50.0/develop/api-reference/layout/st.tabs): tab containers and execution behavior.
-- [Streamlit `st.download_button`](https://docs.streamlit.io/develop/api-reference/widgets/st.download_button): downloadable data and MIME types.
-- [Matplotlib histogram reference](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html): binning and counts.
-- [Matplotlib `close`](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.close.html): releasing figure references.
-- [Seaborn boxplot reference](https://seaborn.pydata.org/generated/seaborn.boxplot.html): quartiles, whiskers and outliers.
-- [Seaborn heatmap reference](https://seaborn.pydata.org/generated/seaborn.heatmap.html): matrix visualization and annotations.
-- [Plotly line charts](https://plotly.com/python/line-charts/) and [bar charts](https://plotly.com/python/bar-charts/): interactive chart construction from tabular data.
+
+[Preview ends; full_report contains the remaining sections.]
+```
+
+**Interpretation and reasoning**
+
+The output is an executed excerpt of a deliberately shorter teaching report. `
+` means a newline, pipes form Markdown table columns, and generator expressions produce repeated rows or question sections. The existing app uses the same list/f-string/join technique for 12 sections including all visual guides, quality counts, recommendations and limitations. Its field dictionary is appended to `report_parts[5]`, which is the KPI-results section because the title occupies index zero. That detail affects placement, not the numerical analysis. Neither report is generated by an AI service.
+
+### Cell 25 - Preview the exact shape of a filtered CSV download
+
+**Question:** What would the user receive when downloading the selected data?
+
+<!-- cell:analysis:25 -->
+
+```python
+# index=False excludes the internal pandas index from the exported file.
+csv_text = filtered.to_csv(index=False)
+print("\n".join(csv_text.splitlines()[:4]))
+print(f"\nExport contains {len(filtered)} order rows and {len(filtered.columns)} columns.")
+```
+
+**Output**
+
+```text
+order_id,order_date,region,category,channel,units,unit_price,discount_pct,unit_cost,revenue,gross_profit
+ORD-0001,2025-01-01,West,Home,Store,7,1043.19,0.0,658.69,7302.33,2691.5
+ORD-0002,2025-01-02,East,Home,Online,2,766.05,0.0,435.11,1532.1,661.8799999999999
+ORD-0003,2025-01-03,South,Home,Store,7,1098.99,0.0,807.3,7692.93,2041.8300000000008
+
+Export contains 720 order rows and 11 columns.
+```
+
+**Interpretation and reasoning**
+
+The output contains the source fields plus `revenue` and `gross_profit`, because they were added to `filtered`. This cell creates text in memory; it does not overwrite `retail_sales.csv`. In Streamlit, `st.download_button(..., csv_text, ..., 'text/csv')` offers that text to the browser. Sorting a displayed table does not change analytical filters or this underlying selection.
+
+## Part 6 - Turn the analysis into a Streamlit app
+
+The analysis above already works without a browser UI. Streamlit adds controls and display commands around the same sequence. The roles remain clear: pandas calculates, Plotly/Matplotlib/Seaborn construct figures, and Streamlit receives widget values and renders outputs.
+
+The next cell is **one complete, separate application**. It has its own imports and loading code, so it does not depend on notebook variables. Save it as `practice_app.py` beside the CSV, then run:
+
+```bash
+python -m streamlit run practice_app.py
+```
+
+In a CookieSensei workspace whose built-in dashboard already uses 8501, run `python -m streamlit run practice_app.py --server.port 8502` and open that forwarded port. To run the existing fuller project instead, use the same command with `app.py`.
+
+**What happens on interaction?** A normal widget change reruns the script from top to bottom using the current values. `st.sidebar.multiselect()` returns a list used in `.isin()`. The date widget returns an interval, which is checked before indexing its two ends. `st.stop()` prevents invalid or empty data from reaching the calculations. Loading is uncached, so a saved CSV edit is read on the next rerun; no automatic CSV watcher is promised.
+
+`st.columns()` and `with tab:` arrange output. In the pinned Streamlit 1.50 version, all tab contents execute on a full rerun, including hidden tabs. Expander visibility likewise does not make computation lazy. Plotly zoom, table sorting and tab selection do not become additional pandas filters in this app.
+
+This compact reconstruction includes the same default measures and five chart types, but shorter business text and a shorter report. It does not replace or modify the original source. Its small all-undefined-margin guard below is an explicit teaching improvement; the original app does not guard that leader edge case.
+
+### Cell 26 - Build the separate interactive retail teaching app
+
+**Question:** How can a reader change the analysis without editing pandas code?
+
+<!-- cell:streamlit:26 -->
+
+```python
+from pathlib import Path
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.express as px
+import seaborn as sns
+import streamlit as st
+
+st.set_page_config(page_title="Retail Sales Explorer", layout="wide")
+st.title("Retail Sales Explorer")
+st.caption("Teaching reconstruction | Fictional orders | Currency: INR")
+
+# In a script, __file__ lets us find the CSV beside this application.
+data_file = Path(__file__).resolve().with_name("retail_sales.csv")
+required = ["order_id", "order_date", "region", "category", "channel",
+            "units", "unit_price", "discount_pct", "unit_cost"]
+try:
+    frame = pd.read_csv(data_file)
+    if not set(required).issubset(frame.columns) or frame.empty:
+        raise ValueError("Provide a nonempty CSV with all required columns.")
+    frame["order_date"] = pd.to_datetime(frame["order_date"], errors="raise")
+    for column in ["units", "unit_price", "discount_pct", "unit_cost"]:
+        frame[column] = pd.to_numeric(frame[column], errors="raise")
+    if frame[required].isna().any().any():
+        raise ValueError("Fill missing required values first.")
+except (OSError, ValueError, KeyError) as error:
+    st.error(str(error))
+    st.stop()  # Do not calculate with invalid or unavailable data.
+
+# Widget return values feed the same membership/date filters used above.
+regions = st.sidebar.multiselect("Regions", sorted(frame["region"].unique()),
+                                default=sorted(frame["region"].unique()))
+categories = st.sidebar.multiselect("Categories", sorted(frame["category"].unique()),
+                                   default=sorted(frame["category"].unique()))
+dates = st.sidebar.date_input(
+    "Date range", (frame["order_date"].min().date(), frame["order_date"].max().date()),
+    min_value=frame["order_date"].min().date(), max_value=frame["order_date"].max().date(),
+)
+if len(dates) != 2:
+    st.info("Choose both a start and an end date.")
+    st.stop()
+filtered = frame[frame["region"].isin(regions) & frame["category"].isin(categories)].copy()
+filtered = filtered[filtered["order_date"].dt.date.between(dates[0], dates[1])]
+if filtered.empty:
+    st.info("No rows match. Select a group or widen the date range.")
+    st.stop()
+
+# Compute once for the current selection, then reuse the results everywhere.
+filtered["revenue"] = filtered["units"] * filtered["unit_price"] * (1 - filtered["discount_pct"] / 100)
+filtered["gross_profit"] = filtered["revenue"] - filtered["units"] * filtered["unit_cost"]
+sales = filtered["revenue"].sum()
+profit = filtered["gross_profit"].sum()
+margin = profit / sales if sales else 0.0  # Source-style fallback; undefined if sales=0.
+cards = st.columns(4)
+cards[0].metric("Net sales (INR)", f"{sales:,.0f}")
+cards[1].metric("Gross profit (INR)", f"{profit:,.0f}")
+cards[2].metric("Gross margin", f"{margin:.1%}")
+cards[3].metric("Average order (INR)", f"{filtered['revenue'].mean():,.0f}")
+
+category_summary = filtered.groupby("category").agg(
+    sales=("revenue", "sum"), profit=("gross_profit", "sum"), orders=("revenue", "size"),
+)
+category_summary["margin"] = category_summary["profit"].div(category_summary["sales"].replace(0, float("nan")))
+valid_margins = category_summary["margin"].dropna()
+# Teaching improvement: the existing source does not guard this all-NaN case.
+margin_leader = valid_margins.idxmax() if not valid_margins.empty else "Undefined"
+
+dashboard, explore, data_tab, report_tab = st.tabs(["Dashboard", "Explore", "Data", "Report"])
+with dashboard:
+    monthly = filtered.assign(month=filtered["order_date"].dt.to_period("M").astype(str))
+    monthly = monthly.groupby("month", as_index=False)[["revenue", "gross_profit"]].sum()
+    st.plotly_chart(px.line(monthly, x="month", y=["revenue", "gross_profit"], markers=True,
+                           title="Monthly sales and gross profit"), use_container_width=True)
+    regional = filtered.groupby(["region", "category"], as_index=False)["revenue"].sum()
+    st.plotly_chart(px.bar(regional, x="region", y="revenue", color="category",
+                          title="Regional category mix"), use_container_width=True)
+    st.dataframe(category_summary.round(2), width="stretch")
+with explore:
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.hist(filtered["revenue"], bins=20, color="#2563eb", edgecolor="white")
+    ax.set(title="Order value distribution", xlabel="Net sales per order (INR)", ylabel="Orders")
+    st.pyplot(fig)
+    plt.close(fig)  # Release the Matplotlib figure after Streamlit renders it.
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    sns.boxplot(data=filtered, x="category", y="gross_profit", ax=ax, color="#a7f3d0")
+    ax.set(title="Profit by category", ylabel="Gross profit per order (INR)")
+    st.pyplot(fig)
+    plt.close(fig)
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    sns.heatmap(filtered[["units", "discount_pct", "revenue", "gross_profit"]].corr(),
+                annot=True, fmt=".2f", vmin=-1, vmax=1, cmap="RdBu_r", ax=ax)
+    ax.set_title("Correlation is association, not causation")
+    st.pyplot(fig)
+    plt.close(fig)
+with data_tab:
+    st.dataframe(filtered, hide_index=True, width="stretch")
+    st.download_button("Download filtered CSV", filtered.to_csv(index=False),
+                       "filtered_retail_sales.csv", "text/csv")
+with report_tab:
+    # Build text from this run's selected data rather than typing fixed results.
+    report_parts = [
+        "# Retail sales - teaching report",
+        f"Selected {len(filtered)} orders, {dates[0]} to {dates[1]}.",
+        f"Regions: {', '.join(regions)}. Categories: {', '.join(categories)}.",
+        f"Sales: INR {sales:,.2f}. Gross profit: INR {profit:,.2f}. Margin: {margin:.2%}.",
+        f"Highest defined category margin: {margin_leader}.",
+        "Fictional data. Gross profit excludes operating expenses and tax. No causal effect is estimated.",
+    ]
+    report = "\n\n".join(report_parts)
+    st.markdown(report)
+    st.download_button("Download teaching report", report, "retail_teaching_report.md", "text/markdown")
+```
+
+**Rendered Streamlit output - captured text summary**
+
+This summarizes the interface produced by this complete Streamlit cell with its default selections; it is not terminal stdout or a browser screenshot.
+
+```text
+Title: Retail Sales Explorer
+Regions: East, North, South, West
+Categories: Electronics, Fashion, Grocery, Home
+Date range: 2025-01-01 to 2025-06-29
+Net sales (INR): 3,014,164
+Gross profit (INR): 991,908
+Gross margin: 32.9%
+Average order (INR): 4,186
+Table 1: 4 rows x 4 columns
+Table 2: 720 rows x 11 columns
+Interactive Plotly charts: 2
+Rendered image charts: 3
+Download: Download filtered CSV
+Download: Download teaching report
+```
+
+**Interpretation and reasoning**
+
+The captured interface summary above comes from executing this complete cell with the actual CSV and its default selections. It is not fabricated terminal output or a browser screenshot. The four metric values match the original app's default calculations. The two Plotly figures and three Matplotlib/Seaborn figures are fed from the same selected rows; downloads follow that selection too. Notice that layout calls do not perform the arithmetic: they receive already computed values. The original `app.py` additionally provides fuller explanations, source-quality and statistical tables, six detailed insight sentences, exercises and its 12-section report.
+
+## Limits, troubleshooting and next questions
+
+The source checks required columns, parseable dates/numbers, nonmissing essential cells, an empty CSV and empty/incomplete selections. It does not enforce unique order IDs, whole positive quantities, finite values, nonnegative prices/costs or a 0-100 discount range. Its field dictionary describes those units and intended ranges; it does not validate them. Exact duplicates are reported rather than removed. Only initial loading is inside the source's error handler, so invalid business values can still fail later calculations or charts.
+
+The scalar `ratio()` uses zero as a programming fallback, while group margins use NaN for a zero denominator. The original category-leader calculation can fail when every margin is undefined. Correlations can be missing for small or constant selections. The guide's explicit edge-case cell and the final teaching app's labeled guard do not silently change `app.py`.
+
+Sales are not verified cash collection; gross profit is not net profit. Customer IDs, returns, store sizes, operating expenses and acquisition costs are absent. Region totals cannot measure per-store productivity, and discount associations cannot establish a causal response. A strong conclusion names the selection, measured result, supporting sample size and the extra information needed for a decision.
+
+| If you see this | What to check |
+| --- | --- |
+| A missing-library error | Use the intended Python environment and install packages with that interpreter's `python -m pip`. |
+| A CSV-not-found error in a notebook | Start the notebook in `01_retail_sales`; the teaching cells intentionally use that working directory. |
+| A CSV-not-found error in the app | Keep the named CSV beside the script; its `__file__` path is script-relative. |
+| An error after editing dates/numbers | Inspect the exact changed values. The app deliberately raises instead of silently discarding them. |
+| No rows match | Restore a region/category or widen dates. Empty selections are not interpreted as all values. |
+| Saved CSV changes do not appear | Save and trigger a rerun. The read is uncached, but a new execution is still needed. |
+| Different decimal places on a card and report | Compare formatting; cards round some amounts to whole INR while reports retain more precision. |
+| A heatmap cell is blank | Check sample size and whether a variable is constant. A blank correlation is not automatically zero. |
+
+For practice, change the analysis-cell selection to North and South, rerun subsequent cells, and compare the results. Add a channel control **before** deriving measures and keep the final empty-data guard after all filters. Explain one difference between a total, a mean, a median and a weighted margin using the real resulting output. Treat price changes or discount changes as explicit arithmetic scenarios unless you have data that models demand response.
+
+## Sources
+
+- [Existing project source](app.py), [bundled dataset](retail_sales.csv), [workshop README](../README.md) and [repository README](../../README.md) ground the implementation and the executed outputs.
+- [pandas 2.2 introduction](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/10min.html) and [GroupBy guide](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/groupby.html) explain the tabular operations.
+- [pandas correlation reference](https://pandas.pydata.org/pandas-docs/version/2.2/reference/api/pandas.DataFrame.corr.html) documents Pearson correlation and missing results.
+- [Streamlit main concepts](https://docs.streamlit.io/get-started/fundamentals/main-concepts), [run instructions](https://docs.streamlit.io/develop/concepts/architecture/run-your-app) and [Streamlit 1.50 tabs](https://docs.streamlit.io/1.50.0/develop/api-reference/layout/st.tabs) explain execution and layout.
+- [Plotly Express](https://plotly.com/python/plotly-express/), [Matplotlib histogram](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html), [Matplotlib close](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.close.html), [Seaborn boxplot](https://seaborn.pydata.org/generated/seaborn.boxplot.html) and [Seaborn heatmap](https://seaborn.pydata.org/generated/seaborn.heatmap.html) explain the chart functions used here.
