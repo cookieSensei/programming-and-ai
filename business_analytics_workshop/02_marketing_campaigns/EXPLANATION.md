@@ -1,5 +1,7 @@
 # Marketing Campaign Lab - a worked tutorial with code, comments and real outputs
 
+**Run the lesson:** [Open the step-by-step Jupyter notebook](TUTORIAL.ipynb) for executable cells, saved outputs, checkpoints, and practice tasks.
+
 This tutorial explains the analysis behind [the existing `app.py`](app.py) by running commented Python cells against [the actual bundled CSV](marketing_campaigns.csv). Every printed table, metric and chart below comes from executing the displayed code. The teaching data is fictional; these are not real advertising-account results.
 
 **How to run the cells:** Markdown is static: it shows saved code and outputs without executing them. Start a Jupyter notebook in this project folder and run the **analysis cells sequentially in one kernel**. Their variables are intentionally reused. The final **Streamlit-only cell** is a separate complete teaching application. Save that cell as `practice_app.py` beside the CSV and launch it with Streamlit instead of treating it as another notebook-analysis cell.

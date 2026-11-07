@@ -1,5 +1,7 @@
 # Retail Sales Explorer - a worked tutorial with code, comments and real outputs
 
+**Run the lesson:** [Open the step-by-step Jupyter notebook](TUTORIAL.ipynb) for executable cells, saved outputs, checkpoints, and practice tasks.
+
 This tutorial works through the analysis behind [the existing `app.py`](app.py), using the real [teaching CSV in this folder](retail_sales.csv). Each step asks a business question, executes commented Python code, shows the output from that code, and explains what the result means. The numbers and charts below were generated from the bundled dataset.
 
 **How to use the code cells:** Markdown shows static code and saved outputs; it does not execute Python itself. Open a Jupyter notebook with this project folder as its working directory and run the **analysis cells in order in one kernel**. Their variables carry forward, just as in a notebook. A final separate section contains a complete **Streamlit-only teaching app**: save that cell as `practice_app.py` beside the CSV and run it with Streamlit. Do not paste that final app into the analysis notebook as another analysis step.

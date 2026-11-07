@@ -1,5 +1,7 @@
 # Budget versus Actuals - an executed Python and Streamlit tutorial
 
+**Run the lesson:** [Open the step-by-step Jupyter notebook](TUTORIAL.ipynb) for executable cells, saved outputs, checkpoints, and practice tasks.
+
 This tutorial starts with a finance manager's questions, works through the [supplied CSV in this folder](department_budget.csv), and finishes with a complete commented Streamlit application. Each analysis cell contains Python you can run, its **actually executed output**, and an explanation of why the operation answers the question. The five chart images and printed outputs were captured from those cells using the supplied data.
 
 **How to use the cells:** Markdown displays static code and recorded results. Open a new notebook or an interactive Python session, set its working directory to this folder, then run the analysis cells in order in one session. Each cell uses variables created earlier. A final bare `fig` displays a figure in a notebook; in a plain Python script use `fig.show()` for Plotly or `plt.show()` for Matplotlib. The final Streamlit cell is a **separate complete script**: save it as `practice_app.py` beside the CSV and launch it with Streamlit. Do not paste it into the middle of the analysis session or overwrite the original `app.py`.

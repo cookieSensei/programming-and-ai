@@ -1,8 +1,9 @@
 # Business Analytics Workshop
 
 Six independent, beginner-friendly Streamlit projects. Each numbered project
-folder contains `app.py`, its CSV dataset, an `EXPLANATION.md` worked tutorial,
-and a `tutorial_assets` folder containing the tutorial's chart outputs.
+folder contains `app.py`, its CSV dataset, an executable `TUTORIAL.ipynb`, an
+`EXPLANATION.md` reading guide, and a `tutorial_assets` folder with the Markdown
+guide's chart outputs.
 No shared Python helpers, API keys, database or internet connection are needed
 to run the apps after the Python dependencies are installed.
 
@@ -20,7 +21,34 @@ analysis; their patterns are not evidence about real businesses.
 | [05_finance_budget](05_finance_budget) | `department_budget.csv` | 192 month/department/expense-category lines | Budget utilization, variance, overspend and monthly trends |
 | [06_restaurant_operations](06_restaurant_operations) | `restaurant_orders.csv` | 600 orders | Sales, service time, ratings, contribution and operational comparisons |
 
-## Worked code cells with outputs
+## Step-by-step Jupyter notebooks and worked guides
+
+Open `TUTORIAL.ipynb` in a project's folder to work through an executable lesson.
+Each notebook explains **what the project solves, what each tool does, why the
+calculation is appropriate, how the code works, and what the output means**.
+Markdown explanations alternate with commented Python cells and saved results.
+Each notebook includes five embedded chart outputs, prediction checkpoints,
+practical exercises, and a walkthrough connecting the analysis to `app.py`.
+
+In JupyterLab or VS Code, select the workshop Python 3.12 environment and run
+the cells from top to bottom with **Shift+Enter**. Use **Restart Kernel and Run
+All Cells** to reproduce the baseline. The setup cell supports starting in the
+project folder, workshop folder, or repository root. Keep the notebook beside
+its CSV and `app.py` when downloading a project. The prepared Cloud Lab already
+provides JupyterLab; for a local installation, add it to your environment with
+`python -m pip install jupyterlab` after installing the analysis packages below.
+
+The notebooks store actual table and chart outputs, so their results can be read
+without running code. Plotly outputs also carry interactive figure data for
+supporting notebook interfaces. Editing a selection or the CSV requires rerunning
+the dependent cells. A notebook remembers variables between cell executions;
+Streamlit reruns its script when an input widget changes.
+
+The complete Streamlit teaching script is a clearly labeled Markdown reference
+block intended for a separate `.py` file. Runnable `AppTest` cells inspect the
+actual sibling `app.py`, show its displayed metrics, and compare a narrowed filter
+with the baseline. **Run All does not launch a long-running web server.** The
+notebook provides the terminal command for opening the browser application.
 
 Open the guide beside each project's `app.py`. Each tutorial follows a practical
 sequence: **business question, commented Python code cell, captured output, and
@@ -33,21 +61,19 @@ measures, grouping, plotting, and preparing reports and CSV downloads. A separat
 Streamlit section shows how to connect the analysis to an interactive interface,
 with an actual rendered-output summary from the runnable teaching example.
 
-| Guide | Main questions explained |
-| --- | --- |
-| [Retail sales explanation](01_retail_sales/EXPLANATION.md) | How do discounts and product costs affect sales and gross profit? Which regions and categories lead, and what does a typical order look like? |
-| [Marketing campaigns explanation](02_marketing_campaigns/EXPLANATION.md) | Which channels produce attributed revenue efficiently? Why do conversion rate, CPA and ROAS use different denominators? |
-| [Customer churn explanation](03_customer_churn/EXPLANATION.md) | Which customer groups have higher observed churn proportions? How do sample sizes, tenure and satisfaction change the interpretation? |
-| [Inventory planning explanation](04_inventory_planning/EXPLANATION.md) | Which SKU locations fall below the reorder threshold? How do demand, lead time and an extra buffer change suggested quantities and purchase cost? |
-| [Finance budget explanation](05_finance_budget/EXPLANATION.md) | Where does actual spending exceed the budget? Why can an overall total hide overspent lines and departments? |
-| [Restaurant operations explanation](06_restaurant_operations/EXPLANATION.md) | How do sales, wait times, ratings and food-cost contribution vary across branches and meal periods? |
+| Project | Notebook | Reading guide | Main questions explained |
+| --- | --- | --- | --- |
+| Retail sales | [TUTORIAL.ipynb](01_retail_sales/TUTORIAL.ipynb) | [EXPLANATION.md](01_retail_sales/EXPLANATION.md) | How do discounts and product costs affect sales and gross profit? Which regions and categories lead, and what does a typical order look like? |
+| Marketing campaigns | [TUTORIAL.ipynb](02_marketing_campaigns/TUTORIAL.ipynb) | [EXPLANATION.md](02_marketing_campaigns/EXPLANATION.md) | Which channels produce attributed revenue efficiently? Why do conversion rate, CPA and ROAS use different denominators? |
+| Customer churn | [TUTORIAL.ipynb](03_customer_churn/TUTORIAL.ipynb) | [EXPLANATION.md](03_customer_churn/EXPLANATION.md) | Which groups have higher observed churn proportions? How do sample sizes, tenure and satisfaction change the interpretation? |
+| Inventory planning | [TUTORIAL.ipynb](04_inventory_planning/TUTORIAL.ipynb) | [EXPLANATION.md](04_inventory_planning/EXPLANATION.md) | How do demand, lead time and an extra buffer change suggested quantities and purchase cost? |
+| Finance budget | [TUTORIAL.ipynb](05_finance_budget/TUTORIAL.ipynb) | [EXPLANATION.md](05_finance_budget/EXPLANATION.md) | Where does actual spending exceed the budget? Why can an overall total hide overspent lines and departments? |
+| Restaurant operations | [TUTORIAL.ipynb](06_restaurant_operations/TUTORIAL.ipynb) | [EXPLANATION.md](06_restaurant_operations/EXPLANATION.md) | How do sales, wait times, ratings and food-cost contribution vary across branches and meal periods? |
 
-Read the business problem first, then work through the analysis cells in order.
-Markdown displays the code and saved output; it does not execute the cells on
-GitHub. To run them, create a JupyterLab notebook in the same numbered project
-folder as the CSV and copy the analysis cells in sequence. Their variables carry
-forward from one cell to the next. The tutorial explains the separate instructions
-for its Streamlit example, which runs as a Python app rather than a notebook cell.
+Read the business problem first, then work through the notebook's analysis cells
+in order. Use `EXPLANATION.md` when you prefer a continuous reading version.
+GitHub previews display saved code and results; open `TUTORIAL.ipynb` in a running
+notebook environment to execute or edit the cells.
 
 The displayed outputs are reproducible snapshots of the supplied fictional data
 and the selections shown in the code. Editing the CSV or changing a selection can
@@ -112,9 +138,9 @@ streamlit run app.py
 ## Suggested learning sequence
 
 1. Read a project's CSV and identify what one row represents.
-2. Open `EXPLANATION.md` and run its commented analysis cells in order in a
-   notebook beside the CSV. Compare each result with the captured output, then
-   read the corresponding operations in `app.py`.
+2. Open `TUTORIAL.ipynb`, read each question, and run its commented analysis cells
+   in order. Compare each result with the saved output, then read the corresponding
+   operations in `app.py`. `EXPLANATION.md` is the reading companion.
 3. Compare the dashboard KPIs with a manual calculation on a small filtered
    sample. Rates use summed numerators and denominators where appropriate.
 4. Open **Explore the data** for Matplotlib histograms and Seaborn distribution
