@@ -1,7 +1,8 @@
 # Business Analytics Workshop
 
 Six independent, beginner-friendly Streamlit projects. Each numbered project
-folder contains `app.py`, its CSV dataset, and an `EXPLANATION.md` learning guide.
+folder contains `app.py`, its CSV dataset, an `EXPLANATION.md` worked tutorial,
+and a `tutorial_assets` folder containing the tutorial's chart outputs.
 No shared Python helpers, API keys, database or internet connection are needed
 to run the apps after the Python dependencies are installed.
 
@@ -19,13 +20,18 @@ analysis; their patterns are not evidence about real businesses.
 | [05_finance_budget](05_finance_budget) | `department_budget.csv` | 192 month/department/expense-category lines | Budget utilization, variance, overspend and monthly trends |
 | [06_restaurant_operations](06_restaurant_operations) | `restaurant_orders.csv` | 600 orders | Sales, service time, ratings, contribution and operational comparisons |
 
-## Detailed project and code explanations
+## Worked code cells with outputs
 
-Open the guide beside each project's `app.py`. Each guide connects the business
-problem to the exact source code, explains the data and formulas with worked
-examples, and walks through every source line. The guides also explain why pandas
-is used, how the charts answer different questions, and how Streamlit turns the
-analysis into an interactive browser app.
+Open the guide beside each project's `app.py`. Each tutorial follows a practical
+sequence: **business question, commented Python code cell, captured output, and
+interpretation**. Tables and calculations are executed against the bundled CSV,
+and chart cells include the generated chart images. Comments explain what the
+operations do and why they help answer the question.
+
+The tutorials build from loading and inspecting data to filtering, calculating
+measures, grouping, plotting, and preparing reports and CSV downloads. A separate
+Streamlit section shows how to connect the analysis to an interactive interface,
+with an actual rendered-output summary from the runnable teaching example.
 
 | Guide | Main questions explained |
 | --- | --- |
@@ -36,11 +42,18 @@ analysis into an interactive browser app.
 | [Finance budget explanation](05_finance_budget/EXPLANATION.md) | Where does actual spending exceed the budget? Why can an overall total hide overspent lines and departments? |
 | [Restaurant operations explanation](06_restaurant_operations/EXPLANATION.md) | How do sales, wait times, ratings and food-cost contribution vary across branches and meal periods? |
 
-Read the business problem and data dictionary first, work through a small manual
-calculation, and then follow the numbered code walkthrough with `app.py` open.
-Run the app and change one filter to connect the code to its visible result.
-The guides explain the current implementation and identify proposed exercises
-separately. Their line numbers refer to the source revision stated in each guide.
+Read the business problem first, then work through the analysis cells in order.
+Markdown displays the code and saved output; it does not execute the cells on
+GitHub. To run them, create a JupyterLab notebook in the same numbered project
+folder as the CSV and copy the analysis cells in sequence. Their variables carry
+forward from one cell to the next. The tutorial explains the separate instructions
+for its Streamlit example, which runs as a Python app rather than a notebook cell.
+
+The displayed outputs are reproducible snapshots of the supplied fictional data
+and the selections shown in the code. Editing the CSV or changing a selection can
+change the results. Static chart images show the captured output; the running
+Streamlit app provides its interactive Plotly charts. Proposed extensions and
+compact teaching examples are identified separately from the full `app.py`.
 
 These static learning guides complement the app's **Full report** tab. The guides
 teach how the program works; the downloaded report contains results for the
@@ -99,8 +112,9 @@ streamlit run app.py
 ## Suggested learning sequence
 
 1. Read a project's CSV and identify what one row represents.
-2. Run the app, then read `app.py` from top to bottom. The numbered comments
-   follow loading, filtering, calculation, visualization and data inspection.
+2. Open `EXPLANATION.md` and run its commented analysis cells in order in a
+   notebook beside the CSV. Compare each result with the captured output, then
+   read the corresponding operations in `app.py`.
 3. Compare the dashboard KPIs with a manual calculation on a small filtered
    sample. Rates use summed numerators and denominators where appropriate.
 4. Open **Explore the data** for Matplotlib histograms and Seaborn distribution

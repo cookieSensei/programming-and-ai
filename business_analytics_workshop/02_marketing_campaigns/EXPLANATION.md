@@ -1,760 +1,1165 @@
-# Marketing Campaign Lab - business questions, weighted metrics and every line of code
+# Marketing Campaign Lab - a worked tutorial with code, comments and real outputs
 
-This guide explains the [actual `app.py` in this folder](app.py) and its [bundled `marketing_campaigns.csv`](marketing_campaigns.csv). It assumes you are learning Python, pandas and Streamlit together. Open the source beside this document with editor line numbers enabled, and connect each calculation to the marketing question it answers.
+This tutorial explains the analysis behind [the existing `app.py`](app.py) by running commented Python cells against [the actual bundled CSV](marketing_campaigns.csv). Every printed table, metric and chart below comes from executing the displayed code. The teaching data is fictional; these are not real advertising-account results.
 
-**Source revision:** `c10a61c36fffdd048b69dd78926e6663bc986fce`. The walkthrough refers to the 256-line `app.py` at that revision. It covers every nonblank source line, including introductory text, chart explanations and report assembly. Blank lines organize the file visually and do not execute. If the Python file changes, revisit the line references and baseline results.
+**How to run the cells:** Markdown is static: it shows saved code and outputs without executing them. Start a Jupyter notebook in this project folder and run the **analysis cells sequentially in one kernel**. Their variables are intentionally reused. The final **Streamlit-only cell** is a separate complete teaching application. Save that cell as `practice_app.py` beside the CSV and launch it with Streamlit instead of treating it as another notebook-analysis cell.
 
-All observations are fictional teaching data. INR is the currency. This is a descriptive exploration of attributed campaign results, not a connection to an advertising platform, an automated budget allocator, or a claim about the effectiveness of real advertising channels. The app's own `CASE`, `DATA_CONTEXT` and `LIMITATIONS` establish these boundaries.
+The existing source inspected here is unchanged from revision `c10a61c36fffdd048b69dd78926e6663bc986fce`. These cells split its analysis into understandable steps and expose intermediate outputs. A few additional inspections are clearly marked as teaching extensions. The final app is a compact reconstruction, not a replacement for the source's fuller explanations and 12-section report.
 
 ## Contents
 
-1. [The business problem and intended solution](#1-the-business-problem-and-intended-solution)
-2. [Understand the observation and the source fields](#2-understand-the-observation-and-the-source-fields)
-3. [Why pandas and the other libraries are used](#3-why-pandas-and-the-other-libraries-are-used)
-4. [Why each metric answers a different question](#4-why-each-metric-answers-a-different-question)
-5. [How Streamlit turns calculations into an application](#5-how-streamlit-turns-calculations-into-an-application)
-6. [Run the project and reproduce its baseline](#6-run-the-project-and-reproduce-its-baseline)
-7. [How to read the five charts](#7-how-to-read-the-five-charts)
-8. [Line-by-line walkthrough](#8-line-by-line-walkthrough)
-9. [Validation, undefined rates and analytical limits](#9-validation-undefined-rates-and-analytical-limits)
-10. [Practice and worked examples](#10-practice-and-worked-examples)
-11. [Troubleshooting](#11-troubleshooting)
-12. [Sources and further reading](#12-sources-and-further-reading)
+- [The business problem](#the-business-problem)
+- [Environment and the role of each library](#environment-and-the-role-of-each-library)
+- [Part 1 - Load and understand campaign observations](#part-1---load-and-understand-campaign-observations)
+- [Part 2 - Filter and calculate weighted marketing metrics](#part-2---filter-and-calculate-weighted-marketing-metrics)
+- [Part 3 - Compare channels, campaigns and dates](#part-3---compare-channels-campaigns-and-dates)
+- [Part 4 - Create all five visual outputs](#part-4---create-all-five-visual-outputs)
+- [Part 5 - Inspect, explain and export results](#part-5---inspect-explain-and-export-results)
+- [Part 6 - Build the separate Streamlit interface](#part-6---build-the-separate-streamlit-interface)
+- [Limits, troubleshooting and useful practice](#limits-troubleshooting-and-useful-practice)
+- [Sources](#sources)
 
-## 1. The business problem and intended solution
+## The business problem
 
-A marketing team has limited money to spend on campaigns. Its spreadsheet contains impressions, clicks, conversions, spend and attributed revenue. Different measures suggest different winners: one channel attracts many clicks, another produces more conversions, and another reports a high revenue-to-spend ratio. Which result should the team investigate before changing its budget?
+A marketing team has a limited advertising budget. One channel attracts many clicks, another produces more conversions, and a third may report a high revenue-to-spend ratio at a tiny scale. Which result should the team investigate before changing its budget?
 
-The problem is not simply a lack of charts. It is a mismatch between different business questions. Clicks measure recorded interaction with advertisements; conversions measure recorded outcomes under the dataset's conversion definition; revenue measures money attributed to those outcomes; spend measures advertising cost. Comparing channels requires knowing which of these quantities is being compared and whether the channel operated at a meaningful scale.
+The quantities answer different questions. Impressions measure ad displays. Clicks measure recorded interactions. Conversions measure attributed outcome events. Spend measures advertising cost, and revenue is the amount already attributed to those observations. The app needs to compare these quantities using the right denominator, not merely find the largest number or average daily percentages.
 
-This app creates a repeatable way to examine those distinctions. The reader selects channels, campaign labels and a date interval. The app calculates total spend, return on ad spend, acquisition cost and conversion rate for exactly those selected observations. It compares daily amounts, aggregate channel efficiency, spending distributions, conversion variability and individual observations. It also exposes the underlying rows, source-quality checks and a downloadable explanatory report.
+The solution is a reproducible descriptive workflow: select channels/campaigns/dates, calculate totals and appropriate ratios, compare efficiency with scale, inspect distributions and individual observations, and document the selected evidence. Its useful outcome is a focused investigation or controlled budget experiment. A chart does not prove that moving money to a high-ROAS channel will preserve that return.
 
-The useful outcome is an informed **investigation or controlled budget experiment**. For example, "This selection's Display observations have the largest aggregate reported ROAS and substantial conversion volume; examine attribution, contribution margin and performance under a bounded experiment before scaling" connects evidence to a next question. "Display is always the best channel" goes beyond this dataset.
+This project does not call an advertising API, change budgets, identify unique new customers, train a model, calculate net profit or implement an attribution algorithm. It accepts `revenue` and `conversions` already present in the CSV. Accurately summarizing attributed results is different from proving that an advertisement caused additional sales.
 
-No predictive model is trained. No advertising account is read or changed. No attribution algorithm is implemented. The app accepts the `revenue` and `conversions` fields already present in the CSV and summarizes them. Understanding that boundary is essential: a dashboard can accurately summarize an attribution system while that system still fails to measure the incremental effect of advertising.
+## Environment and the role of each library
 
-## 2. Understand the observation and the source fields
-
-### 2.1 Row grain: a campaign observation, not a customer
-
-One row represents one **channel/campaign observation on one day**. That description is the dataset's grain. The bundled CSV has **360 rows and 8 columns**, spanning **1 January through 31 March 2025**, or 90 dates. In this file there are four rows per date, one for each of Display, Email, Search and Social; each row has one of three campaign labels: Always on, Launch or Seasonal.
-
-Do not reinterpret the row count as customers, campaigns or days. The 360 rows are observations across days and channels. The same channel repeats across dates; a campaign label also repeats. The file does not contain customer identifiers, so neither 360 rows nor 11,634 conversions is a verified count of distinct acquired customers.
-
-The supplied file has no missing cells, no exact duplicate rows and no duplicates of the `date`, `channel`, `campaign` combination. These facts were checked from this particular CSV. The app does not enforce that combination as a unique key; duplicate business observations added later could be counted twice.
-
-### 2.2 Field dictionary
-
-| Source column | Meaning and units | Role in the analysis |
-| --- | --- | --- |
-| `date` | Observation date | Converted to datetime; used for inclusive interval filtering and daily totals. |
-| `channel` | The marketing channel receiving the attributed results | Sidebar selection, group summaries, bar colors and comparisons. |
-| `campaign` | A campaign label within the observations | Sidebar selection and hover context. A label alone is not an individual customer's identity. |
-| `impressions` | Number of ad displays | Denominator for click-through rate. Repeated displays can belong to the same person. |
-| `clicks` | Recorded ad clicks | Numerator for CTR and denominator for click-to-conversion rate; not necessarily unique visitors. |
-| `conversions` | Attributed conversion events | Used for conversion volume, conversion rate, acquisition cost and scatter-marker size. |
-| `spend` | Advertising cost in INR | Total cost, the ROAS denominator and CPA numerator. |
-| `revenue` | Revenue already attributed to the observation, in INR | ROAS numerator and revenue comparisons; not net profit or proven incremental revenue. |
-
-These meanings are stated in the project's `FIELD_GUIDE` and the workshop [README](../README.md). For another dataset, agree on what a conversion means before reusing the formulas. A form submission, account registration and paid purchase are different outcomes even if each is labeled `conversions` in a CSV.
-
-### 2.3 Existing amounts versus derived ratios
-
-Unlike the retail project, this app does not derive revenue from units, price and discount. Both `spend` and `revenue` already exist in the input. It sums them and derives ratios from the sums. There is no hidden price, customer or product-cost lookup.
-
-The `filtered` table retains the eight source columns, with `date` parsed into a datetime type. Group-derived `ROAS` and `CTR_pct` columns are created in the separate `channels` summary table. They do **not** get added to `filtered`. Consequently, the current Download filtered CSV button exports selected source observations, not a per-row ROAS column or the grouped channel table.
-
-This distinction prevents a common confusion: seeing ROAS in the dashboard does not mean the app has stored a row-level rate in the original CSV. The code creates temporary analysis objects in memory and leaves the source file unchanged.
-
-## 3. Why pandas and the other libraries are used
-
-### 3.1 Why a DataFrame is useful here
-
-The questions require operations on tables: load a CSV, interpret dates and numbers, select subsets, add totals, group by channel/date, calculate ratios and export a selection. Pandas supplies a **DataFrame**, a two-dimensional labeled table, and a **Series**, a one-dimensional labeled collection such as a single column. Those concepts are introduced in the official [pandas table-oriented data tutorial](https://pandas.pydata.org/pandas-docs/stable/getting_started/intro_tutorials/01_table_oriented.html).
-
-```python
-frame = pd.read_csv(DATA_FILE)
-```
-
-means "parse the CSV and give me a table called `frame`." A reference such as `frame["clicks"]` selects a Series. `frame[["clicks", "conversions"]]` selects a two-column DataFrame: the inner brackets construct a list, and the outer brackets apply the selection. A name such as `spend` later in the file is a scalar total, while `filtered["spend"]` is still a column of amounts. Distinguishing those types makes the code much easier to follow.
-
-Without pandas, Python could still solve these problems using dictionaries, lists and loops, but we would need to implement all of those transformations manually. Pandas lets the central business operation stay visible. For example:
-
-```python
-filtered.groupby("channel")[["spend", "revenue"]].sum()
-```
-
-reads almost like the question: group selected observations by channel, choose spend and revenue, and sum both within each group. The result has one row per channel rather than one row per original observation. This is the table on which channel-level ROAS should be calculated.
-
-Pandas is useful here because its methods fit the data problem, not because pandas makes a conclusion automatically correct. A perfectly valid `.sum()` can still double-count duplicated observations. A valid ratio can still use the wrong denominator. The learner's job is to connect code, units, grain and interpretation.
-
-### 3.2 The project's main pandas operations
-
-| Operation | What it contributes |
-| --- | --- |
-| `read_csv()` | Reads the file's headers and rows into a table. |
-| `to_datetime()` | Makes dates comparable and groupable as dates rather than arbitrary text. |
-| `to_numeric()` | Ensures counts and amounts can participate in arithmetic; invalid text raises an error. |
-| `.copy()` | Starts a separate working table while retaining the full loaded source for quality checks. |
-| `.unique()`, `sorted()` | Supplies stable, distinct widget choices. `sorted()` is a Python built-in used with pandas results. |
-| `.isin()` and Boolean indexing | Converts channel/campaign choices into selected rows. |
-| `.dt.date.between()` | Filters observations using an inclusive requested interval. |
-| `.groupby().sum()` | Aggregates related observations before comparing channels or dates. |
-| `.div()` with `.replace(0, NaN)` | Calculates grouped rates while representing zero-denominator group rates as undefined. |
-| `.idxmax()` | Finds the group label attached to the maximum value, rather than only the numeric maximum. |
-| `.describe()` | Summarizes the distribution of each numeric field. |
-| `.to_csv(index=False)` | Makes a downloadable CSV string without an extra pandas-index column. |
-
-The [pandas GroupBy guide](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/groupby.html) calls the grouping pattern split-apply-combine: split rows into groups, apply an aggregation, combine the results into a new table. Here that pattern turns hundreds of daily observations into a few channel summaries.
-
-### 3.3 Why several plotting libraries appear
-
-| Import | Actual purpose in this app |
-| --- | --- |
-| `Path` | Locates `marketing_campaigns.csv` relative to `app.py`, making loading independent of the terminal's current folder. |
-| `matplotlib.pyplot as plt` | Creates figure/axes objects, draws the spending histogram and manages figure cleanup. |
-| `pandas as pd` | Loads, validates, filters, aggregates and exports tabular observations. |
-| `plotly.express as px` | Builds interactive daily line, channel bar and observation scatter charts. |
-| `seaborn as sns` | Builds the per-channel conversion boxplot on Matplotlib axes. |
-| `streamlit as st` | Renders browser controls, layout, tables, charts, text, notices and downloads. |
-
-The workshop intentionally exposes complementary plotting styles. Matplotlib teaches direct figure/axes control; Seaborn expresses a statistical distribution comparison; Plotly Express produces interactive figures from a DataFrame with compact declarations. Streamlit displays each figure in the app. Pandas computes the values; plotting libraries encode them visually; Streamlit connects the analysis to a usable interface.
-
-There is no direct NumPy import in this file even though NumPy is part of the pinned workshop environment. There is no need to invent a NumPy step when explaining this program.
-
-### 3.4 Python syntax worth recognizing
-
-`import ... as ...` gives a library a short alias. `=` assigns a value, whereas `==` would compare values. `def` defines a function; its body executes when called. `if` chooses whether a block runs. `for` repeats a block. Indentation tells Python which statements belong to those blocks.
-
-An f-string such as `f"{ratio(revenue, spend):.2f}x"` calls the ratio function, formats the result to two decimal places, and adds the literal `x`. The `x` is a label for a multiple, not a multiplication operator inside that string. `:.1%` instead formats a fraction as a percentage, multiplying by 100 for display. Mixing up these two formats would make the same underlying number appear to mean something different.
-
-## 4. Why each metric answers a different question
-
-### 4.1 The funnel and the units
-
-Conceptually, the fields follow stages: advertisements are displayed, some displays generate clicks, and some clicks are associated with attributed conversions. The CSV stores event counts for those stages. Ratios compare different stages, but those counts are not unique people and the code does not verify an individual-level journey.
-
-Consider this **invented arithmetic example**, separate from the supplied CSV:
-
-| Impressions | Clicks | Conversions | Spend | Attributed revenue |
-| ---: | ---: | ---: | ---: | ---: |
-| 10,000 | 300 | 24 | INR 2,400 | INR 9,600 |
-
-This one example supports several different questions:
-
-- CTR is `300 / 10000 = 0.03`, or 3%: recorded clicks per ad display.
-- Click-to-conversion rate is `24 / 300 = 0.08`, or 8%: attributed conversions per recorded click.
-- CPA is `2400 / 24 = 100`: INR 100 advertising spend per attributed conversion.
-- ROAS is `9600 / 2400 = 4`: INR 4 attributed revenue for every INR 1 of ad spend.
-
-Each denominator represents the quantity against which performance is normalized. Replacing clicks with impressions changes the conversion question. Replacing spend with revenue changes the efficiency ratio. Correct code is not just code that runs; it must divide by the quantity that matches the intended question.
-
-### 4.2 Total ad spend
-
-```python
-spend = filtered["spend"].sum()
-```
-
-adds the advertising cost of all selected observations. It answers how much advertising cost the selected records represent. No ratio is needed for an amount. It should be read with the selected interval and campaigns: a larger spend total can simply represent more days or more selected channels.
-
-### 4.3 Return on ad spend
-
-The app calculates:
-
-```python
-ratio(revenue, spend)
-```
-
-where both arguments are totals of the selected observations. ROAS is a multiple. A reported 3.43x means about INR 3.43 attributed sales per INR 1 spent, under the dataset's attribution definition. It does not mean INR 3.43 profit per INR 1 spent.
-
-Why not subtract spend from revenue and call the difference profit? Revenue also needs to pay product/service delivery costs and other expenses. This file contains none of those costs. It also does not establish which sales would have happened without advertising. Even `revenue - spend` would be an incomplete accounting measure and would not demonstrate advertising's causal contribution.
-
-### 4.4 Cost per acquisition
-
-```python
-ratio(spend, conversions)
-```
-
-calculates advertising spend per attributed conversion. The UI calls it cost per acquisition, but the actual denominator is **conversion events**. Without distinct-customer information or a first-purchase flag, the program cannot prove that every conversion represents a newly acquired customer.
-
-When `conversions` is zero, the metric card and report explicitly display `N/A`. If no conversions occurred, a positive advertising cost cannot be divided into a meaningful cost per conversion. Showing zero cost would falsely suggest perfect efficiency. This is why the CPA display has its own `if conversions else "N/A"` condition even though the shared `ratio()` helper returns zero for a zero denominator.
-
-### 4.5 Conversion rate and click-through rate
-
-Conversion rate is total conversions divided by total clicks. CTR is total clicks divided by total impressions. The app computes both as fractions and uses percentage formatting when displaying them. For the grouped channel hover/table, it instead multiplies the CTR fraction by 100 and stores that percentage value in a field named `CTR_pct`.
-
-This distinction matters when extending the code. If a value is already multiplied by 100, formatting it again with `%` would multiply it a second time. A fraction of `0.04` becomes 4% with `:.0%`; a stored `CTR_pct` of `4.0` should be read as 4 percentage points, not formatted as 400%.
-
-CTR concerns ad interaction, not final return. A channel may get inexpensive attention but few paid outcomes. Conversion rate concerns conversion among recorded clicks; it is influenced by audience, offer, landing-page experience and other unobserved differences. Neither rate independently identifies what caused a difference between channels.
-
-### 4.6 Why ratios must use totals
-
-Suppose two **invented** observations have these clicks and conversions:
-
-| Observation | Clicks | Conversions | Row conversion rate |
-| --- | ---: | ---: | ---: |
-| A | 10 | 5 | 50.00% |
-| B | 990 | 45 | About 4.55% |
-| Combined | 1,000 | 50 | **5.00%** |
-
-The simple average of 50% and 4.55% is about 27.27%, which does not describe the combined activity. Observation A contains only 10 clicks but receives half the weight in that simple average. The correct combined rate is `sum(conversions) / sum(clicks) = 50 / 1000 = 5%`. Equivalently, weight each row's rate by its click count.
-
-The same principle applies to ROAS. An observation with INR 100 spend and INR 1,000 attributed revenue reports 10x. Another with INR 900 spend and INR 900 revenue reports 1x. The mean of their ROAS values is 5.5x, but the combined result is `1900 / 1000 = 1.9x`. Aggregate ROAS weights by spend, because spend is the denominator of the underlying ratio.
-
-More generally, the appropriate weights follow each measure's denominator: clicks for conversion rate, impressions for CTR, spend for ROAS, and conversions for aggregate CPA. The app avoids a list of special weighted-average calculations by summing the relevant numerators and denominators first. See how `channel_summary` sums five measures before it derives `roas`.
-
-### 4.7 Efficiency and scale are different questions
-
-The code identifies one channel by maximum aggregate `roas` and another by maximum `conversions`. They can be different. A tiny channel can have a high ratio but contribute few conversions; a large channel can generate many conversions at lower reported efficiency. The grouped table and hover fields keep spend and volume visible beside the ratio.
-
-In the full bundled dataset, Display happens to lead both aggregate ROAS and conversion count. That is a result of this selection, not a requirement built into the app. A different campaign/date selection can lead to a different comparison, and a valid analysis must report the actual result even when it does not illustrate the contrast a teacher expected.
-
-### 4.8 Question-to-code map
-
-| Question | Code mechanism | Why the mechanism answers it | What remains unanswered |
-| --- | --- | --- | --- |
-| How much advertising cost is represented? | Sum selected `spend` (146) | Adds the amounts for the exact chosen scope | Whether every relevant expense was recorded |
-| How much attributed revenue per INR spent? | Total revenue divided by total spend (147, 151) | Normalizes reported revenue by advertising cost | Incremental revenue, margin and net profit |
-| How expensive is each attributed conversion? | Total spend divided by total conversions; N/A if none (148, 152) | Matches advertising cost with counted outcomes | Unique new customers, lifetime value and acceptable acquisition cost |
-| How well does selected traffic convert? | Total conversions divided by total clicks (153, 162) | Measures conversion events relative to recorded clicks | Why the rate differs, or whether clicks/users are deduplicated |
-| Which channel has highest reported efficiency? | Group sums, derive ROAS, find label at maximum (155-157) | Compares like-defined aggregate channel ratios | Whether efficiency persists if budget is increased |
-| Which channel brings most conversions? | Maximum grouped conversions (158, 164) | Ranks observed outcome volume independently of the ratio | Quality, profit or incremental value of those outcomes |
-| Is spending concentrated in some observations? | Median/max and histogram (166, 222) | Exposes center, extremes and distribution | Whether concentration was deliberate or commercially wise |
-
-## 5. How Streamlit turns calculations into an application
-
-### 5.1 A Python script becomes a browser interface
-
-Starting the program with `streamlit run app.py` runs a Streamlit server. The Python code runs in the server's environment while the user views and controls the app in a browser. Commands such as `st.title()`, `st.sidebar.multiselect()`, `st.metric()` and `st.dataframe()` describe what should appear on that page. This app does not manually define HTML pages, JavaScript event handlers or web API endpoints.
-
-The official [Streamlit run-your-app guide](https://docs.streamlit.io/develop/concepts/architecture/run-your-app) describes the runner. The key programming model is that normal input-widget changes trigger a rerun of the script from top to bottom with the current widget values. Consequently, the author can express one clear sequence: load, validate, filter, aggregate, interpret and render.
-
-The top-of-file constants are reusable explanatory content. The sidebar widgets return actual Python values. A multiselect returns a list of selected channel/campaign labels; the date-range widget returns date selections. The app uses those returned values to construct the analysis population. The controls are therefore inputs to the calculation, not merely visual decoration.
-
-### 5.2 One selected table drives the outputs
-
-The application starts with `filtered = frame.copy()`. It then applies three conditions in order:
-
-1. Channel membership in the selected channel list.
-2. Campaign membership in the selected campaign list.
-3. Date membership in the chosen inclusive interval.
-
-Sequential filtering means a retained observation satisfies **all three** conditions. The app checks for an empty result before calculating rankings or drawing charts. Cards, answers, chart data, the selected-record table and report scope are then built from `filtered`, ensuring they refer to the same observations.
-
-The widget options are read from full `frame`. Selecting Search does not dynamically rebuild campaign options to show only combinations present for Search. An empty combination is allowed as an input but is handled by the empty-state message. Unique widget keys such as `02_marketing_campaigns_channel` identify Streamlit controls; they are unrelated to database keys or marketing attribution.
-
-### 5.3 Reruns, tabs and uncached data
-
-The source intentionally does not cache `read_csv()`. If you edit and save the CSV, the next rerun reads it again. That does not imply a special CSV watcher automatically reruns the app immediately after every file edit; trigger a rerun if needed. The small teaching dataset makes the straightforward behavior easy to understand.
-
-The four tabs organize output: Campaign dashboard, Explore the data, Data and quality, and Full report. In the pinned Streamlit 1.50 behavior, the code in all tab containers executes on a full rerun, not only in the currently visible tab. The same principle applies to an expander's content: collapsing it hides the output but does not make the block a conditional computation. See the [Streamlit 1.50 tabs API](https://docs.streamlit.io/1.50.0/develop/api-reference/layout/st.tabs).
-
-The app uses `with` blocks as rendering contexts. `with overview:` sends subsequent Streamlit elements to the dashboard tab; it does not select rows. Plotly hover/zoom and interactive table sorting help inspect a view, but they are not additional analytical filters in this code. In particular, sorting the source-record table does not change the KPI population.
-
-### 5.4 Reports and downloads are assembled from calculated values
-
-`insights` is a list of predefined questions and calculated answer strings. F-strings insert totals, ratios, labels and amounts. `report_parts` combines those answers with explanations, scope, quality checks and limitations. The report is deterministic Python text assembly, not a call to an AI model.
-
-The same `full_report` string is displayed with `st.markdown()` and offered with `st.download_button()`. It includes written chart explanations but does not embed chart image files. A separate download serializes selected source rows as CSV. Neither button modifies the source dataset or this guide, and neither sends information to an advertising account.
-
-## 6. Run the project and reproduce its baseline
-
-### 6.1 Local setup
-
-Use the environment documented in the workshop [README](../README.md): Python 3.12 with the versions below. From the repository root in a Linux/macOS terminal:
+Use Python 3.12 with the versions in the [workshop README](../README.md):
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
 python -m pip install streamlit==1.50.0 pandas==2.2.3 numpy==2.3.5 matplotlib==3.10.8 seaborn==0.13.2 plotly==6.5.2
-cd business_analytics_workshop/02_marketing_campaigns
-python -m streamlit run app.py
 ```
 
-Make sure `python` is your Python 3.12 interpreter before creating the environment, or call your Python 3.12 executable explicitly. The environment keeps this project's packages separate from other projects. `python -m pip` and `python -m streamlit` use the same interpreter selected by `python`, reducing confusion when multiple Python installations exist.
+Use your prepared environment or a virtual environment. For a full repository clone on Windows, follow the root README's WSL/Linux guidance because other phase-folder names contain `>` characters. No API key or database is needed by this project.
 
-On Windows PowerShell, environment activation is `.venv\Scripts\Activate.ps1`. However, the full repository contains phase-folder names with `>`, which native Windows filesystems cannot use. Follow the root [README](../../README.md) and use a Linux Cloud Lab or clone within WSL's Linux filesystem for the full repository. The workshop folder itself does not contain those special phase names.
+**Why pandas?** The input is a table and the questions require table operations. A pandas **DataFrame** stores rows, named columns, types and a row index. One selected column is usually a **Series**. Pandas provides CSV parsing, conversion, Boolean selection, grouping, aggregation and export. Python could implement those operations with loops and dictionaries, but the concise pandas form lets the business rule remain visible. It still needs the analyst to choose the correct grain and denominator.
 
-Open the URL printed by Streamlit, usually `http://localhost:8501`, while the server is running. The app needs its local dataset and installed libraries, not an API key, database or advertising-platform connection. Installing packages may require network access; loading the included CSV does not.
+`Path` handles file locations. Matplotlib creates figures/axes and draws the spend histogram. Seaborn draws the conversion boxplot. Plotly Express creates the interactive daily trend, ROAS bar chart and observation scatter plot. Streamlit adds browser controls, containers, tables and downloads. NumPy is part of the environment but is not directly imported by this source app.
 
-### 6.2 In the prepared CookieSensei workshop workspace
+In chart cells, the final bare `fig` expression displays the figure in a notebook. Each image below is the saved result of that displayed figure. The static PNG does not reproduce Plotly's live hover and zoom controls; those are available in a live notebook or Streamlit view.
 
-The workspace may already provide the Business Analytics Dashboard project selector. To run a separate editable app in its terminal, use the folder and port described in the workshop instructions:
+## Part 1 - Load and understand campaign observations
+
+### Cell 01 - Read the actual CSV into a DataFrame
+
+**Question:** What is the actual size and structure of our input?
+
+<!-- cell:analysis:01 -->
+
+```python
+from pathlib import Path
+import pandas as pd
+import matplotlib.pyplot as plt
+import plotly.express as px
+import seaborn as sns
+
+# Notebook cells use the project working directory; the CSV must be here.
+DATA_FILE = Path("marketing_campaigns.csv")
+frame = pd.read_csv(DATA_FILE)  # Header names become DataFrame columns.
+print(f"Loaded {frame.shape[0]} observations and {frame.shape[1]} columns.")
+print("Source file:", DATA_FILE.name)
+```
+
+**Output**
+
+```text
+Loaded 360 observations and 8 columns.
+Source file: marketing_campaigns.csv
+```
+
+**Interpretation and reasoning**
+
+The 360 rows are campaign observations, not 360 customers or 360 days. `shape` returns the table dimensions. In the existing script, `Path(__file__).resolve().with_name(...)` locates the CSV beside `app.py`. A notebook normally has no `__file__`, so this teaching cell deliberately uses its current project folder. The alias `pd` shortens the name pandas; it does not alter library behavior.
+
+### Cell 02 - Inspect real records and understand their grain
+
+**Question:** What exactly does one row represent?
+
+<!-- cell:analysis:02 -->
+
+```python
+# Display the first five source observations without the internal row index.
+print(frame.head(5).to_string(index=False))
+```
+
+**Output**
+
+```text
+      date channel campaign  impressions  clicks  conversions   spend  revenue
+2025-01-01  Search Seasonal        14074     984           96 6793.68 94378.06
+2025-01-01  Social   Launch        17118     501           33 2065.35 14977.08
+2025-01-01   Email Seasonal         9956     254           26 1385.10 23334.97
+2025-01-01 Display   Launch         5478     369           17 1610.06 15077.95
+2025-01-02  Search Seasonal         3926     132            4 1062.78  1864.03
+```
+
+**Interpretation and reasoning**
+
+One row is one channel/campaign observation for one day. The same date, channel and campaign label can appear repeatedly across the file's combinations. Impressions and clicks are events, not unique people. Conversions are attributed events, not verified first-time customer acquisitions. Spend and revenue are INR amounts already recorded in the source. Unlike the retail project, this app does not calculate revenue from quantity and price.
+
+### Cell 03 - Parse dates and explicitly require numeric measures
+
+**Question:** Why do types matter before calculating a rate?
+
+<!-- cell:analysis:03 -->
+
+```python
+print("Date type before conversion:", frame["date"].dtype)
+
+# Parsed dates support chronological comparison and date grouping.
+frame["date"] = pd.to_datetime(frame["date"], errors="raise")
+numeric_columns = ["impressions", "clicks", "conversions", "spend", "revenue"]
+for column in numeric_columns:
+    # Invalid text raises an error instead of silently turning into a zero.
+    frame[column] = pd.to_numeric(frame[column], errors="raise")
+
+print("\nTypes after conversion:")
+print(frame.dtypes.to_string())
+```
+
+**Output**
+
+```text
+Date type before conversion: object
+
+Types after conversion:
+date           datetime64[ns]
+channel                object
+campaign               object
+impressions             int64
+clicks                  int64
+conversions             int64
+spend                 float64
+revenue               float64
+```
+
+**Interpretation and reasoning**
+
+`frame['clicks']` is a Series; assigning its converted version back replaces that column's representation. Counts and money must support arithmetic, and dates must support date operations. Parsing only checks whether values can be represented in those types. It does not enforce nonnegative whole counts, finite amounts or consistent attribution definitions. The source catches loading/conversion failures and shows a Streamlit error; a notebook normally displays the Python exception directly.
+
+### Cell 04 - Validate required inputs and inspect quality
+
+**Question:** Are the essential columns present, and might observations be counted twice?
+
+<!-- cell:analysis:04 -->
+
+```python
+required_columns = ["date", "channel", "campaign", "impressions",
+                    "clicks", "conversions", "spend", "revenue"]
+if not set(required_columns).issubset(frame.columns):
+    raise ValueError("The CSV is missing required columns.")
+if frame.empty:
+    raise ValueError("The CSV contains no observations.")
+if frame[required_columns].isna().any().any():
+    raise ValueError("Fill missing required analysis values first.")
+
+# Summarize the whole loaded source, not a later filtered subset.
+quality = pd.DataFrame({
+    "column": frame.columns,
+    "type": frame.dtypes.astype(str).values,
+    "missing": frame.isna().sum().values,
+})
+print(quality.to_string(index=False))
+print("Exact duplicate rows:", int(frame.duplicated().sum()))
+print("Repeated date/channel/campaign combinations:",
+      int(frame.duplicated(["date", "channel", "campaign"]).sum()))
+```
+
+**Output**
+
+```text
+     column           type  missing
+       date datetime64[ns]        0
+    channel         object        0
+   campaign         object        0
+impressions          int64        0
+     clicks          int64        0
+conversions          int64        0
+      spend        float64        0
+    revenue        float64        0
+Exact duplicate rows: 0
+Repeated date/channel/campaign combinations: 0
+```
+
+**Interpretation and reasoning**
+
+The first `.any()` reduces missingness by column; the second asks whether any required field contains a missing value. The bundled data passes. The repeated-combination check is an extra teaching inspection: the existing app reports exact duplicates but does not enforce a unique date/channel/campaign key. It also does not remove duplicate observations automatically. A complete, parseable row can still be wrong, duplicated in business meaning or measured under a different attribution window.
+
+### Cell 05 - Check the date coverage and what repeats
+
+**Question:** Does a daily observation represent an entire company's daily budget?
+
+<!-- cell:analysis:05 -->
+
+```python
+print("Observed dates:", frame["date"].min().date(), "to", frame["date"].max().date())
+print("Distinct dates:", frame["date"].nunique())
+
+# Count observations by channel and campaign, rather than counting customers.
+print("\nObservations by channel:")
+print(frame.groupby("channel").size().rename("observations").to_string())
+print("\nObservations by campaign label:")
+print(frame.groupby("campaign").size().rename("observations").to_string())
+
+daily_counts = frame.groupby("date").size()
+print("\nMinimum/maximum observations per date:", daily_counts.min(), daily_counts.max())
+```
+
+**Output**
+
+```text
+Observed dates: 2025-01-01 to 2025-03-31
+Distinct dates: 90
+
+Observations by channel:
+channel
+Display    90
+Email      90
+Search     90
+Social     90
+
+Observations by campaign label:
+campaign
+Always on    121
+Launch       100
+Seasonal     139
+
+Minimum/maximum observations per date: 4 4
+```
+
+**Interpretation and reasoning**
+
+This file has four channel observations per date over 90 dates, January-March 2025. One raw row is therefore not a complete company-day total. A histogram of raw spend answers a different question from a line chart of spend summed by date. Campaign labels are repeated categories, not unique customer identities. These counts describe the bundled file; the code does not promise another CSV will have exactly four observations every day.
+
+## Part 2 - Filter and calculate weighted marketing metrics
+
+### Cell 06 - Turn channel, campaign and date choices into selected rows
+
+**Question:** How do filter choices control the numbers that follow?
+
+<!-- cell:analysis:06 -->
+
+```python
+# Use the source app's default: all channels, all campaigns, full observed dates.
+selected_channels = sorted(frame["channel"].unique())
+selected_campaigns = sorted(frame["campaign"].unique())
+dates = (frame["date"].min().date(), frame["date"].max().date())
+
+filtered = frame.copy()
+filtered = filtered[filtered["channel"].isin(selected_channels)]
+filtered = filtered[filtered["campaign"].isin(selected_campaigns)]
+filtered = filtered[filtered["date"].dt.date.between(dates[0], dates[1])]
+if filtered.empty:
+    raise ValueError("No observations match this selection.")
+
+print(f"Selected {len(filtered)} of {len(frame)} observations.")
+print(f"Requested dates: {dates[0]} to {dates[1]} (inclusive)")
+
+# Show a real narrower mask without changing the main analysis population.
+search_mask = frame["channel"].isin(["Search"])
+print("Rows a Search-only selection would keep:", int(search_mask.sum()))
+```
+
+**Output**
+
+```text
+Selected 360 of 360 observations.
+Requested dates: 2025-01-01 to 2025-03-31 (inclusive)
+Rows a Search-only selection would keep: 90
+```
+
+**Interpretation and reasoning**
+
+`.isin()` returns one Boolean per row and the outer brackets keep the True rows. Each successive filter narrows the current selection, so the conditions combine as AND. The date interval is inclusive. The main tutorial retains all default observations so the generated results match the original app's initial view. The Search mask is a separate demonstration. In the app, controls read their available labels from full `frame`; a combination with no records triggers a helpful stop rather than a misleading empty ranking.
+
+### Cell 07 - Add the selected funnel counts and monetary amounts
+
+**Question:** What activity and money do the selected records represent?
+
+<!-- cell:analysis:07 -->
+
+```python
+# Sum additive quantities first. Each total covers exactly the selected rows.
+impressions = filtered["impressions"].sum()
+clicks = filtered["clicks"].sum()
+conversions = filtered["conversions"].sum()
+spend = filtered["spend"].sum()
+revenue = filtered["revenue"].sum()
+
+print(f"Impressions: {impressions:,}")
+print(f"Clicks: {clicks:,}")
+print(f"Conversions: {conversions:,}")
+print(f"Ad spend: INR {spend:,.2f}")
+print(f"Attributed revenue: INR {revenue:,.2f}")
+```
+
+**Output**
+
+```text
+Impressions: 3,484,268
+Clicks: 146,788
+Conversions: 11,634
+Ad spend: INR 2,431,713.93
+Attributed revenue: INR 8,338,864.84
+```
+
+**Interpretation and reasoning**
+
+These totals are the numerators and denominators for the next step. A total spend answers 'how much cost in this selection?', not 'how efficient was it?'. More days or more selected channels can produce larger totals without better performance. Revenue is already attributed by the dataset; the app does not reconstruct individual transactions or determine whether the advertisement caused them.
+
+### Cell 08 - Calculate CTR, conversion rate, CPA and ROAS
+
+**Question:** Which denominator answers each business question?
+
+<!-- cell:analysis:08 -->
+
+```python
+def ratio(numerator, denominator):
+    # Match the source helper: zero denominators use a scalar fallback.
+    return numerator / denominator if denominator else 0.0
+
+ctr = ratio(clicks, impressions)         # Clicks per ad display.
+conversion_rate = ratio(conversions, clicks)  # Conversions per recorded click.
+roas = ratio(revenue, spend)             # Attributed revenue per INR ad spend.
+cpa = ratio(spend, conversions)         # INR ad spend per attributed conversion.
+
+print(f"Click-through rate: {ctr:.2%}")
+print(f"Click-to-conversion rate: {conversion_rate:.2%}")
+print(f"ROAS: {roas:.2f}x")
+print(f"Cost per attributed conversion: INR {cpa:,.2f}" if conversions else "CPA: N/A")
+```
+
+**Output**
+
+```text
+Click-through rate: 4.21%
+Click-to-conversion rate: 7.93%
+ROAS: 3.43x
+Cost per attributed conversion: INR 209.02
+```
+
+**Interpretation and reasoning**
+
+CTR normalizes clicks by impressions; conversion rate normalizes conversions by clicks. They describe different funnel stages. ROAS is a multiple: 3.43x means about INR 3.43 attributed revenue per INR 1 of advertising spend, not INR 3.43 profit. CPA uses conversion events, so it is not proven distinct-new-customer acquisition cost. `:.2%` turns a fraction into a percentage for display; the `x` suffix is a ratio label. The source gives CPA an explicit N/A display when there are no conversions; other helper-based rates may display a fallback zero for an undefined denominator.
+
+### Cell 09 - Prove why averaging observation percentages gives a different answer
+
+**Question:** Why does the existing app calculate ratios from summed inputs?
+
+<!-- cell:analysis:09 -->
+
+```python
+# This extra inspection calculates individual-observation rates for teaching.
+row_roas = filtered["revenue"].div(filtered["spend"].replace(0, float("nan")))
+row_cvr = filtered["conversions"].div(filtered["clicks"].replace(0, float("nan")))
+
+# Correct weights follow the denominator: spend for ROAS, clicks for conversion rate.
+weighted_roas = (row_roas * filtered["spend"] / spend).sum()
+weighted_cvr = (row_cvr * filtered["clicks"] / clicks).sum()
+
+print(f"Unweighted mean of observation ROAS: {row_roas.mean():.4f}x")
+print(f"Spend-weighted observation ROAS:     {weighted_roas:.4f}x")
+print(f"Total revenue / total spend:        {roas:.4f}x")
+print()
+print(f"Unweighted mean observation conversion rate: {row_cvr.mean():.4%}")
+print(f"Click-weighted observation conversion rate:  {weighted_cvr:.4%}")
+print(f"Total conversions / total clicks:           {conversion_rate:.4%}")
+```
+
+**Output**
+
+```text
+Unweighted mean of observation ROAS: 4.3989x
+Spend-weighted observation ROAS:     3.4292x
+Total revenue / total spend:        3.4292x
+
+Unweighted mean observation conversion rate: 7.8352%
+Click-weighted observation conversion rate:  7.9257%
+Total conversions / total clicks:           7.9257%
+```
+
+**Interpretation and reasoning**
+
+A tiny observation should not receive equal influence to a large one when the question is overall return per rupee or conversion per click. In the bundled positive-denominator data, weighting each observation's rate by its denominator produces the same result as dividing totals. The simple average answers the average rate of an equally chosen observation, a different question. The source directly divides totals rather than creating these row-rate columns. This demonstration uses the real CSV and does not add fields to `filtered`.
+
+### Cell 10 - Trace the first actual observation by hand
+
+**Question:** Can we connect a displayed rate to concrete source numbers?
+
+<!-- cell:analysis:10 -->
+
+```python
+# iloc[0] retrieves one source observation by its row position.
+observation = filtered.iloc[0]
+print(f"{observation['date']:%Y-%m-%d} | {observation['channel']} | {observation['campaign']}")
+print(f"CTR = {observation['clicks']} / {observation['impressions']} = "
+      f"{ratio(observation['clicks'], observation['impressions']):.2%}")
+print(f"Conversion rate = {observation['conversions']} / {observation['clicks']} = "
+      f"{ratio(observation['conversions'], observation['clicks']):.2%}")
+print(f"CPA = INR {observation['spend']:.2f} / {observation['conversions']} = "
+      f"INR {ratio(observation['spend'], observation['conversions']):.2f}")
+print(f"ROAS = INR {observation['revenue']:.2f} / INR {observation['spend']:.2f} = "
+      f"{ratio(observation['revenue'], observation['spend']):.2f}x")
+```
+
+**Output**
+
+```text
+2025-01-01 | Search | Seasonal
+CTR = 984 / 14074 = 6.99%
+Conversion rate = 96 / 984 = 9.76%
+CPA = INR 6793.68 / 96 = INR 70.77
+ROAS = INR 94378.06 / INR 6793.68 = 13.89x
+```
+
+**Interpretation and reasoning**
+
+These are rates calculated for the real first row, not the overall campaign results. Its high ROAS does not imply every Search observation or the entire selected business has that ratio. This check makes the numerator, denominator and units explicit. It also shows why moving from one observation to many requires aggregation rather than repeating one attractive example as a conclusion.
+
+## Part 3 - Compare channels, campaigns and dates
+
+### Cell 11 - Compare channel efficiency with conversion volume
+
+**Question:** Is the most efficient channel also the one with the most outcomes?
+
+<!-- cell:analysis:11 -->
+
+```python
+# Aggregate inputs by channel before deriving a channel-level ROAS.
+channel_summary = filtered.groupby("channel")[[
+    "spend", "revenue", "clicks", "impressions", "conversions"
+]].sum()
+channel_summary["roas"] = channel_summary["revenue"].div(
+    channel_summary["spend"].replace(0, float("nan"))
+)
+
+# idxmax returns the channel label at the maximum value.
+best_channel = channel_summary["roas"].idxmax()
+volume_channel = channel_summary["conversions"].idxmax()
+print(channel_summary.round(2).to_string())
+print(f"\nROAS leader: {best_channel}")
+print(f"Conversion-volume leader: {volume_channel}")
+```
+
+**Output**
+
+```text
+             spend     revenue  clicks  impressions  conversions  roas
+channel
+Display  645963.35  2580802.82   39282       898879         3391  4.00
+Email    627985.17  1979780.89   37068       927359         2837  3.15
+Search   558090.56  1883842.10   34242       784361         2701  3.38
+Social   599674.85  1894439.03   36196       873669         2705  3.16
+
+ROAS leader: Display
+Conversion-volume leader: Display
+```
+
+**Interpretation and reasoning**
+
+The two leader calculations answer different questions even when they return the same label. Here Display leads both aggregate attributed ROAS and conversion count. Its exact ratio is about 3.9953, displayed as 4.00x after rounding. Inspect spend and outcome volume alongside the ratio; a high return at low scale may not persist after increasing the budget. If all selected group spends were zero, every grouped ROAS could be NaN and the original leader lookup would need an additional guard.
+
+### Cell 12 - Inspect campaign labels as another comparison
+
+**Question:** Could campaign mix be part of the explanation for channel differences?
+
+<!-- cell:analysis:12 -->
+
+```python
+# Teaching extension: the source has a campaign filter but no identical campaign table.
+campaign_summary = filtered.groupby("campaign").agg(
+    observations=("campaign", "size"),
+    spend=("spend", "sum"), revenue=("revenue", "sum"),
+    clicks=("clicks", "sum"), conversions=("conversions", "sum"),
+)
+campaign_summary["ROAS"] = campaign_summary["revenue"] / campaign_summary["spend"]
+campaign_summary["conversion_pct"] = 100 * campaign_summary["conversions"] / campaign_summary["clicks"]
+print(campaign_summary.round(2).to_string())
+```
+
+**Output**
+
+```text
+           observations      spend     revenue  clicks  conversions  ROAS  conversion_pct
+campaign
+Always on           121  743289.32  2428760.16   45882         3552  3.27            7.74
+Launch              100  774718.80  2846445.09   45615         3942  3.67            8.64
+Seasonal            139  913705.81  3063659.59   55291         4140  3.35            7.49
+```
+
+**Interpretation and reasoning**
+
+Named aggregation declares the output name, source field and operation for each summary column. This additional table groups across channels by campaign label, so its meaning differs from the channel table. It motivates a more specific channel/campaign comparison but does not isolate a causal campaign effect. The direct divisions here rely on the positive denominators observed in the bundled file; a reusable extension should explicitly handle zero denominators as the channel code does.
+
+### Cell 13 - Aggregate observations into daily amounts
+
+**Question:** What should one point in the daily trend represent?
+
+<!-- cell:analysis:13 -->
+
+```python
+# Several observations can share a date, so add their spend and revenue first.
+daily = filtered.groupby("date", as_index=False)[["spend", "revenue"]].sum()
+print(daily.head(7).round(2).to_string(index=False))
+print(f"\nDaily groups in the full table: {len(daily)}")
+```
+
+**Output**
+
+```text
+      date    spend   revenue
+2025-01-01 11854.19 147768.06
+2025-01-02 18241.43  29998.24
+2025-01-03 17714.27  85533.84
+2025-01-04 12564.29  53415.72
+2025-01-05 30231.68  82825.45
+2025-01-06 15520.55  70995.39
+2025-01-07 19200.18 108210.16
+
+Daily groups in the full table: 90
+```
+
+**Interpretation and reasoning**
+
+`as_index=False` keeps the grouping date as a regular column that Plotly can address by name. Each resulting row is a date's selected total across its channel/campaign observations. The displayed output is the first seven daily rows; `daily` contains all 90. Plotting raw observations as if each were a complete company-day amount would mix grains. The code does not insert dates absent from the selection or estimate conversion lag.
+
+## Part 4 - Create all five visual outputs
+
+### Cell 14 - Plot daily spend and attributed revenue
+
+**Question:** Were high-revenue dates also high-spend dates?
+
+<!-- cell:analysis:14 -->
+
+```python
+# A list of two y columns produces two named lines on the same value axis.
+fig = px.line(
+    daily, x="date", y=["spend", "revenue"],
+    title="Daily spend and attributed revenue", labels={"value": "INR"},
+)
+fig
+```
+
+**Output**
+
+![Plot daily spend and attributed revenue](tutorial_assets/01_daily_spend_revenue.png)
+
+**Interpretation and reasoning**
+
+Both lines are monetary totals in INR. Their difference is not net profit because product/service costs and other expenses are missing. Attributed sales may reflect a delay or an attribution rule the CSV does not explain. The chart reveals timing and scale to investigate; it does not prove that a higher spend caused that day's revenue. Hover in the interactive version supplies the exact grouped values.
+
+### Cell 15 - Plot aggregate channel ROAS with scale in hover details
+
+**Question:** Which selected channel reports the highest efficiency, and at what scale?
+
+<!-- cell:analysis:15 -->
+
+```python
+# Reset the channel index into a normal column for Plotly's x argument.
+channels = channel_summary.reset_index().rename(columns={"roas": "ROAS"})
+channels["CTR_pct"] = 100 * channels["clicks"].div(
+    channels["impressions"].replace(0, float("nan"))
+)
+print(channels[["channel", "ROAS", "spend", "conversions", "CTR_pct"]]
+      .round(2).to_string(index=False))
+
+fig = px.bar(
+    channels, x="channel", y="ROAS", color="channel",
+    title="Return per rupee spent", hover_data=["spend", "conversions", "CTR_pct"],
+)
+fig
+```
+
+**Output**
+
+```text
+channel  ROAS     spend  conversions  CTR_pct
+Display  4.00 645963.35         3391     4.37
+  Email  3.15 627985.17         2837     4.00
+ Search  3.38 558090.56         2701     4.37
+ Social  3.16 599674.85         2705     4.14
+```
+
+![Plot aggregate channel ROAS with scale in hover details](tutorial_assets/02_channel_roas.png)
+
+**Interpretation and reasoning**
+
+The bar height is a multiple, not an INR amount. The supporting table and live hover data keep spend and conversion scale visible. `CTR_pct` is already multiplied by 100, so a value near 4 means about 4%, while the earlier `ctr` variable is a fraction near 0.04. Formatting an already-multiplied value with Python's `%` format would multiply it again. The original app creates a separate grouped `channels` table with the same information; it does not add these ratios to each selected source row.
+
+### Cell 16 - Plot the distribution of spend per observation
+
+**Question:** Is the budget spread evenly or concentrated in large observations?
+
+<!-- cell:analysis:16 -->
+
+```python
+fig, ax = plt.subplots(figsize=(8, 4.5))
+# Use raw selected observation spend, not the daily aggregate table.
+ax.hist(filtered["spend"], bins=20, color="#7c3aed", edgecolor="white")
+ax.set(title="Daily observation spend", xlabel="Spend (INR)", ylabel="Observations")
+fig
+```
+
+**Output**
+
+![Plot the distribution of spend per observation](tutorial_assets/03_observation_spend_histogram.png)
+
+**Interpretation and reasoning**
+
+Each bin counts channel/campaign-day records whose spend falls in a monetary range. It is not a count of customers or complete daily company budgets. The right tail helps explain why an average can differ from the median. Twenty bins is a chosen setting; changing it changes the appearance, not the source totals. The app renders the figure with `st.pyplot(fig)` and closes the Matplotlib handle afterward to avoid retaining figures across reruns.
+
+### Cell 17 - Compare conversion-count distributions by channel
+
+**Question:** Which channel tends to bring more conversions per observation, and how variable is that count?
+
+<!-- cell:analysis:17 -->
+
+```python
+fig, ax = plt.subplots(figsize=(8, 4.5))
+# Seaborn summarizes individual observations within each channel.
+sns.boxplot(data=filtered, x="channel", y="conversions", ax=ax, color="#ddd6fe")
+ax.set_title("Conversion distribution by channel")
+fig
+```
+
+**Output**
+
+![Compare conversion-count distributions by channel](tutorial_assets/04_channel_conversion_boxplot.png)
+
+**Interpretation and reasoning**
+
+The middle line is the median, the box spans the middle 50%, and default whiskers extend to observations within the 1.5-interquartile-range rule. Points beyond are observations to inspect, not automatically invalid records. The y-axis contains conversion counts, not conversion percentages. A channel may have larger counts because it received more spend or traffic. A taller box therefore does not by itself prove greater efficiency; also compare selected sample sizes.
+
+### Cell 18 - Inspect individual spend and revenue observations
+
+**Question:** Which observations combine meaningful outcome volume with strong attributed revenue?
+
+<!-- cell:analysis:18 -->
+
+```python
+# Each point remains one selected source observation; no grouping is applied.
+fig = px.scatter(
+    filtered, x="spend", y="revenue", color="channel", size="conversions",
+    hover_data=["campaign", "date"],
+    title="Spend versus revenue: hover to investigate",
+)
+fig
+```
+
+**Output**
+
+![Inspect individual spend and revenue observations](tutorial_assets/05_spend_revenue_scatter.png)
+
+**Interpretation and reasoning**
+
+Position encodes spend and revenue, color identifies channel, and marker size represents conversion count. A point in the upper right is large in both cost and revenue; it is not necessarily best in revenue per rupee. A larger marker means more conversions, not a higher conversion rate. The app fits no regression line and computes no correlation coefficient for this view. Budget choice, audience differences and attribution rules can explain associations, so the plot cannot estimate the causal effect of an extra rupee of spend.
+
+## Part 5 - Inspect, explain and export results
+
+### Cell 19 - Inspect the numeric summary and unusually large spend
+
+**Question:** Which records should we investigate when the distribution has a long tail?
+
+<!-- cell:analysis:19 -->
+
+```python
+print(filtered.select_dtypes(include="number").describe().round(2).to_string())
+
+# An extra inspection preserves rows instead of removing 'outliers' automatically.
+largest = filtered.nlargest(3, "spend")
+print("\nThree largest observation spends:")
+print(largest[["date", "channel", "campaign", "spend", "revenue", "conversions"]]
+      .to_string(index=False))
+print(f"\nMedian observation spend: INR {filtered['spend'].median():,.2f}")
+```
+
+**Output**
+
+```text
+       impressions   clicks  conversions     spend    revenue
+count       360.00   360.00       360.00    360.00     360.00
+mean       9678.52   407.74        32.32   6754.76   23163.51
+std        4498.77   272.87        26.57   5929.25   21818.73
+min        1860.00    38.00         1.00    309.95     987.40
+25%        5745.75   185.00        12.75   2652.34    8516.98
+50%        9484.50   347.50        25.50   5031.50   16932.96
+75%       13353.00   572.00        46.00   8773.02   29078.45
+max       17845.00  1250.00       156.00  33200.45  140207.56
+
+Three largest observation spends:
+      date channel campaign    spend   revenue  conversions
+2025-02-25  Social Seasonal 33200.45  38469.59           36
+2025-02-07 Display   Launch 30356.72 140207.56          140
+2025-02-06   Email   Launch 30223.57  34902.47           52
+
+Median observation spend: INR 5,031.51
+```
+
+**Interpretation and reasoning**
+
+`describe()` reports count, mean, standard deviation, extremes and quartiles; its 50% row is the median. Counts and monetary amounts have different units, so their spreads are not directly comparable. The three-largest-spend table is an additional inspection using actual selected rows. It does not remove those rows or claim they are errors. The median is per observation, not median total company-day spend.
+
+### Cell 20 - Observe empty selections and undefined ratios
+
+**Question:** When is zero a programming fallback rather than a meaningful business rate?
+
+<!-- cell:analysis:20 -->
+
+```python
+no_channels = frame[frame["channel"].isin([])]
+print("Observations after selecting no channels:", len(no_channels))
+
+# These explicit edge-case values are separate from the bundled CSV.
+print("Scalar ratio(100, 0) fallback:", ratio(100, 0))
+example_conversions = 0
+example_spend = 100
+print("CPA display with no conversions:",
+      f"{ratio(example_spend, example_conversions):.2f}" if example_conversions else "N/A")
+undefined_roas = pd.Series([100.0]).div(pd.Series([0.0]).replace(0, float("nan")))
+print("Grouped ROAS with zero spend:", undefined_roas.iloc[0])
+```
+
+**Output**
+
+```text
+Observations after selecting no channels: 0
+Scalar ratio(100, 0) fallback: 0.0
+CPA display with no conversions: N/A
+Grouped ROAS with zero spend: nan
+```
+
+**Interpretation and reasoning**
+
+The source stops an empty selection. Its scalar helper returns zero for a zero denominator, but mathematically those rates are undefined. CPA explicitly shows N/A when conversion count is zero, avoiding the implication of free acquisition. Grouped rates use NaN. If all groups have undefined ROAS, the original `idxmax()`/leader-text path is unguarded. With zero conversions across all groups, a named volume leader can simply be the first member of a zero-valued tie.
+
+### Cell 21 - Describe the exact analysis scope
+
+**Question:** What does a rate or leader statement actually refer to?
+
+<!-- cell:analysis:21 -->
+
+```python
+scope_parts = []
+# Low-cardinality labels make useful report context without long ID lists.
+for column in frame.select_dtypes(include="object").columns:
+    if frame[column].nunique() <= 12:
+        labels = ", ".join(map(str, sorted(filtered[column].unique())))
+        scope_parts.append(column.replace("_", " ") + ": " + labels)
+scope_parts.append(
+    f"Observed records: {filtered['date'].min():%Y-%m-%d} "
+    f"to {filtered['date'].max():%Y-%m-%d}"
+)
+scope_parts.append(f"Requested dates: {dates[0]} to {dates[1]} (inclusive)")
+scope = "; ".join(scope_parts)
+print(scope)
+```
+
+**Output**
+
+```text
+channel: Display, Email, Search, Social; campaign: Always on, Launch, Seasonal; Observed records: 2025-01-01 to 2025-03-31; Requested dates: 2025-01-01 to 2025-03-31 (inclusive)
+```
+
+**Interpretation and reasoning**
+
+A reported ratio needs its channels, campaigns and period. This follows the original app's scope pattern. Requested dates describe the control; observed dates describe the rows that survived. They can differ if a selected boundary has no observation. This text is useful context, but it is not a copy of the source dataset or a complete serialized record that guarantees identical results after the CSV is edited.
+
+### Cell 22 - Generate answer sentences from calculated values
+
+**Question:** How does the report update its conclusions when a filter changes?
+
+<!-- cell:analysis:22 -->
+
+```python
+# Reuse measured variables instead of manually typing results into prose.
+insights = [
+    ("What attributed return is represented?",
+     f"INR {spend:,.2f} spend and INR {revenue:,.2f} revenue produce {roas:.2f}x ROAS."),
+    ("How well does traffic convert?",
+     f"{impressions:,} impressions, {clicks:,} clicks and {conversions:,} conversions; "
+     f"CTR {ctr:.2%}, conversion rate {conversion_rate:.2%}."),
+    ("Which channel leads reported efficiency?",
+     f"{best_channel}: {channel_summary.loc[best_channel, 'roas']:.2f}x ROAS on "
+     f"INR {channel_summary.loc[best_channel, 'spend']:,.2f} spend."),
+    ("Which channel leads conversion volume?",
+     f"{volume_channel}: {channel_summary.loc[volume_channel, 'conversions']:,.0f} conversions."),
+    ("What is each attributed conversion costing?",
+     f"INR {cpa:,.2f}." if conversions else "Undefined because there are no conversions."),
+    ("How concentrated is observation spend?",
+     f"Median INR {filtered['spend'].median():,.2f}; maximum INR {filtered['spend'].max():,.2f}."),
+]
+for question, answer in insights:
+    print(question)
+    print(answer)
+    print()
+```
+
+**Output**
+
+```text
+What attributed return is represented?
+INR 2,431,713.93 spend and INR 8,338,864.84 revenue produce 3.43x ROAS.
+
+How well does traffic convert?
+3,484,268 impressions, 146,788 clicks and 11,634 conversions; CTR 4.21%, conversion rate 7.93%.
+
+Which channel leads reported efficiency?
+Display: 4.00x ROAS on INR 645,963.35 spend.
+
+Which channel leads conversion volume?
+Display: 3,391 conversions.
+
+What is each attributed conversion costing?
+INR 209.02.
+
+How concentrated is observation spend?
+Median INR 5,031.51; maximum INR 33,200.45.
+```
+
+**Interpretation and reasoning**
+
+F-strings interpolate computed values into fixed explanatory sentences. `.loc[channel, field]` retrieves the relevant grouped value by label. These shorter teaching sentences use the same facts as the source's fuller insights, which add cautions about attribution and scope. The original displays the first three in its short summary and all six in its report. There is no AI request here and no need for an API key. A leader label must still be interpreted with sample size, scale and possible ties.
+
+### Cell 23 - Keep field meanings alongside the calculations
+
+**Question:** How can another reader interpret the same column names correctly?
+
+<!-- cell:analysis:23 -->
+
+```python
+# Map source field names to business meanings so each result retains its units and row grain.
+field_guide = {
+    "date": "One observation date",
+    "channel": "Channel receiving attributed results",
+    "campaign": "Campaign label within the observations",
+    "impressions": "Ad-display events, not unique people",
+    "clicks": "Recorded clicks, not unique visitors",
+    "conversions": "Attributed conversion events",
+    "spend": "Advertising cost in INR",
+    "revenue": "Attributed sales in INR, not profit or proven incrementality",
+}
+print(pd.DataFrame(field_guide.items(), columns=["Field", "Meaning"]).to_string(index=False))
+```
+
+**Output**
+
+```text
+      Field                                                      Meaning
+       date                                         One observation date
+    channel                         Channel receiving attributed results
+   campaign                       Campaign label within the observations
+impressions                         Ad-display events, not unique people
+     clicks                         Recorded clicks, not unique visitors
+conversions                                 Attributed conversion events
+      spend                                      Advertising cost in INR
+    revenue Attributed sales in INR, not profit or proven incrementality
+```
+
+**Interpretation and reasoning**
+
+A dictionary maps exact source names to explanations; `.items()` supplies pairs that pandas can render as a table. The original stores and reuses these meanings in `FIELD_GUIDE`. For a real project, agree on the conversion event, currency and attribution window before trusting comparisons. A label such as `conversions` cannot reveal whether outcomes are purchases, registrations or leads without its data definition.
+
+### Cell 24 - Assemble a compact Markdown report
+
+**Question:** How does ordinary Python produce a Markdown report?
+
+<!-- cell:analysis:24 -->
+
+```python
+kpi_values = [
+    ("Ad spend (INR)", f"{spend:,.2f}"),
+    ("Attributed revenue (INR)", f"{revenue:,.2f}"),
+    ("ROAS", f"{roas:.2f}x"),
+    ("Cost per conversion (INR)", f"{cpa:,.2f}" if conversions else "N/A"),
+    ("Conversion rate", f"{conversion_rate:.2%}"),
+]
+report_parts = [
+    "# Marketing campaigns - teaching report",
+    "## Business question\nWhich channel/campaign combinations merit further investigation?",
+    "## Scope\n" + scope,
+    "## KPI results\n| Measure | Result |\n| --- | --- |\n"
+    + "\n".join(f"| {name} | {value} |" for name, value in kpi_values),
+    "## Questions answered\n"
+    + "\n\n".join(f"### {question}\n{answer}" for question, answer in insights),
+    "## Source fields\n| Field | Meaning |\n| --- | --- |\n"
+    + "\n".join(f"| {name} | {meaning} |" for name, meaning in field_guide.items()),
+    "## Limits\nFictional attributed observations. No customer deduplication, margin, "
+    "lifetime value or experiment assignment. ROAS is not profit or a causal effect.",
+]
+full_report = "\n\n".join(report_parts)
+
+# Show an executed excerpt while retaining the complete string for download.
+print("\n".join(full_report.splitlines()[:24]))
+print("\n[Preview ends; full_report contains the remaining sections.]")
+```
+
+**Output**
+
+```text
+# Marketing campaigns - teaching report
+
+## Business question
+Which channel/campaign combinations merit further investigation?
+
+## Scope
+channel: Display, Email, Search, Social; campaign: Always on, Launch, Seasonal; Observed records: 2025-01-01 to 2025-03-31; Requested dates: 2025-01-01 to 2025-03-31 (inclusive)
+
+## KPI results
+| Measure | Result |
+| --- | --- |
+| Ad spend (INR) | 2,431,713.93 |
+| Attributed revenue (INR) | 8,338,864.84 |
+| ROAS | 3.43x |
+| Cost per conversion (INR) | 209.02 |
+| Conversion rate | 7.93% |
+
+## Questions answered
+### What attributed return is represented?
+INR 2,431,713.93 spend and INR 8,338,864.84 revenue produce 3.43x ROAS.
+
+### How well does traffic convert?
+3,484,268 impressions, 146,788 clicks and 11,634 conversions; CTR 4.21%, conversion rate 7.93%.
+
+
+[Preview ends; full_report contains the remaining sections.]
+```
+
+**Interpretation and reasoning**
+
+The report is text assembled from lists, f-strings and `join()`. Newline characters create sections, and pipes create table columns. The output is an actual excerpt of this shorter teaching report. The existing app builds 12 sections, including all visual guides, quality information, recommendations and limitations, using the same technique. Its report contains five KPI rows because attributed revenue appears there even though the top row has only four cards. Its field dictionary is appended to list index 5, the KPI-results section because the report title occupies index zero.
+
+### Cell 25 - Preview the selected CSV export and distinguish it from the summary
+
+**Question:** Does the existing CSV download contain channel ROAS?
+
+<!-- cell:analysis:25 -->
+
+```python
+# Serialize selected source observations, excluding the pandas row index.
+csv_text = filtered.to_csv(index=False)
+print("\n".join(csv_text.splitlines()[:4]))
+print(f"\nFiltered export: {len(filtered)} rows x {len(filtered.columns)} columns")
+print("Filtered fields:", ", ".join(filtered.columns))
+print("Grouped table fields:", ", ".join(channels.columns))
+```
+
+**Output**
+
+```text
+date,channel,campaign,impressions,clicks,conversions,spend,revenue
+2025-01-01,Search,Seasonal,14074,984,96,6793.68,94378.06
+2025-01-01,Social,Launch,17118,501,33,2065.35,14977.08
+2025-01-01,Email,Seasonal,9956,254,26,1385.1,23334.97
+
+Filtered export: 360 rows x 8 columns
+Filtered fields: date, channel, campaign, impressions, clicks, conversions, spend, revenue
+Grouped table fields: channel, spend, revenue, clicks, impressions, conversions, ROAS, CTR_pct
+```
+
+**Interpretation and reasoning**
+
+No. `filtered` still has the eight source fields, whereas `ROAS` and `CTR_pct` belong to the separate grouped `channels` table. The first download row is one observation; a grouped-table row is one channel. A future download of `channels.to_csv(index=False)` would be a separate summary export. This cell creates text in memory and does not alter the original CSV. In Streamlit the button sends that text to the browser.
+
+## Part 6 - Build the separate Streamlit interface
+
+Pandas already answers the questions. Streamlit makes those answers usable by a reader who should not need to edit code to change the selection. Its widget calls return Python values that feed the filters; its display calls render values and figures already calculated by the analysis.
+
+Save the next **complete standalone cell** as `practice_app.py` beside `marketing_campaigns.csv`, then run:
 
 ```bash
-cd /home/coder/project/business_analytics_workshop/02_marketing_campaigns
-streamlit run app.py --server.port 8502
+python -m streamlit run practice_app.py
 ```
 
-The built-in dashboard uses port 8501, so forward/open 8502 for this separate instance. The project selector belongs to the surrounding workspace; this `app.py` remains an independent app. Existing student copies are preserved, so updating repository content does not automatically overwrite every older workspace copy.
+If the prepared Cloud Lab dashboard already uses port 8501, append `--server.port 8502` and open that forwarded port. Run the fuller existing project by using `app.py` instead of `practice_app.py` in the command.
 
-### 6.3 Baseline from all supplied observations
+A normal widget change reruns the script top to bottom. The current lists and date interval are returned by the widgets and reused in pandas masks. An incomplete date interval or empty selection stops before calculations. The CSV is deliberately read on every run; a saved file edit appears on the next rerun, not through a promised automatic CSV watcher.
 
-These results were independently recalculated from the bundled CSV with all channels, all campaign labels and the full available date interval. They describe teaching data, not real advertising results.
+The `with` blocks determine output placement, not data filtering. In Streamlit 1.50 all tab contents execute on a full rerun, even when hidden, and collapsing an expander does not make its code lazy. Table sorting, chart hover/zoom and switching tabs do not change the underlying analytical population in this app.
 
-| Measure | Full-selection value |
-| --- | ---: |
-| Observation count | 360 |
-| Date count | 90 |
-| Impressions | 3,484,268 |
-| Clicks | 146,788 |
-| Conversions | 11,634 |
-| Total ad spend | INR 2,431,713.93 |
-| Total attributed revenue | INR 8,338,864.84 |
-| Aggregate ROAS | 3.43x |
-| Spend per attributed conversion | INR 209.02 |
-| Click-to-conversion rate | 7.93% |
-| Click-through rate | 4.21% |
-| Median spend per observation | Approximately INR 5,031.51 |
-| Maximum spend per observation | INR 33,200.45 |
+This teaching reconstruction contains the same four metrics and five chart types but shorter explanatory text and a shorter report. Its explicit guard for entirely undefined channel ROAS is a labeled improvement; the original leader path does not contain it. Nothing here rewrites the existing app or dataset.
 
-The display cards round ad spend and CPA to whole INR and conversion rate to one decimal place. The report usually retains two decimals. These differences are formatting choices, not separate calculation methods. The app does not round every intermediate amount to paise before aggregating.
+### Cell 26 - Build the separate interactive marketing teaching app
 
-The channel comparison explains the default leader statements:
+**Question:** How can a reader explore the same calculations without editing Python?
 
-| Channel | Observations | Spend (INR) | Attributed revenue (INR) | Conversions | Aggregate ROAS |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Display | 90 | 645,963.35 | 2,580,802.82 | 3,391 | 4.00x |
-| Email | 90 | 627,985.17 | 1,979,780.89 | 2,837 | 3.15x |
-| Search | 90 | 558,090.56 | 1,883,842.10 | 2,701 | 3.38x |
-| Social | 90 | 599,674.85 | 1,894,439.03 | 2,705 | 3.16x |
-
-The leader's rounded 4.00x is about 3.9953 before formatting. Do not use rounded displayed values as the inputs to reproduce another calculation; use the source sums.
-
-You can check the key totals in a separate Python session without launching the interface. This **standalone verification example** assumes the current directory contains the CSV:
+<!-- cell:streamlit:26 -->
 
 ```python
+from pathlib import Path
 import pandas as pd
-
-observations = pd.read_csv("marketing_campaigns.csv")
-spend = observations["spend"].sum()
-revenue = observations["revenue"].sum()
-clicks = observations["clicks"].sum()
-conversions = observations["conversions"].sum()
-impressions = observations["impressions"].sum()
-print(f"Spend: {spend:,.2f}")
-print(f"Revenue: {revenue:,.2f}")
-print(f"ROAS: {revenue / spend:.2f}x")
-print(f"CPA: {spend / conversions:,.2f}")
-print(f"Conversion rate: {conversions / clicks:.2%}")
-print(f"CTR: {clicks / impressions:.2%}")
-```
-
-For a manual source-row check, the first observation is Search / Seasonal on 1 January 2025: 14,074 impressions, 984 clicks, 96 conversions, INR 6,793.68 spend and INR 94,378.06 attributed revenue. Its row CTR is approximately 6.99%, conversion rate 9.76%, CPA INR 70.77 and ROAS 13.89x. These row-level rates are a teaching calculation from the CSV; the existing app displays aggregate selected/grouped rates rather than creating those row columns.
-
-## 7. How to read the five charts
-
-### 7.1 Daily spend and attributed revenue
-
-The app first groups selected rows by date and sums spend and revenue. There can be several observations on a date, so plotting each raw row as though it were a complete daily total would be misleading. The grouped line chart shows one selected total per date for each of the two measures, both on an INR axis.
-
-This view answers whether periods of larger reported revenue coincide with larger spend. It does not show profit. It also does not match an advertisement to the future date of a customer's purchase or estimate conversion lag. The code neither inserts dates absent from the selected data nor normalizes totals by the number of observations on a date. Check scope before interpreting changes.
-
-### 7.2 Return per rupee by channel
-
-The bar chart uses channel totals to derive ROAS. Its y-axis is a ratio, not rupees: a height of 4 means four rupees of attributed revenue per rupee spent. Each channel has its own color. Hover exposes spend, conversions and `CTR_pct` so the reader can examine scale beside efficiency.
-
-A high bar with very little spend is not evidence that unlimited extra spending would retain the same return. Audiences, campaign mix, available reach and attribution practices can differ between groups. In this descriptive dataset the ratio is an observation, not an experimentally established response to increasing the budget.
-
-### 7.3 Observation spend distribution
-
-The histogram uses raw selected `spend` values, divided into 20 bins. Each bar counts **channel/campaign-day observations** whose spend lies in that bin. It is not a histogram of complete daily company budgets. For the supplied file, a typical day has four observations; aggregating to daily company spend first would answer a different question.
-
-Use this chart to ask whether most observations operate at similar scale or a few absorb much larger amounts. A long right tail would make a maximum or average less representative of an ordinary observation. The median in the generated insights supplies a useful comparison. Changing the bin count would change appearance, so investigate underlying rows before interpreting a visually isolated bin as an error.
-
-### 7.4 Conversion distribution by channel
-
-The Seaborn boxplot summarizes conversions per selected observation within each channel. The median line gives the distribution's center; the box covers its middle 50%; whiskers extend to observations within the default 1.5-interquartile-range rule; more distant points are drawn separately. The [official boxplot reference](https://seaborn.pydata.org/generated/seaborn.boxplot.html) documents these semantics.
-
-The vertical quantity is **count per observation**, not a conversion percentage. A channel can have more conversions because it receives more spend or more clicks. A higher box therefore does not automatically indicate greater efficiency. The chart also does not display sample size through box width. Check observation counts and the grouped totals before comparing how much evidence supports each distribution.
-
-### 7.5 Spend versus attributed revenue
-
-The scatter plot retains individual selected observations. Its x-axis is spend in INR, y-axis is attributed revenue in INR, color identifies channel and marker size represents conversions. Hover identifies the campaign and date, allowing the reader to trace an interesting point back to its row.
-
-The point's slope from the origin corresponds conceptually to revenue divided by spend, but the app does not draw a fitted regression line or compute a correlation coefficient here. A cluster farther to the upper right is larger in spend and revenue, not necessarily better in ROAS. Marker size provides conversion scale, but a larger marker does not mean a higher conversion rate.
-
-A spend/revenue association can arise because larger campaigns produce larger measured amounts, because successful campaigns receive larger budgets, or because of unobserved differences. This plot alone cannot establish that an extra rupee of spend causes a specific increase in revenue. That question needs a suitable design and additional evidence.
-
-## 8. Line-by-line walkthrough
-
-Refer to [app.py](app.py) alongside these tables. Numbers are source lines, not steps you must run manually. Groups of continued string literals are explained together because they form one textual value. Blank lines supply spacing; all nonblank lines are covered below.
-
-### 8.1 Imports and page configuration: lines 1-15
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 1 | The module docstring identifies this as the Marketing Campaign Lab and states its fictional teaching purpose. It is source documentation, not an automatic browser element. |
-| 2 | Imports `Path` from the standard-library `pathlib` module for script-relative dataset location. |
-| 4 | Imports Matplotlib's plotting interface as `plt` for figure/axes construction, the histogram and closing figures. |
-| 5 | Imports pandas as `pd` for reading and transforming tabular data. |
-| 6 | Imports Plotly Express as `px` for interactive line, bar and scatter figures. |
-| 7 | Imports Seaborn as `sns` for the conversion boxplot. |
-| 8 | Imports Streamlit as `st` for page controls and rendered content. |
-| 10 | Sets the browser page title, chart icon and wide layout using named arguments. |
-| 11 | Adds the visible Marketing Campaign Lab page title. |
-| 12 | Adds a smaller caption identifying the workshop, fictional data and INR currency. |
-| 13 | Displays the opening learning objective: compare reach, conversions and cost, and calculate campaign rates from totals. |
-| 15 | A comment introduces the business question and reading guidance stored below. Comments do not execute as calculations. |
-
-### 8.2 Case study and reusable explanation data: lines 16-77
-
-The uppercase variable names are a convention for reusable descriptive content; Python does not make them constant automatically. Adjacent string literals inside parentheses are concatenated into one string. Tuples keep related pieces of a definition or chart guide together.
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 16-17 | Builds `CASE`, describing limited advertising budget and the distinction between clicks, purchases and high return at small scale. |
-| 18-19 | Builds `DECISION`, framing the outcome as choosing combinations to investigate in controlled experiments, balancing return, cost and volume. |
-| 20-22 | Builds `DATA_CONTEXT`: one channel/campaign-day row, 360 fictional observations, 90 days, attributed revenue and no customer-level incrementality proof. This is static documentation, not a dynamically calculated row count. |
-| 23 | Starts `FORMULAS` and adds a three-item tuple explaining total ad spend. The strings document a formula; they do not compute the sum. |
-| 24-27 | Adds ROAS name, numerator/denominator description and the interpretation of revenue per rupee spent. Continued lines explicitly distinguish that from profit. |
-| 28-30 | Adds the CPA definition and the undefined-no-conversions case. |
-| 31-33 | Adds conversion-rate definition and the requirement to aggregate with click-based weighting. |
-| 34-36 | Adds CTR definition and its engagement interpretation, then closes the formulas list. |
-| 37-43 | Starts `VISUAL_GUIDE` with the daily line-chart tuple: title, purpose, axis/aggregation explanation, question and caution about attribution/lag. |
-| 44-50 | Adds the channel ROAS chart guide, including aggregate-rate logic, scale in hover information and limits on extrapolating a high ratio. |
-| 51-56 | Adds the spend histogram guide, identifying bins, observation counts and the channel/campaign-day grain. |
-| 57-62 | Adds the conversion boxplot guide, explaining median, quartiles, whiskers and the distinction between counts and efficiency. |
-| 63-69 | Adds the scatter guide, mapping x, y, color, size and hover, and warning that spend/revenue association does not prove a causal response. The final bracket closes all five guide entries. |
-| 70 | Starts `RECOMMENDATIONS` with the need to compare the ROAS leader and conversion-volume leader. |
-| 71-72 | Adds one continued string recommending a bounded holdout or randomized experiment with explicit limits and success criteria. This text does not run an experiment. |
-| 73-74 | Adds a continued string requesting margin, repeat-purchase value and attribution/lag information before setting acquisition-cost targets, then closes the list. |
-| 75-77 | Builds `LIMITATIONS`, describing missing customer deduplication, lifetime value, product margin, refunds and experimental assignment. |
-
-### 8.3 Context, field definitions and reusable chart captions: lines 79-102
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 79 | Opens the Business problem and context expander, initially expanded, and establishes the container for its indented commands. |
-| 80 | Displays a bold Markdown problem label plus the `CASE` string. |
-| 81 | Displays the intended decision context. |
-| 82 | Displays the row meaning and dataset context. |
-| 83 | Adds an informational notice separating fictional teaching findings from claims about real businesses. |
-| 84 | Displays a suggested reading sequence and tells the reader that filters recalculate the findings and report. |
-| 87 | Starts `FIELD_GUIDE` with the observation-date definition. |
-| 88 | Adds the channel definition. |
-| 89 | Adds the campaign-label definition. |
-| 90 | Defines impressions as ad displays, explicitly excluding a unique-person interpretation. |
-| 91 | Defines clicks as recorded events, explicitly excluding a unique-visitor interpretation. |
-| 92 | Defines conversions as attributed conversion events. |
-| 93 | Defines spend as advertising expense in INR. |
-| 94 | Defines revenue as attributed sales, not profit or proven incremental revenue, and closes the dictionary. |
-| 96 | Defines `explain_visual(index, container=st)`. The optional container allows the same function to render in the page or a left/right column. The body does not execute until called. |
-| 97 | Selects one five-item visual tuple by zero-based index and unpacks it into named parts. |
-| 98 | Renders a bold heading containing that visual's title using an f-string. |
-| 99 | Writes the purpose into the selected container. |
-| 100 | Displays the reading instructions with a Markdown label. |
-| 101 | Displays the corresponding business question. |
-| 102 | Displays the interpretation caution as a caption, keeping chart explanations consistent. |
-
-### 8.4 Loading, type checks and division helper: lines 104-126
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 104 | Comment introducing dataset location relative to the Python script. |
-| 105 | Comment explaining that loading is uncached so a later rerun reads the saved CSV again. |
-| 106 | Wraps `__file__` in `Path`, resolves an absolute path and replaces the script filename with `marketing_campaigns.csv`. The data remains beside the script regardless of the terminal's working directory. |
-| 107 | Starts a `try` block around loading and validation so expected errors can be displayed usefully. |
-| 108 | Parses the CSV into a DataFrame called `frame`; pandas infers initial types from file contents. |
-| 109 | Converts `date` into pandas datetime values and raises on invalid date parsing. This happens before the full schema check, so an absent date field becomes a caught `KeyError`. |
-| 110 | Lists the five numeric fields: three counts and two monetary amounts. |
-| 111 | Lists the full required eight-column schema. |
-| 112 | Checks whether every required name is present in the source columns. Extra columns are allowed because the test is a subset check. |
-| 113 | Raises `ValueError` if a required column is missing. |
-| 114 | Checks whether the table has no observations. Headers alone do not provide analyzable rows. |
-| 115 | Raises a clear empty-file error instead of continuing to minimum dates or rankings. |
-| 116 | Loops over each numeric column name. |
-| 117 | Converts that field to numeric values with errors raised for invalid text, and assigns the resulting Series back to the table. It does not enforce integer or nonnegative counts. |
-| 118 | Marks missing cells in required fields, uses `.any()` to reduce each column, then `.any()` again to ask whether any required field contains a missing cell. |
-| 119 | Raises an error asking the learner to fix missing analysis values rather than silently dropping affected observations. |
-| 120 | Catches file-system, value-conversion and key-lookup errors, exposing the exception as `error`. |
-| 121 | Displays the CSV name and error message with Streamlit's error element. |
-| 122 | Stops the current script run, preventing later use of invalid or unavailable source data. |
-| 124 | Defines `ratio()` for scalar numerator/denominator division used by cards and sentences. |
-| 125 | Documents the implementation's zero-denominator fallback. It is a programming safeguard, not a mathematical definition of an undefined rate. |
-| 126 | Returns the quotient for a truthy denominator and `0.0` otherwise. It handles numeric zero but is not a validator for NaN, infinity, negative amounts or impossible counts. |
-
-### 8.5 Filter the observation population: lines 128-143
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 128 | Comment establishing the order: apply controls before calculating any chart or KPI. |
-| 129 | Adds the sidebar filter heading. |
-| 130 | Copies the source table into `filtered`, retaining `frame` for source-quality reporting. |
-| 131 | Creates a channel multiselect from sorted distinct source channels, initially selecting all, and gives it a project-specific widget key. The return value is the currently selected list. |
-| 132 | Creates a Boolean membership mask with `.isin(selected_channel)` and retains only matching channel rows. |
-| 133 | Creates a campaign multiselect from full-source campaign labels, also initially selecting all. Its options do not automatically shrink to the preceding channel selection. |
-| 134 | Retains only observations whose campaign label is in the chosen list, combining this condition with the existing channel filter. |
-| 135 | Creates the date-range control using source min/max dates for its initial pair and limits. `.date()` converts pandas Timestamp boundaries to Python date objects. |
-| 136 | Checks that both dates are currently selected before reading two elements from the returned value. |
-| 137 | Displays a completion message if only part of the date interval exists. |
-| 138 | Stops the incomplete run, preventing an invalid interval lookup. |
-| 139 | Extracts each timestamp's date and uses `.between()` to keep both boundary dates and all dates between them. |
-| 140 | Displays how many source rows survived all filters, with thousands separators for readability. |
-| 141 | Checks whether the current selection has zero observations. |
-| 142 | Displays recovery guidance for an empty population. |
-| 143 | Stops before totals, group leaders and plots are calculated from empty data. |
-
-### 8.6 Totals, weighted rates and calculated insights: lines 145-168
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 145 | Comment introducing business measures and comparisons. This project derives aggregate rates rather than adding per-observation revenue. |
-| 146 | Sums selected advertising cost into the scalar `spend`. |
-| 147 | Sums already attributed source revenue into the scalar `revenue`. It does not estimate revenue from clicks. |
-| 148 | Sums conversion counts into `conversions`; the result is conversion events, not verified unique customers. |
-| 149 | Creates four horizontal containers for the metric cards. |
-| 150 | Displays total ad spend in the first container. `:,.0f` adds separators and rounds only the rendered string to whole INR. |
-| 151 | Displays total revenue divided by total spend with two decimals and an `x` suffix. Aggregating first avoids averaging observation ROAS values incorrectly. |
-| 152 | Displays spend per conversion with whole-INR formatting if conversions exist; otherwise displays `N/A` instead of the helper's zero fallback. |
-| 153 | Displays total conversions divided by total clicks as a percentage with one decimal place. It does not average observation conversion rates. |
-| 154 | Reminds readers of the observation grain, ROAS and conversion formulas, and the distinction between attributed return and profit. |
-| 155 | Groups by channel and sums spend, revenue, clicks, impressions and conversions. The channel labels form the result's index. |
-| 156 | Creates channel-level `roas` from summed revenue divided by summed spend, replacing zero spend with NaN so an undefined group rate is not represented as infinity. |
-| 157 | Finds the channel label at the maximum defined ROAS. `.idxmax()` returns a label; `.max()` would return the ratio itself. It assumes a defined group ratio exists. |
-| 158 | Finds the channel label with the greatest conversion count, which can differ from the efficiency leader. |
-| 159 | Calculates overall CTR from summed clicks and impressions. The result is a fraction until formatted for display. |
-| 160 | Starts a list of question/answer tuples to reuse in the screen summary and full report. |
-| 161 | Builds the spend/revenue/ROAS answer using calculated totals, then warns that attribution ratio is not profit. |
-| 162 | Builds the funnel answer from total impressions, clicks and conversions plus aggregate CTR and click-to-conversion rate. `:,` formats counts; `:.2%` formats fractions. |
-| 163 | Builds the efficiency-leader answer by using `.loc[best_channel, ...]` to fetch that channel's ratio and spend, keeping scale visible. |
-| 164 | Builds the conversion-volume-leader answer and its share of all selected conversions. The helper provides a fallback if the total conversion count is zero. |
-| 165 | Builds either a CPA sentence or an explicit undefined-CPA sentence using a conditional expression. Additional margin/lifetime-value context is requested rather than invented. |
-| 166 | Builds a spending-variability answer from the median and largest per-observation spend, not aggregated company-day spend. |
-| 167 | Closes the insights list. |
-| 168 | Creates five report KPI label/value pairs. Unlike the four cards, this list includes total attributed revenue explicitly; formatting usually uses two decimal places. |
-
-### 8.7 Scope and short answer display: lines 170-187
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 170 | Comment stating that the report should use the same filtered table as the charts. |
-| 171 | Creates an empty list for human-readable descriptions of the current scope. |
-| 172 | Iterates over source columns with dtype `object`, which includes ordinary text channel and campaign labels here. |
-| 173 | Restricts scope lists to fields having at most 12 distinct source values, avoiding unwieldy lists if high-cardinality fields are later added. |
-| 174 | Makes each field name readable, extracts/sorts distinct selected values, converts them to strings, joins them with commas and appends the resulting description. |
-| 175 | Iterates over datetime source columns, including the parsed observation date. |
-| 176 | Appends the earliest/latest selected observed dates using a year-month-day format. Observed bounds can differ from requested bounds if selected boundary dates contain no rows. |
-| 177 | Separately appends the actual requested inclusive date window from the control. |
-| 178 | Joins all scope descriptions with semicolons into one string. |
-| 180 | Opens the KPI-definitions expander. |
-| 181 | Converts `FORMULAS` tuples into a three-column DataFrame and renders it without the pandas row index. `width="stretch"` uses the available container width. |
-| 182 | States the shared-scope and summed-denominator rules and explains why zero-denominator display fallbacks need caution. |
-| 184 | Adds a heading for answers calculated from the selected observations. |
-| 185 | Loops over `insights[:3]`, which contains only the first three question/answer pairs. The other insights are still used in the report. |
-| 186 | Displays each question in bold followed by its answer. |
-| 187 | Displays selected/source row counts and the generated scope string beneath those answers. |
-
-### 8.8 Assemble a complete report: lines 189-205
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 189 | Starts `report_parts`, a list of Markdown strings that will become one report. |
-| 190 | Adds the report title as list element 0. |
-| 191 | Adds section 1 using the case-study problem. `\n` produces a newline in the output string. |
-| 192 | Adds section 2 with decision and data context separated by a blank line. |
-| 193 | Adds section 3 with source filename, selected/source row counts, current scope and descriptive/fictional qualification. |
-| 194 | Adds an executive summary by joining the first three answer strings; the `_` variable discards each question during tuple unpacking. |
-| 195 | Creates the KPI Markdown table: a header followed by one formatted row from each `kpi_values` tuple. |
-| 196 | Creates the definitions table using the name, formula and business interpretation in each `FORMULAS` tuple. This is list element 6 because the title occupies index 0. |
-| 197 | Formats all question/answer pairs as report subsections, including the three not shown in the short on-screen summary. |
-| 198 | Formats all five visual explanations by unpacking each visual tuple. The report contains their text, not rendered chart images. |
-| 199 | Adds full-source quality statistics and notes what those checks can establish. `.duplicated().sum()` counts repeated identical rows after the first copy; missing-cell sums are reduced across columns. |
-| 200 | Numbers each investigation recommendation with `enumerate(..., 1)` and adds the caution that these are not already-proved decisions. |
-| 201 | Adds limitations and explains tie selection, absent significance tests and insufficient-data caveats. It does not run any of those tests. |
-| 202 | Adds reproduction/extension instructions as static text. The generic reference to adding a variable or experiment describes future work, not an implemented feature. |
-| 203 | Closes the report-section list. |
-| 204 | Appends a Markdown field dictionary to `report_parts[5]`. Because the title is element 0, element 5 is **KPI results**, while Definitions and methods is element 6. This explains the actual dictionary placement in the generated report. |
-| 205 | Joins all sections with blank lines to create the single `full_report` string. |
-
-### 8.9 Campaign dashboard: lines 207-218
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 207 | Creates four tab containers and assigns them to variables by tuple unpacking. The names specify where later elements render. |
-| 208 | Enters the Campaign dashboard tab's context. |
-| 209 | Groups selected observations by date and sums spend and revenue. `as_index=False` keeps date as a normal column so Plotly can reference it by name. |
-| 210 | Creates a Plotly line chart with date on x and spend/revenue as separate y series, labels the value axis INR and renders it at container width. |
-| 211 | Renders visual-guide entry 0 below the daily chart. |
-| 212 | Builds another channel summary, this time with channel kept as a normal column. This table is suited for Plotly's `x="channel"` argument and on-screen display. |
-| 213 | Adds uppercase `ROAS` to that chart/table DataFrame by dividing group revenue by group spend, replacing zero denominators with NaN. It matches the lowercase `roas` logic in `channel_summary`. |
-| 214 | Adds `CTR_pct` by dividing group clicks by group impressions and multiplying by 100. It is already in percentage units, unlike the earlier fractional `ctr` variable. |
-| 215 | Creates and renders the channel bar chart: channel on x, aggregate ROAS on y, channel colors, and spend/conversion/CTR fields in hover details. |
-| 216 | Renders guide entry 1, explaining channel return and scaling limits. |
-| 217 | Displays the grouped `channels` table after rounding numeric display values to two decimals and hiding the pandas index. The original CSV is unaffected. |
-| 218 | Explains that exact grouped values and group sizes should accompany interpretation and invites source-row inspection. |
-
-### 8.10 Exploratory charts: lines 219-232
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 219 | Enters the exploration tab's output context. |
-| 220 | Allocates left and right layout columns for the histogram and boxplot. |
-| 221 | Creates a Matplotlib figure and axes with a 7-by-4-inch base figure size, unpacking the two returned objects into `fig` and `ax`. |
-| 222 | Draws a 20-bin histogram of per-observation spend with purple bars and white edges. It uses raw selected records, not the daily aggregate table. |
-| 223 | Labels the figure so x is INR spend and y is observation count; the title identifies the daily-observation grain. |
-| 224 | Displays the figure in the left container and then calls `plt.close(fig)` to release its Matplotlib registration. The semicolon separates two statements on the same source line. |
-| 225 | Renders guide entry 2 in the same left container. |
-| 226 | Creates a new figure and axes for the boxplot, keeping its drawing separate from the histogram. |
-| 227 | Uses Seaborn to summarize per-observation conversions by channel, drawing onto the explicit axes with one fill color. |
-| 228 | Sets the boxplot title. Seaborn already uses the selected source field names for axis labels. |
-| 229 | Displays the boxplot in the right container and closes its Matplotlib figure handle to avoid accumulating figures across reruns. |
-| 230 | Renders guide entry 3 below the boxplot in the right container. |
-| 231 | Creates an interactive scatter plot from individual selected observations: spend on x, revenue on y, channel color, conversion-dependent marker size, and campaign/date hover details. No regression or causal model is fitted. |
-| 232 | Renders guide entry 4 below the scatter plot. |
-
-### 8.11 Data tables, learning prompts and report export: lines 234-256
-
-| Line(s) | What the code does and why |
-| --- | --- |
-| 234 | Comment introducing data inspection and practice explaining results. |
-| 235 | Enters the Data and quality tab's context. |
-| 236 | Adds the source-field-dictionary heading. |
-| 237 | Converts `FIELD_GUIDE.items()` key/value pairs into a two-column DataFrame and renders its definitions without a numeric row index. |
-| 238 | Adds the filtered-records heading. |
-| 239 | Explains that selected observations drive the analysis and that table sorting does not alter filters. Its generic phrase about derived columns is conditional; this app does not add ROAS/CTR columns to `filtered`. |
-| 240 | Displays the selected eight-column source table, with dates parsed and the pandas index hidden. |
-| 241 | Converts selected records to CSV text with `index=False` and creates a download named `filtered_marketing_campaigns.csv` with MIME type `text/csv`. This is not the grouped channel summary. |
-| 242 | Adds the numeric-summary heading. |
-| 243 | Explains the meaning of count, mean, standard deviation, minimum/maximum and quartiles before rendering descriptive statistics. |
-| 244 | Selects numeric columns, calculates `.describe()`, rounds its displayed table to two decimals and renders it. Counts and INR amounts still require their different business units to be interpreted. |
-| 245 | Adds the source-quality heading. |
-| 246 | Displays row count, exact-duplicate count and missing-cell count for full `frame`, not just the selected rows. |
-| 247 | Builds a quality DataFrame containing each column name, its dtype converted to a string, and its missing-value count. `.values` supplies arrays following source column order. |
-| 249 | Opens the Workshop exercises and chart guide expander outside the tab contexts. |
-| 250 | Displays four numbered practice prompts using newline-separated Markdown. These are text prompts, not automatically executed analysis. |
-| 251 | Explains the distinct educational roles of Matplotlib, Seaborn and Plotly. |
-| 252 | Reminds readers that observed associations in the fictional data do not prove cause and effect. |
-| 254 | Enters the Full report tab's rendering context. |
-| 255 | Offers the existing `full_report` string as `02_marketing_campaigns_report.md` with MIME type `text/markdown`. The browser download does not alter this explanation guide. |
-| 256 | Renders that same string as Markdown in the tab, aligning visible and downloadable report contents. |
-
-## 9. Validation, undefined rates and analytical limits
-
-### 9.1 What the current loader guarantees
-
-The code requires the named fields, at least one source observation, parseable dates, parseable numeric measures and nonmissing values in required analysis fields. File and expected parsing/schema problems are presented as Streamlit errors, followed by `st.stop()`. The sidebar separately guards incomplete intervals and empty selections.
-
-These are useful prerequisites, but they are not a complete marketing-data audit. A number that parses is not necessarily a truthful or sensible number. A row can be structurally complete while being duplicated, incorrectly attributed or recorded in the wrong currency.
-
-### 9.2 Checks not implemented
-
-The app does not enforce nonnegative spend/revenue, nonnegative integer counts, finite numeric values, a unique observation key, or the funnel convention `conversions <= clicks <= impressions`. It also does not trim/normalize category labels or verify that all sources share one attribution window. Such checks may be appropriate for a real dataset, depending on its agreed event definitions, but they are not present merely because the interface shows a Source data quality tab.
-
-Exact duplicate counts are reported, not automatically removed. An observation with the same date/channel/campaign but a changed amount is not an exact duplicate row and will not be identified by that count alone. Adding rows without checking their meaning can inflate sums even when no required value is missing.
-
-A negative conversion count can pass numeric parsing and later cause problems because Plotly uses conversions as marker size. Infinite spend can also pass a simple numeric conversion and disrupt a histogram. The loading `try` block does not surround all later plotting and analysis. These examples explain why successful parsing is only an initial check.
-
-### 9.3 Zero is not always a meaningful result
-
-The scalar `ratio()` helper returns `0.0` when a denominator is zero. Thus the ROAS or conversion-rate display can show zero as a fallback for an undefined rate. The captions correctly ask the reader to inspect underlying counts before interpreting that value. CPA has a clearer special branch: when no conversions exist it displays `N/A` and its sentence explains why.
-
-Grouped channel rates use another approach: zero spend or impressions are replaced with NaN before division. NaN represents a missing/undefined result, which can appear as a missing bar/table value. If at least one channel has a defined ROAS, the leader calculation can choose among those defined values. If **every** selected channel has zero spend, the entire `roas` column can be NaN. The current `.idxmax()` and later `.loc[best_channel, ...]` path does not guard this situation and may fail while constructing the leader sentence.
-
-Zero conversions across all selected channels also make a volume leader uninformative: every group ties at zero. `.idxmax()` returns the first maximum encountered rather than proving that one channel is uniquely best. The app's report notes tie handling; investigate the grouped table before repeating an automatic leader label as a strong conclusion.
-
-### 9.4 What the charts cannot establish
-
-The input has no customer deduplication, first-acquisition flag, product margin, refunds, customer lifetime value, experiment assignment or controlled exposure information. The code calculates no confidence interval, significance test, forecast, budget-response curve or attribution model. It cannot derive those missing facts from a scatter plot or a high ROAS bar.
-
-A small sample can have an extreme ratio; a large sample can still be biased. Date filters may mix complete and incomplete periods. Different campaign mixes can make channel comparisons unfair even though the aggregate arithmetic is correct. Revenue may be assigned to the date of a click, a purchase or another attribution rule; the CSV does not provide enough provenance to settle all those possibilities.
-
-Useful reporting therefore names the population, formula and limit. For example: "Across the complete supplied teaching file, Display has approximately 4.00x attributed ROAS on INR 645,963.35 spend and 3,391 conversion events. These observations motivate an experiment; they do not prove that increasing Display spend would retain the same return."
-
-## 10. Practice and worked examples
-
-These examples are public learning material intended to make the reasoning visible. They extend or interpret the current code; any extension snippet below is explicitly separate from the existing implementation.
-
-### Worked example 1: Show why a mean of percentages can mislead
-
-Use the invented 10-click/5-conversion observation and 990-click/45-conversion observation from Section 4. Calculate both the simple average of their row rates and the ratio of their total conversions to total clicks.
-
-**Reasoning:** The simple mean is about 27.27%, while the combined rate is 5%. The first observation receives far too much influence in the simple mean. In code, `filtered["conversions"].sum() / filtered["clicks"].sum()` preserves the denominator's exposure. A mean of a derived row-rate column would answer the average rate of an observation, not the overall rate across clicks.
-
-### Worked example 2: Add a visible CTR metric
-
-The source already computes `ctr` at line 159, but the top metric row has four cards and no CTR card. To display it as a separate element, a learner could add the following **extension** after `ctr` has been calculated:
-
-```python
-st.metric("Click-through rate", f"{ctr:.2%}")
-```
-
-**Reasoning:** `ctr` is already the aggregate fraction, so percentage formatting is sufficient. Placing this above its assignment would cause a name error. Multiplying `ctr` by 100 and then using `:.2%` would double-convert the units. If you redesign the top card row instead, account for when the needed variable is computed.
-
-### Worked example 3: Export grouped channel results
-
-The existing CSV download exports filtered observations. To export the exact channel summary as well, add this **extension** inside the dashboard after `channels` and its derived rate columns exist:
-
-```python
-st.download_button(
-    "Download channel summary",
-    channels.to_csv(index=False),
-    "marketing_channel_summary.csv",
-    "text/csv",
+import matplotlib.pyplot as plt
+import plotly.express as px
+import seaborn as sns
+import streamlit as st
+
+st.set_page_config(page_title="Marketing Campaign Lab", layout="wide")
+st.title("Marketing Campaign Lab")
+st.caption("Teaching reconstruction | Fictional attributed data | Currency: INR")
+
+# Locate the CSV beside this standalone Python file.
+data_file = Path(__file__).resolve().with_name("marketing_campaigns.csv")
+required = ["date", "channel", "campaign", "impressions", "clicks", "conversions", "spend", "revenue"]
+try:
+    frame = pd.read_csv(data_file)
+    if not set(required).issubset(frame.columns) or frame.empty:
+        raise ValueError("Provide a nonempty CSV with all required columns.")
+    frame["date"] = pd.to_datetime(frame["date"], errors="raise")
+    for column in ["impressions", "clicks", "conversions", "spend", "revenue"]:
+        frame[column] = pd.to_numeric(frame[column], errors="raise")
+    if frame[required].isna().any().any():
+        raise ValueError("Fill missing required values first.")
+except (OSError, ValueError, KeyError) as error:
+    st.error(str(error))
+    st.stop()
+
+def ratio(numerator, denominator):
+    return numerator / denominator if denominator else 0.0
+
+# Widget values become ordinary Python inputs to the same pandas analysis.
+selected_channels = st.sidebar.multiselect(
+    "Channels", sorted(frame["channel"].unique()), default=sorted(frame["channel"].unique()),
 )
+selected_campaigns = st.sidebar.multiselect(
+    "Campaigns", sorted(frame["campaign"].unique()), default=sorted(frame["campaign"].unique()),
+)
+dates = st.sidebar.date_input(
+    "Date range", (frame["date"].min().date(), frame["date"].max().date()),
+    min_value=frame["date"].min().date(), max_value=frame["date"].max().date(),
+)
+if len(dates) != 2:
+    st.info("Choose both a start and an end date.")
+    st.stop()
+filtered = frame[frame["channel"].isin(selected_channels) & frame["campaign"].isin(selected_campaigns)].copy()
+filtered = filtered[filtered["date"].dt.date.between(dates[0], dates[1])]
+if filtered.empty:
+    st.info("No observations match. Restore a selection or widen the dates.")
+    st.stop()
+
+# Aggregate first so every rate is weighted by the appropriate denominator.
+spend = filtered["spend"].sum()
+revenue = filtered["revenue"].sum()
+conversions = filtered["conversions"].sum()
+clicks = filtered["clicks"].sum()
+cards = st.columns(4)
+cards[0].metric("Ad spend (INR)", f"{spend:,.0f}")
+cards[1].metric("ROAS", f"{ratio(revenue, spend):.2f}x")
+cards[2].metric("Cost per acquisition (INR)", f"{ratio(spend, conversions):,.0f}" if conversions else "N/A")
+cards[3].metric("Conversion rate", f"{ratio(conversions, clicks):.1%}")
+
+channels = filtered.groupby("channel", as_index=False)[[
+    "impressions", "clicks", "conversions", "spend", "revenue"
+]].sum()
+channels["ROAS"] = channels["revenue"].div(channels["spend"].replace(0, float("nan")))
+channels["CTR_pct"] = 100 * channels["clicks"].div(channels["impressions"].replace(0, float("nan")))
+valid_rates = channels.dropna(subset=["ROAS"])
+# Teaching improvement: handle all channel rates being undefined explicitly.
+leader = valid_rates.loc[valid_rates["ROAS"].idxmax(), "channel"] if not valid_rates.empty else "Undefined"
+
+dashboard, explore, data_tab, report_tab = st.tabs(["Dashboard", "Explore", "Data", "Report"])
+with dashboard:
+    daily = filtered.groupby("date", as_index=False)[["spend", "revenue"]].sum()
+    st.plotly_chart(px.line(daily, x="date", y=["spend", "revenue"],
+                           title="Daily spend and attributed revenue"), use_container_width=True)
+    st.plotly_chart(px.bar(channels, x="channel", y="ROAS", color="channel",
+                          hover_data=["spend", "conversions", "CTR_pct"],
+                          title="Return per rupee spent"), use_container_width=True)
+    st.dataframe(channels.round(2), hide_index=True, width="stretch")
+with explore:
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.hist(filtered["spend"], bins=20, color="#7c3aed", edgecolor="white")
+    ax.set(title="Observation spend distribution", xlabel="Spend (INR)", ylabel="Observations")
+    st.pyplot(fig)
+    plt.close(fig)  # Release the Matplotlib figure after rendering.
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    sns.boxplot(data=filtered, x="channel", y="conversions", ax=ax, color="#ddd6fe")
+    ax.set_title("Conversion distribution by channel")
+    st.pyplot(fig)
+    plt.close(fig)
+
+    st.plotly_chart(px.scatter(filtered, x="spend", y="revenue", color="channel", size="conversions",
+                              hover_data=["campaign", "date"], title="Spend versus attributed revenue"),
+                    use_container_width=True)
+with data_tab:
+    # Export the selected observations; grouped rates are in channels instead.
+    st.dataframe(filtered, hide_index=True, width="stretch")
+    st.download_button("Download filtered CSV", filtered.to_csv(index=False),
+                       "filtered_marketing_campaigns.csv", "text/csv")
+with report_tab:
+    report_parts = [
+        "# Marketing campaigns - teaching report",
+        f"Selected {len(filtered)} observations, {dates[0]} to {dates[1]}.",
+        f"Channels: {', '.join(selected_channels)}. Campaigns: {', '.join(selected_campaigns)}.",
+        f"Ad spend: INR {spend:,.2f}. Attributed revenue: INR {revenue:,.2f}.",
+        f"ROAS: {ratio(revenue, spend):.2f}x. Highest defined channel ROAS: {leader}.",
+        "Fictional attribution data. ROAS is not profit and does not prove a causal budget response.",
+    ]
+    report = "\n\n".join(report_parts)
+    st.markdown(report)
+    st.download_button("Download teaching report", report, "marketing_teaching_report.md", "text/markdown")
 ```
 
-**Reasoning:** This uses the DataFrame that already contains grouped totals, `ROAS` and `CTR_pct`. It should not be confused with adding those rates to every source row. The exported summary has one row per selected channel, while the existing download has one row per selected observation. State that grain difference when sharing either file.
+**Rendered Streamlit output - captured text summary**
 
-### Worked example 4: Investigate an unusually strong day
+This summarizes the interface produced by this complete Streamlit cell with its default selections; it is not terminal stdout or a browser screenshot.
 
-Select a channel and campaign, inspect the scatter plot for a high-revenue observation and note its date. Compare the selected totals with and without that observation in a separate analysis copy. Keep the reason for comparison explicit rather than deleting it merely because it is large.
+```text
+Title: Marketing Campaign Lab
+Channels: Display, Email, Search, Social
+Campaigns: Always on, Launch, Seasonal
+Date range: 2025-01-01 to 2025-03-31
+Ad spend (INR): 2,431,714
+ROAS: 3.43x
+Cost per acquisition (INR): 209
+Conversion rate: 7.9%
+Table 1: 4 rows x 8 columns
+Table 2: 360 rows x 8 columns
+Interactive Plotly charts: 3
+Rendered image charts: 2
+Download: Download filtered CSV
+Download: Download teaching report
+```
 
-**Reasoning:** One extreme observation may strongly affect a total or ratio, especially in a narrow selection. A sensitivity check asks whether a conclusion depends on that observation. It does not establish that the observation is invalid. The original app offers date-range filtering and row inspection but no built-in "remove this one observation" control. A custom exclusion should be identified as an extension, not described as an existing feature.
+**Interpretation and reasoning**
 
-### Worked example 5: Compare scale with efficiency
+The interface summary above was captured by executing this complete Streamlit cell with the actual CSV and default selections. It is a text summary of rendered elements, not terminal stdout or an invented screenshot. Its default cards match the original source's arithmetic. All three Plotly charts and two Matplotlib/Seaborn charts use selected rows; the CSV and short report use that same scope. The original `app.py` additionally renders more contextual explanations, source-quality and numeric-summary tables, fuller insight wording, exercises and a 12-section report.
 
-Read the full-selection channel table. Display leads both ROAS and conversion volume in this bundled file. Then select one campaign label and a shorter interval and repeat the comparison.
+## Limits, troubleshooting and useful practice
 
-**Reasoning:** The app's two `.idxmax()` calls answer different questions even when they happen to return the same label. Record the selected scope, spend and conversion count beside each ratio. If the ranking changes, investigate mix and sample size before claiming that the channel's underlying quality changed.
+The loader checks required fields, a nonempty CSV, parseable dates/numbers and nonmissing essential cells. It does not enforce nonnegative integer counts, finite amounts, a unique business observation key, or the convention `conversions <= clicks <= impressions`. Whether that funnel convention applies to a real source depends on its event definitions. Exact duplicates are reported, not automatically removed. Negative conversions can parse successfully and later fail when used as scatter marker sizes; the loading error handler does not cover the whole application.
 
-### Worked example 6: Explain why CPA is not yet customer acquisition cost
+The scalar ratio helper uses zero as a fallback for zero denominators; CPA explicitly reports N/A with zero conversions. Grouped ROAS uses NaN for zero spend. The existing all-undefined-channel leader path is unguarded, while the final teaching reconstruction labels its added guard. Ties can name the first maximum in sorted group order rather than a unique winner. Strong filtering can reduce the evidence to very few observations.
 
-Suppose a real customer makes three attributed purchases. If each purchase is counted as a conversion, the denominator includes three events even though there is only one person.
+No customer deduplication, lifetime value, product margin, refunds, causal experiment, confidence interval or budget-response model is present. A high bar cannot establish how a channel will perform with additional spend. Revenue minus advertising cost alone would still omit other costs and would not establish incrementality. Useful reporting states the scope, denominator, scale and unresolved question.
 
-**Reasoning:** Spend divided by conversion events can be a useful cost-per-outcome measure, but the app cannot count distinct new customers without customer identifiers and an acquisition definition. To calculate actual new-customer acquisition cost, the dataset and denominator would need to change. Renaming an existing field or adding a chart cannot recover an identity that was never recorded.
-
-### Worked example 7: Distinguish this guide from the generated report
-
-Change the channel filter, then download the full Markdown report. Compare its scope and KPI values with the previous selection.
-
-**Reasoning:** `02_marketing_campaigns_report.md` is generated from current runtime selections. This `EXPLANATION.md` is a static guide to the source and method. Changing a filter changes the report's values; it does not rewrite the guide or modify the CSV. That separation lets the same teaching document support many different investigations.
-
-## 11. Troubleshooting
-
-| Symptom | Explanation and next check |
+| If you see this | What to check |
 | --- | --- |
-| A library is missing | Check which interpreter the terminal is using, activate the intended virtual environment and install the pinned dependencies with `python -m pip`. |
-| `python app.py` does not open a usable app | Use `python -m streamlit run app.py`, which creates the required Streamlit runner and server context. |
-| The dataset cannot be found | Keep `marketing_campaigns.csv` beside this script with the exact filename. The code resolves the script's neighbor, not a file elsewhere in the terminal's current directory. |
-| A required column is missing | Inspect exact header names and capitalization. The code expects `conversions`, not an informal alternative such as `purchases`. |
-| Parsing fails after editing the CSV | Check date validity and numeric fields for text/currency symbols or malformed values. The app deliberately raises instead of silently dropping bad records. |
-| An incomplete-date notice appears | Select both dates; the code stops until a complete interval is available. |
-| No observations match | Broaden dates or re-enable channel/campaign values. All conditions must be satisfied simultaneously. |
-| Report figures change after a filter | That is the intended behavior. The report is reconstructed from the same newly selected rows as the charts. |
-| CSV changes appear stale | Save the file and trigger a rerun. Reads are uncached, but a new execution is still necessary. |
-| CPA displays `N/A` | The selected conversion count is zero. Cost per conversion is undefined, rather than free. |
-| A zero rate looks suspicious | Inspect the denominator. Some scalar rates use a zero fallback even when mathematically undefined. |
-| All-zero spend causes a leader lookup failure | All grouped ROAS values may be NaN. The current leader selection does not explicitly handle an entirely undefined ratio column. |
-| The downloaded CSV has no ROAS field | The existing download exports filtered observations. ROAS belongs to the separate grouped channel summary table. |
-| Histogram values do not match daily line-chart totals | The histogram uses observation spend, while the line chart sums observations by date. They intentionally have different grains. |
-| Cards and report show different decimal places | Cards round some amounts to whole INR and rate percentages to one decimal; report values are often more precise. |
-| A separate Cloud Lab instance cannot use 8501 | The built-in dashboard may already occupy it. Run and forward the documented separate-instance port 8502. |
+| A missing-library error | Activate the intended Python environment and install using its `python -m pip`. |
+| Notebook cannot find the CSV | Start it inside `02_marketing_campaigns`; notebook cells use that working directory. |
+| The app cannot find the CSV | Keep the exact named file beside the Python script, which resolves its own location. |
+| Numeric/date conversion fails | Inspect edited values and headers. The app intentionally rejects invalid inputs instead of silently discarding them. |
+| No rows match | Re-enable channels/campaigns or widen the interval. Conditions combine as AND. |
+| CPA is N/A | No selected conversions exist; cost per conversion is undefined, not zero cost. |
+| A zero ratio seems suspicious | Inspect its denominator because some scalar displays use a fallback. |
+| Downloaded observations have no ROAS column | The existing download exports `filtered`; grouped rates belong to `channels`. |
+| Histogram totals differ from the daily line chart | The histogram counts observations; the line chart aggregates amounts by date. Their grains differ intentionally. |
+| Cards and reports show different digits | Compare formatting: cards round some amounts to whole INR and conversion rate to one decimal percentage. |
+| Saved CSV changes are not visible | Save and trigger a rerun; no automatic CSV watcher is implied by an uncached read. |
 
-## 12. Sources and further reading
+For practice, change the analysis selection to one campaign and rerun every subsequent cell. Compare the ROAS and conversion-volume leaders with their spend and counts. Investigate a high-revenue observation by its date/campaign before considering an exclusion; an unusually large result is not automatically an error. To add CTR to the interface, display the already calculated fractional CTR with `:.2%` after calculating it. To export channel summaries, create a separate button for `channels.to_csv(index=False)` and label its different row grain clearly.
 
-The project-specific behavior, fields, formulas and example outputs are grounded in [this folder's `app.py`](app.py), [the supplied CSV](marketing_campaigns.csv), the [workshop README](../README.md) and the [repository README](../../README.md), inspected at the revision identified above. The library references below explain Python and API behavior. They do not substantiate claims about real marketing performance, and current documentation can describe a newer release than the pinned workshop environment.
+This Markdown guide describes the method and shows executed baseline outputs. The app's Markdown report is rebuilt for current runtime filters. Neither is a reason to substitute a static screenshot's values for the current selected data.
 
-- [Python `pathlib`](https://docs.python.org/3/library/pathlib.html): script-relative file paths and filename replacement.
-- [Pandas table-oriented data introduction](https://pandas.pydata.org/pandas-docs/stable/getting_started/intro_tutorials/01_table_oriented.html): DataFrame and Series.
-- [Pandas 2.2 ten-minute introduction](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/10min.html): selecting, manipulating and summarizing tabular data.
-- [Pandas 2.2 GroupBy guide](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/groupby.html): group aggregation and output structure.
-- [Pandas indexing guide](https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html): Boolean selection and `.loc` label lookups.
-- [Streamlit run-your-app guide](https://docs.streamlit.io/develop/concepts/architecture/run-your-app): starting the server and executing the app.
-- [Streamlit 1.50 tabs reference](https://docs.streamlit.io/1.50.0/develop/api-reference/layout/st.tabs): layout containers and execution of hidden-tab contents.
-- [Streamlit download-button reference](https://docs.streamlit.io/develop/api-reference/widgets/st.download_button): offering CSV and text data for browser download.
-- [Plotly Express overview](https://plotly.com/python/plotly-express/): DataFrame-driven chart construction.
-- [Plotly scatter plots](https://plotly.com/python/line-and-scatter/): color, size and hover encodings.
-- [Matplotlib histogram reference](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html): bins and observation counts.
-- [Matplotlib `close`](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.close.html): closing figures after display.
-- [Seaborn boxplot reference](https://seaborn.pydata.org/generated/seaborn.boxplot.html): distribution summaries, quartiles and whiskers.
+## Sources
+
+- [Existing project source](app.py), [bundled CSV](marketing_campaigns.csv), [workshop README](../README.md) and [repository README](../../README.md) ground the implemented behavior and executed outputs.
+- [pandas 2.2 introduction](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/10min.html), [GroupBy guide](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/groupby.html) and [indexing guide](https://pandas.pydata.org/pandas-docs/version/2.2/user_guide/indexing.html) explain tabular operations.
+- [Streamlit main concepts](https://docs.streamlit.io/get-started/fundamentals/main-concepts), [run instructions](https://docs.streamlit.io/develop/concepts/architecture/run-your-app) and [Streamlit 1.50 tabs](https://docs.streamlit.io/1.50.0/develop/api-reference/layout/st.tabs) explain the execution model.
+- [Plotly Express](https://plotly.com/python/plotly-express/), [Matplotlib histogram](https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.hist.html), [Matplotlib close](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.close.html) and [Seaborn boxplot](https://seaborn.pydata.org/generated/seaborn.boxplot.html) explain the visual functions used here.
